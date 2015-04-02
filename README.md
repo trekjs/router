@@ -24,16 +24,16 @@ import Router from 'trek-router';
 
 let r = new Router();
 // static route
-r.add('get', '/folders/files/bolt.gif', () => {});
+r.add('GET', '/folders/files/bolt.gif', () => {});
 // param route
-r.add('get', '/users/:id', () => {});
+r.add('GET', '/users/:id', () => {});
 // all star
-r.add('get', '/books/*', () => {});
+r.add('GET', '/books/*', () => {});
 
-let result = r.find('get', '/users/233')
+let result = r.find('GET', '/users/233')
 // => [()=>{}, [{name: id, value: 233}]]
 
-let result = r.find('get', '/photos/233')
+let result = r.find('GET', '/photos/233')
 // => null
 ```
 

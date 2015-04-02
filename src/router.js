@@ -37,7 +37,7 @@ class Router {
   constructor() {
     this.trees = Object.create(null);
     methods.forEach((m) => {
-      this.trees[m] = new Node('', null, null, []);
+      this.trees[m.toUpperCase()] = new Node('', null, null, []);
     });
   }
 

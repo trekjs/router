@@ -9,14 +9,14 @@ var suite = new Benchmark.Suite;
 suite
   .add('Router', function() {
     var r = new Router();
-    r.add('get', '/folders/files/bolt.gif', function() {});
-    r.add('get', '/users/:id', function() {});
-    r.add('get', '/photos/:id', function() {});
-    r.add('get', '/books/:id', function() {});
-    r.add('get', '/repos/:id', function() {});
-    r.add('get', '/replies/:id', function() {});
-    r.add('get', '/notifications/:id', function() {});
-    var result = r.find('get', '/notifications/233');
+    r.add('GET', '/folders/files/bolt.gif', function() {});
+    r.add('GET', '/users/:id', function() {});
+    r.add('GET', '/photos/:id', function() {});
+    r.add('GET', '/books/:id', function() {});
+    r.add('GET', '/repos/:id', function() {});
+    r.add('GET', '/replies/:id', function() {});
+    r.add('GET', '/notifications/:id', function() {});
+    var result = r.find('GET', '/notifications/233');
     assert.notEqual(null, result);
   })
   .add('pathToRegexp', function() {
