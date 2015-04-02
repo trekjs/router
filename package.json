@@ -1,7 +1,7 @@
 {
   "name": "trek-router",
   "version": "0.0.1",
-  "description": "Zippy router",
+  "description": "A fast HTTP router router",
   "repository": "trekjs/router",
   "main": "lib/router.js",
   "author": "fundon cfddream@gmail.com",
