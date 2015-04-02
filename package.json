@@ -1,0 +1,43 @@
+{
+  "name": "trek-router",
+  "version": "0.0.1",
+  "description": "Zippy router",
+  "repository": "trekjs/router",
+  "main": "lib/router.js",
+  "author": "fundon cfddream@gmail.com",
+  "license": "MIT",
+  "keywords": [
+    "router",
+    "route",
+    "routing",
+    "trek"
+  ],
+  "scripts": {
+    "benchmark": "node benchmarks",
+    "compile": "babel src --out-dir lib --copy-files",
+    "prepublish": "npm run compile",
+    "test": "mocha --require babel/register --reporter spec --bail --check-leaks test/**/*.test.js",
+    "test-ci": "babel-node node_modules/.bin/isparta cover node_modules/.bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/**/*.test.js",
+    "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
+  },
+  "devDependencies": {
+    "babel": "^4.7.16",
+    "benchmark": "^1.0.0",
+    "isparta": "^2.2.0",
+    "istanbul": "^0.3.13",
+    "mocha": "^2.2.1",
+    "path-to-regexp": "^1.0.3"
+  },
+  "files": [
+    "LICENSE",
+    "HISTORY.md",
+    "lib"
+  ],
+  "engines": {
+    "node": ">= 0.8.0",
+    "iojs": "1.x.x"
+  },
+  "dependencies": {
+    "methods": "^1.1.1"
+  }
+}
