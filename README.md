@@ -4,7 +4,7 @@ A fast HTTP router, inspired by [Echo](https://github.com/labstack/echo)'s Route
 
 ## Benchmarks
 
-trek-router vs [path-to-regexp][]
+trek-router vs [path-to-regexp][], see [benchmarks](benchmarks)
 
 ```bash
 $ node benchmarks

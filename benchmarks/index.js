@@ -39,6 +39,7 @@ suite
   // add listeners
   .on('cycle', function(event) {
     console.log(String(event.target));
+    console.log(process.memoryUsage());
   })
   .on('complete', function() {
     console.log('Fastest is ' + this.filter('fastest').pluck('name'));
