@@ -2,6 +2,13 @@
 
 A fast HTTP router, inspired by [Echo](https://github.com/labstack/echo)'s Router.
 
+  [![NPM version][npm-img]][npm-url]
+  [![Build status][travis-img]][travis-url]
+  [![Test coverage][coveralls-img]][coveralls-url]
+  [![License][license-img]][license-url]
+  [![Dependency status][david-img]][david-url]
+
+
 ## Benchmarks
 
 trek-router vs [path-to-regexp][], see [benchmarks](benchmarks)
@@ -35,3 +42,14 @@ let result = r.find('get', '/photos/233')
   [MIT](LICENSE)
 
 [path-to-regexp]: https://github.com/pillarjs/path-to-regexp
+
+[npm-img]: https://img.shields.io/npm/v/trek-router.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/trek-router
+[travis-img]: https://img.shields.io/travis/trekjs/trek-router.svg?style=flat-square
+[travis-url]: https://travis-ci.org/trekjs/trek-router
+[coveralls-img]: https://img.shields.io/coveralls/trekjs/trek-router.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/trekjs/trek-router?branch=master
+[license-img]: https://img.shields.io/badge/license-MIT-green.svg?style=flat-square
+[license-url]: LICENSE
+[david-img]: https://img.shields.io/david/trekjs/trek-router.svg?style=flat-square
+[david-url]: https://david-dm.org/trekjs/trek-router
