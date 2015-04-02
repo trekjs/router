@@ -1,6 +1,6 @@
 # trek-router
 
-A fast HTTP router, inspired by [Echo](https://github.com/labstack/echo) Router.
+A fast HTTP router, inspired by [Echo](https://github.com/labstack/echo)'s Router.
 
 ## Benchmarks
 
