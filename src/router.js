@@ -6,9 +6,9 @@
 
 import methods from 'methods';
 
-const SNODE = 0;
-const PNODE = 1;
-const ANODE = 2;
+const SNODE = 0; // static route
+const PNODE = 1; // param route
+const ANODE = 2; // all star route
 
 class Node {
 
@@ -42,8 +42,7 @@ class Router {
   }
 
   add(method, path, handler) {
-    var i = 0,
-      l = path.length;
+    var i = 0, l = path.length;
     for (; i < l; i++) {
       // `:`
       if (path.charCodeAt(i) === 58) {
@@ -64,7 +63,7 @@ class Router {
   }
 
   insert(method, path, handler, has) {
-    let cn = this.trees[method];
+    let cn = this.trees[method]; // Current node as root
     let search = path;
 
     while (true) {
@@ -105,15 +104,12 @@ class Router {
       } else if (l < sl) {
         search = search.substring(l);
         let e = cn.findEdge(search[0]);
-        if (!e) {
-          let n = new Node(search, has, null, null);
-          if (handler) {
-            n.handler = handler;
-          }
+        if (e) {
+          cn = e;
+        } else {
+          let n = new Node(search, has, handler, null, null);
           cn.edges.push(n);
           break;
-        } else {
-          cn = e;
         }
       } else {
         // Node already exists
