@@ -14,7 +14,7 @@ A fast HTTP router, inspired by [Echo](https://github.com/labstack/echo)'s Route
 trek-router vs [path-to-regexp][], see [benchmarks](benchmarks)
 
 ```bash
-$ node benchmarks
+$ npm run benchmark
 ```
 
 ## Usage
@@ -31,10 +31,12 @@ r.add('GET', '/users/:id', () => {});
 r.add('GET', '/books/*', () => {});
 
 let result = r.find('GET', '/users/233')
+// => [handler, params]
 // => [()=>{}, [{name: id, value: 233}]]
 
 let result = r.find('GET', '/photos/233')
-// => null
+// => [handler, params]
+// => [null, []]
 ```
 
 ## License
