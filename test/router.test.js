@@ -54,6 +54,40 @@ describe('Router', () => {
     assert.equal(377, params2[1].value);
   });
 
+  /*
+  it('params nested resources', () => {
+    r.add('GET', '/users/:id', () => {})
+    r.add('GET', '/users/:userId/photos/:photoId', () => {})
+    console.log(r.trees['GET'].edges[0])
+    let [h, params] = r.find('GET', '/users/233');
+    assert.notEqual(null, h);
+    assert.equal('id', params[0].name);
+    assert.equal(233, params[0].value);
+    console.log(2333);
+    let [h2, params2] = r.find('GET', '/users/233/photos/377');
+    assert.notEqual(null, h2);
+    assert.equal('userId', params2[0].name);
+    assert.equal(233, params2[0].value);
+    assert.equal('photoId', params2[1].name);
+    assert.equal(377, params2[1].value);
+  });
+
+  it('params resource', () => {
+    r.add('GET', '/users', () => {})
+    r.add('GET', '/users/new', () => {})
+    r.add('GET', '/users/:id', () => {})
+    let [h, params] = r.find('GET', '/users/233');
+    console.log(h)
+    assert.notEqual(null, h);
+    assert.equal('id', params[0].name);
+    assert.equal(233, params[0].value);
+    let [h2, params2] = r.find('GET', '/users');
+    assert.notEqual(null, h2);
+    let [h3, params3] = r.find('GET', '/users/new');
+    assert.notEqual(null, h3);
+  });
+  */
+
   describe('Node', () => {
     let node;
     beforeEach(() => {

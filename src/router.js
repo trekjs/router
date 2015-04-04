@@ -25,7 +25,7 @@ class Node {
     let [i, l, e] = [0, this.edges.length, void 0];
     for (; i < l; i++) {
       e = this.edges[i];
-      if (e.label === c) return e;
+      if (e.label.charCodeAt() === c.charCodeAt()) return e;
     }
     return null;
   }
@@ -106,7 +106,7 @@ class Router {
         if (e) {
           cn = e;
         } else {
-          let n = new Node(search, has, handler, null, null);
+          let n = new Node(search, has, handler, []);
           cn.edges.push(n);
           break;
         }
@@ -124,7 +124,7 @@ class Router {
     let cn = this.trees[method]; // Current node as root
     let search = path;
     let n = 0; // Param count
-    let result = [];
+    let result = [null];
     let params = [];
 
       while (true) {
