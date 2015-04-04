@@ -96,8 +96,7 @@ class Router {
           cn.handler = handler;
         } else {
           // Need to fork a node
-          let n = new Node(search.substring(l), has, null, null);
-          n.handler = handler;
+          let n = new Node(search.substring(l), has, handler, null);
           cn.edges.push(n);
         }
         break;
@@ -128,9 +127,9 @@ class Router {
     let handler;
     let params = [];
 
-    topLabel:
       while (true) {
         if (search === '' || search === cn.prefix) {
+          // Found
           handler = cn.handler;
           return [handler, params];
         }
@@ -177,10 +176,9 @@ class Router {
           }
           cn = e;
           continue;
-        } else {
-          // Not found
-          return null;
         }
+        // Not found
+        return null;
       }
   }
 
