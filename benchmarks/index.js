@@ -16,8 +16,11 @@ suite
     r.add('GET', '/repos/:id', function() {});
     r.add('GET', '/replies/:id', function() {});
     r.add('GET', '/notifications/:id', function() {});
-    var result = r.find('GET', '/notifications/233');
-    assert.notEqual(null, result);
+    r.add('GET', '/photos/:id/comments/:cid', function() {});
+    var result = r.find('GET', '/photos/233');
+    assert.notEqual(null, result[0]);
+    var result = r.find('GET', '/photos/233/comments/377');
+    assert.notEqual(null, result[0]);
   })
   .add('pathToRegexp', function() {
     var r = [];
@@ -29,12 +32,19 @@ suite
     r.push(pathToRegexp('/repos/:id', keys));
     r.push(pathToRegexp('/replies/:id', keys));
     r.push(pathToRegexp('/notifications/:id', keys));
+    r.push(pathToRegexp('/photos/:id/comments/:cid'), keys);
     var result;
     for (var i = 0, l = r.length; i < l; i++) {
       result = r[i].test('/notifications/233');
       if (result) break;
     }
     assert.notEqual(null, result);
+    var result2;
+    for (var i = 0, l = r.length; i < l; i++) {
+      result2 = r[i].test('/photos/233/comments/377');
+      if (result2) break;
+    }
+    assert.notEqual(null, result2);
   })
   // add listeners
   .on('cycle', function(event) {

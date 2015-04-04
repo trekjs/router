@@ -40,13 +40,18 @@ describe('Router', () => {
   });
 
   it('params', () => {
+    r.add('GET', '/users/:id', () => {})
     r.add('GET', '/users/:id/photos/:pid', () => {})
-    let [h, params] = r.find('GET', '/users/233/photos/377');
+    let [h, params] = r.find('GET', '/users/233');
     assert.notEqual(null, h);
     assert.equal('id', params[0].name);
     assert.equal(233, params[0].value);
-    assert.equal('pid', params[1].name);
-    assert.equal(377, params[1].value);
+    let [h2, params2] = r.find('GET', '/users/233/photos/377');
+    assert.notEqual(null, h2);
+    assert.equal('id', params2[0].name);
+    assert.equal(233, params2[0].value);
+    assert.equal('pid', params2[1].name);
+    assert.equal(377, params2[1].value);
   });
 
   describe('Node', () => {
