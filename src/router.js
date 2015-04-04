@@ -4,7 +4,17 @@
  * MIT Licensed
  */
 
-import methods from 'methods';
+const METHODS = [
+  'CONNECT',
+  'DELETE',
+  'GET',
+  'HEAD',
+  'OPTIONS',
+  'PATCH',
+  'POST',
+  'PUT',
+  'TRACE'
+];
 
 const SNODE = 0; // static route
 const PNODE = 1; // param route
@@ -36,7 +46,7 @@ class Router {
 
   constructor() {
     this.trees = Object.create(null);
-    methods.forEach((m) => {
+    METHODS.forEach((m) => {
       this.trees[m.toUpperCase()] = new Node('', null, null, []);
     });
   }
