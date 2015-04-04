@@ -124,14 +124,15 @@ class Router {
     let cn = this.trees[method]; // Current node as root
     let search = path;
     let n = 0; // Param count
-    let handler;
+    let result = [];
     let params = [];
 
       while (true) {
         if (search === '' || search === cn.prefix) {
           // Found
-          handler = cn.handler;
-          return [handler, params];
+          result[0] = cn.handler;
+          result[1] = params;
+          return result;
         }
 
         let pl = cn.prefix.length;
@@ -172,13 +173,12 @@ class Router {
           let e = cn.findEdge(search[0])
           if (!e) {
             // Not found
-            return null;
+            return result;
           }
           cn = e;
           continue;
         }
-        // Not found
-        return null;
+        return result;
       }
   }
 

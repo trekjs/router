@@ -12,9 +12,9 @@ describe('Router', () => {
     let [h, params] = r.find('GET', '/folders/files/bolt.gif');
     assert.notEqual(null, h);
     let result = r.find('GET', '/folders/files/bolt.hash.gif');
-    assert.equal(null, result);
+    assert.equal(null, result[0]);
     let result2 = r.find('GET', '/folders/bolt .gif');
-    assert.equal(null, result2);
+    assert.equal(null, result2[0]);
   });
 
   it('catch all', () => {
@@ -22,9 +22,9 @@ describe('Router', () => {
     let [h, params] = r.find('GET', '/static/*');
     assert.notEqual(null, h);
     let result = r.find('GET', '/static/js');
-    assert.notEqual(null, result);
+    assert.notEqual(null, result[0]);
     let result2 = r.find('GET', '/static/');
-    assert.notEqual(null, result2);
+    assert.notEqual(null, result2[0]);
   });
 
   it('param', () => {
@@ -34,7 +34,7 @@ describe('Router', () => {
     assert.equal('id', params[0].name);
     assert.equal(233, params[0].value);
     let result = r.find('GET', '/users/2');
-    assert.notEqual(null, result);
+    assert.notEqual(null, result[0]);
     assert.equal('id', result[1][0].name);
     assert.equal(2, result[1][0].value);
   });
