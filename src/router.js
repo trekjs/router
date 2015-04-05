@@ -16,9 +16,9 @@ const METHODS = [
   'TRACE'
 ];
 
-const SNODE = 0; // static route
-const PNODE = 1; // param route
-const ANODE = 2; // all star route
+const SNODE = 0; // Static node
+const PNODE = 1; // Param node
+const ANODE = 2; // Catch-all node
 
 class Node {
 
@@ -52,8 +52,7 @@ class Router {
   }
 
   add(method, path, handler) {
-    var i = 0, l = path.length;
-    for (; i < l; i++) {
+    for (let i = 0, l = path.length; i < l; i++) {
       // `:`
       if (path.charCodeAt(i) === 58) {
         this.insert(method, path.substring(0, i), null, PNODE);
