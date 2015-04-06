@@ -11,10 +11,19 @@ A fast HTTP router, inspired by [Echo](https://github.com/labstack/echo)'s Route
 
 ## Benchmarks
 
-trek-router vs [path-to-regexp][], see [benchmarks](benchmarks)
+trek-router vs [path-to-regexp][], see [benchmarks](benchmarks)   
+Using GitHub API Routes
 
 ```bash
 $ npm run benchmark
+
+Router x 1,166 ops/sec ±7.23% (77 runs sampled)
+{ rss: 40083456, heapTotal: 27330560, heapUsed: 9130896 }
+pathToRegexp x 323 ops/sec ±5.66% (72 runs sampled)
+{ rss: 42172416, heapTotal: 29382400, heapUsed: 13250216 }
+route-recognizer x 214 ops/sec ±7.23% (66 runs sampled)
+{ rss: 44371968, heapTotal: 30414336, heapUsed: 11770608 }
+Fastest is Router
 ```
 
 ## Usage

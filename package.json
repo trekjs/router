@@ -26,7 +26,8 @@
     "isparta": "^3.0.0",
     "istanbul": "^0.3.13",
     "mocha": "^2.2.1",
-    "path-to-regexp": "^1.0.3"
+    "path-to-regexp": "^1.0.3",
+    "route-recognizer": "^0.1.5"
   },
   "files": [
     "LICENSE",

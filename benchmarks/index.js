@@ -1,7 +1,8 @@
 var assert = require('assert');
 var Benchmark = require('benchmark');
-var Router = require('../');
 var pathToRegexp = require('path-to-regexp');
+var RouteRecognizer = require('route-recognizer');
+var Router = require('../');
 
 var api = [
   // OAuth Authorizations
@@ -284,6 +285,14 @@ api.forEach(function(i) {
   r.push(pathToRegexp(path, keys));
 });
 
+var routes2 = {};
+api.forEach(function (i) {
+  var method = i[0],
+    path = i[1];
+  var r = routes2[method] || (routes2[method] = new RouteRecognizer());
+  r.add([{ path: path, handler: function () {} }]);
+});
+
 // add tests
 suite
   .add('Router', function() {
@@ -305,6 +314,16 @@ suite
       var result = r.filter(function(j) {
         return realpath.match(j);
       })[0];
+      assert.notEqual(null, result);
+    });
+  })
+  .add('route-recognizer', function() {
+    api.forEach(function(i) {
+      var method = i[0],
+        path = i[1],
+        realpath = i[2];
+      var r = routes2[method];
+      var result = r.recognize(realpath);
       assert.notEqual(null, result);
     });
   })
