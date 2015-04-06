@@ -63,5 +63,5 @@ let result = r.find('GET', '/photos/233')
 [coveralls-url]: https://coveralls.io/r/trekjs/router?branch=master
 [license-img]: https://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
-[david-img]: https://img.shields.io/david/trekjs/trek-router.svg?style=flat-square
-[david-url]: https://david-dm.org/trekjs/trek-router
+[david-img]: https://img.shields.io/david/trekjs/router.svg?style=flat-square
+[david-url]: https://david-dm.org/trekjs/router
