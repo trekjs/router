@@ -80,6 +80,15 @@ describe('Router', () => {
     r.trees['GET'].printTree('', true)
   });
 
+  it('not found', () => {
+    r.add('GET', '/users/new', () => {})
+    r.add('GET', '/users/when', () => {})
+    r.add('GET', '/users/:id', () => {})
+    let [h, params] = r.find('GET', '/users/377');
+    assert.deepEqual(null, h);
+    assert.equal(0, params.length);
+  });
+
   it('params nested resources', () => {
     r.add('GET', '/users/:id', () => {})
     r.add('GET', '/users/:userId/photos/:photoId', () => {})
