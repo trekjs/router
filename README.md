@@ -11,8 +11,8 @@ A fast HTTP router, inspired by [Echo](https://github.com/labstack/echo)'s Route
 
 ## Benchmarks
 
-trek-router vs [path-to-regexp][], see [benchmarks](benchmarks)   
-Using GitHub API Routes
+trek-router vs [path-to-regexp][] vs [route-recognizer][].   
+See [benchmarks](benchmarks), using GitHub API Routes.
 
 ```bash
 $ npm run benchmark
@@ -53,14 +53,15 @@ let result = r.find('GET', '/photos/233')
   [MIT](LICENSE)
 
 [path-to-regexp]: https://github.com/pillarjs/path-to-regexp
+[route-recognizer]: https://github.com/tildeio/route-recognizer
 
 [npm-img]: https://img.shields.io/npm/v/trek-router.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trek-router
-[travis-img]: https://img.shields.io/travis/trekjs/trek-router.svg?style=flat-square
-[travis-url]: https://travis-ci.org/trekjs/trek-router
-[coveralls-img]: https://img.shields.io/coveralls/trekjs/trek-router.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/trekjs/trek-router?branch=master
+[travis-img]: https://img.shields.io/travis/trekjs/router.svg?style=flat-square
+[travis-url]: https://travis-ci.org/trekjs/router
+[coveralls-img]: https://img.shields.io/coveralls/trekjs/router.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/trekjs/router?branch=master
 [license-img]: https://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
-[david-img]: https://img.shields.io/david/trekjs/trek-router.svg?style=flat-square
-[david-url]: https://david-dm.org/trekjs/trek-router
+[david-img]: https://img.shields.io/david/trekjs/router.svg?style=flat-square
+[david-url]: https://david-dm.org/trekjs/router
