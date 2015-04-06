@@ -268,38 +268,40 @@ var api = [
 
 var suite = new Benchmark.Suite;
 
+var routes0 = new Router();
+api.forEach(function(i) {
+  var method = i[0],
+    path = i[1];
+  routes0.add(method, path, function() {});
+});
+
+var routes1 = {};
+api.forEach(function(i) {
+  var keys = [];
+  var method = i[0],
+    path = i[1];
+  var r = routes1[method] || (routes1[method] = []);
+  r.push(pathToRegexp(path, keys));
+});
+
 // add tests
 suite
   .add('Router', function() {
-    var r = new Router();
-    api.forEach(function(i) {
-      var method = i[0],
-        path = i[1];
-      r.add(method, path, function() {});
-    });
     api.forEach(function(i) {
       var method = i[0],
         path = i[1],
         realpath = i[2];
-      var result = r.find(method, realpath);
+      var result = routes0.find(method, realpath);
       var handler = result[0];
       assert.notEqual(null, handler);
     });
   })
   .add('pathToRegexp', function() {
-    var routes = {};
-    api.forEach(function(i) {
-      var keys = [];
-      var method = i[0],
-        path = i[1];
-      var r = routes[method] || (routes[method] = []);
-      r.push(pathToRegexp(path, keys));
-    });
     api.forEach(function(i) {
       var method = i[0],
         path = i[1],
         realpath = i[2];
-      var r = routes[method];
+      var r = routes1[method];
       var result = r.filter(function(j) {
         return realpath.match(j);
       })[0];
