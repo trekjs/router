@@ -11,18 +11,25 @@ A fast HTTP router, inspired by [Echo](https://github.com/labstack/echo)'s Route
 
 ## Benchmarks
 
-trek-router vs [path-to-regexp][] vs [route-recognizer][].   
-See [benchmarks](benchmarks), using GitHub API Routes.
+See [benchmarks](benchmarks), use GitHub API Routes.
+
+**trek-router** VS
+
+* [path-to-regexp][]
+* [route-recognizer][]
+* [route-trie][]
 
 ```bash
 $ npm run benchmark
 
-Router x 1,166 ops/sec ±7.23% (77 runs sampled)
-{ rss: 40083456, heapTotal: 27330560, heapUsed: 9130896 }
-pathToRegexp x 323 ops/sec ±5.66% (72 runs sampled)
-{ rss: 42172416, heapTotal: 29382400, heapUsed: 13250216 }
-route-recognizer x 214 ops/sec ±7.23% (66 runs sampled)
-{ rss: 44371968, heapTotal: 30414336, heapUsed: 11770608 }
+Router x 2,659 ops/sec ±0.99% (86 runs sampled)
+{ rss: 40484864, heapTotal: 27330560, heapUsed: 10963168 }
+pathToRegexp x 388 ops/sec ±0.93% (89 runs sampled)
+{ rss: 43233280, heapTotal: 30414336, heapUsed: 12261616 }
+route-recognizer x 285 ops/sec ±1.20% (82 runs sampled)
+{ rss: 45744128, heapTotal: 32478208, heapUsed: 19188888 }
+route-trie x 1,131 ops/sec ±1.34% (91 runs sampled)
+{ rss: 64806912, heapTotal: 52072960, heapUsed: 23980736 }
 Fastest is Router
 ```
 
@@ -54,6 +61,7 @@ let result = r.find('GET', '/photos/233')
 
 [path-to-regexp]: https://github.com/pillarjs/path-to-regexp
 [route-recognizer]: https://github.com/tildeio/route-recognizer
+[route-trie]: https://github.com/zensh/route-trie
 
 [npm-img]: https://img.shields.io/npm/v/trek-router.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trek-router
