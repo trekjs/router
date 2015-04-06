@@ -89,7 +89,7 @@ var api = [
   ['POST', '/repos/:owner/:repo/issues', '/repos/trekjs/trek/issues'],
   //['PATCH', '/repos/:owner/:repo/issues/:number'],
   ['GET', '/repos/:owner/:repo/assignees', '/repos/trekjs/trek/assignees'],
-  ['GET', '/repos/:owner/:repo/assignees/:assignee', '/repos/trekjs/trek/assignees'],
+  ['GET', '/repos/:owner/:repo/assignees/:assignee', '/repos/trekjs/trek/assignees/31231'],
   ['GET', '/repos/:owner/:repo/issues/:number/comments', '/repos/trekjs/trek/issues/610/comments'],
   //['GET', '/repos/:owner/:repo/issues/comments'],
   //['GET', '/repos/:owner/:repo/issues/comments/:id'],
@@ -106,7 +106,7 @@ var api = [
   ['DELETE', '/repos/:owner/:repo/labels/:name', '/repos/trekjs/trek/labels/iojs'],
   ['GET', '/repos/:owner/:repo/issues/:number/labels', '/repos/trekjs/trek/issues/388/labels'],
   ['POST', '/repos/:owner/:repo/issues/:number/labels', '/repos/trekjs/trek/issues/388/labels'],
-  ['DELETE', '/repos/:owner/:repo/issues/:number/labels/:name', '/repos/trekjs/trek/issues/233/labels'],
+  ['DELETE', '/repos/:owner/:repo/issues/:number/labels/:name', '/repos/trekjs/trek/issues/233/labels/help'],
   ['PUT', '/repos/:owner/:repo/issues/:number/labels', '/repos/trekjs/trek/issues/233/labels'],
   ['DELETE', '/repos/:owner/:repo/issues/:number/labels', '/repos/trekjs/trek/issues/399/labels'],
   ['GET', '/repos/:owner/:repo/milestones/:number/labels', '/repos/trekjs/trek/milestones/0/labels'],
@@ -272,12 +272,15 @@ var suite = new Benchmark.Suite;
 suite
   .add('Router', function() {
     var r = new Router();
-    api.forEach(function(i){
-      var method = i[0], path = i[1];
+    api.forEach(function(i) {
+      var method = i[0],
+        path = i[1];
       r.add(method, path, function() {});
     });
-    api.forEach(function(i){
-      var method = i[0], path = i[1], realpath = i[2];
+    api.forEach(function(i) {
+      var method = i[0],
+        path = i[1],
+        realpath = i[2];
       var result = r.find(method, realpath);
       var handler = result[0];
       assert.notEqual(null, handler);
@@ -285,16 +288,19 @@ suite
   })
   .add('pathToRegexp', function() {
     var routes = {};
-    api.forEach(function (i) {
+    api.forEach(function(i) {
       var keys = [];
-      var method = i[0], path = i[1];
+      var method = i[0],
+        path = i[1];
       var r = routes[method] || (routes[method] = []);
       r.push(pathToRegexp(path, keys));
     });
-    api.forEach(function (i) {
-      var method = i[0], path = i[1], realpath = i[2];
+    api.forEach(function(i) {
+      var method = i[0],
+        path = i[1],
+        realpath = i[2];
       var r = routes[method];
-      var result = r.filter(function (j) {
+      var result = r.filter(function(j) {
         return realpath.match(j);
       })[0];
       assert.notEqual(null, result);

@@ -216,7 +216,7 @@ describe('Router', () => {
       ['POST', '/repos/:owner/:repo/issues', '/repos/trekjs/trek/issues'],
       //['PATCH', '/repos/:owner/:repo/issues/:number'],
       ['GET', '/repos/:owner/:repo/assignees', '/repos/trekjs/trek/assignees'],
-      ['GET', '/repos/:owner/:repo/assignees/:assignee', '/repos/trekjs/trek/assignees'],
+      ['GET', '/repos/:owner/:repo/assignees/:assignee', '/repos/trekjs/trek/assignees/31231'],
       ['GET', '/repos/:owner/:repo/issues/:number/comments', '/repos/trekjs/trek/issues/610/comments'],
       //['GET', '/repos/:owner/:repo/issues/comments'],
       //['GET', '/repos/:owner/:repo/issues/comments/:id'],
@@ -233,7 +233,7 @@ describe('Router', () => {
       ['DELETE', '/repos/:owner/:repo/labels/:name', '/repos/trekjs/trek/labels/iojs'],
       ['GET', '/repos/:owner/:repo/issues/:number/labels', '/repos/trekjs/trek/issues/388/labels'],
       ['POST', '/repos/:owner/:repo/issues/:number/labels', '/repos/trekjs/trek/issues/388/labels'],
-      ['DELETE', '/repos/:owner/:repo/issues/:number/labels/:name', '/repos/trekjs/trek/issues/233/labels'],
+      ['DELETE', '/repos/:owner/:repo/issues/:number/labels/:name', '/repos/trekjs/trek/issues/233/labels/help'],
       ['PUT', '/repos/:owner/:repo/issues/:number/labels', '/repos/trekjs/trek/issues/233/labels'],
       ['DELETE', '/repos/:owner/:repo/issues/:number/labels', '/repos/trekjs/trek/issues/399/labels'],
       ['GET', '/repos/:owner/:repo/milestones/:number/labels', '/repos/trekjs/trek/milestones/0/labels'],
@@ -390,7 +390,7 @@ describe('Router', () => {
       ['GET', '/user/keys/:id', '/user/keys/233'],
       ['POST', '/user/keys', '/user/keys'],
       //['PATCH', '/user/keys/:id'],
-      ['DELETE', '/user/keys/:id', '/user/keys/233'],
+      ['DELETE', '/user/keys/:id', '/user/keys/233']
     ];
 
     beforeEach(() => {
@@ -405,8 +405,9 @@ describe('Router', () => {
       let [method, path, realpath] = i;
       it(path, () => {
         let [handler, params] = r.find(method, realpath);
-        assert.notEqual(null, handler);
         console.log(path, realpath, params);
+        assert.notEqual(null, handler);
+        assert.equal((path.match(/\:/g) || []).length, params.length);
       });
     });
 
