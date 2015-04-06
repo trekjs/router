@@ -123,7 +123,8 @@ describe('Router', () => {
 
     it('create a node', () => {
       assert.equal('/users', node.prefix);
-      assert.equal('/', node.label);
+      // `/`
+      assert.equal(47, node.label);
     });
   });
 

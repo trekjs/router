@@ -23,7 +23,7 @@ const ANODE = 2; // Catch-all node
 class Node {
 
   constructor(prefix, has, handler, edges) {
-    this.label = prefix[0];
+    this.label = prefix.charCodeAt(0);
     this.prefix = prefix;
     this.has = has;
     this.handler = handler;
@@ -35,7 +35,8 @@ class Node {
     let [i, l, e] = [0, this.edges.length, void 0];
     for (; i < l; i++) {
       e = this.edges[i];
-      if (e.label.charCodeAt() === c.charCodeAt()) return e;
+      // compare charCode
+      if (e.label === c) return e;
     }
     return null;
   }
@@ -82,7 +83,7 @@ class Router {
 
       if (l === 0) {
         // At root node
-        cn.label = search[0];
+        cn.label = search.charCodeAt(0);
         cn.prefix = search;
         cn.has = has;
         if (handler) {
@@ -95,7 +96,7 @@ class Router {
         cn.edges = [n]; // Add to parent
 
         // Reset parent node
-        cn.label = cn.prefix[0]
+        cn.label = cn.prefix.charCodeAt(0);
         cn.prefix = cn.prefix.substring(0, l);
         cn.has = SNODE;
         cn.handler = null;
@@ -111,7 +112,7 @@ class Router {
         break;
       } else if (l < sl) {
         search = search.substring(l);
-        let e = cn.findEdge(search[0]);
+        let e = cn.findEdge(search.charCodeAt(0));
         if (e) {
           cn = e;
         } else {
@@ -152,7 +153,7 @@ class Router {
         if (cn.has === PNODE) {
           // Param node
           cn = cn.edges[0];
-          var i = 0;
+          let i = 0;
           l = search.length;
           // `/`
           for (; i < l && search.charCodeAt(i) !== 47; i++) {}
@@ -168,7 +169,7 @@ class Router {
           // Catch-all node
           params[n] = {
             name: cn.prefix.substring(1),
-            value: search.substring(0, i)
+            value: search
           };
           search = ''; // End search
         }
@@ -178,7 +179,7 @@ class Router {
         }
 
         // Dig more
-        let e = cn.findEdge(search[0])
+        let e = cn.findEdge(search.charCodeAt(0));
         if (!e) {
           // Not found
           return result;
@@ -194,13 +195,9 @@ class Router {
 
 // Length of longest common prefix
 function lcp(a, b) {
-  var i = 0;
-  let max = a.length;
-  let l = b.length;
-  if (l < max) {
-    max = l;
-  }
-  for (; i < max && a.charCodeAt(i) === b.charCodeAt(i); i++) {}
+  let i = 0;
+  let max = Math.min(a.length, b.length);
+  for (; i < max && (a.charCodeAt(i) === b.charCodeAt(i)); i++) {}
   return i;
 }
 
