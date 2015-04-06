@@ -2,6 +2,7 @@ var assert = require('assert');
 var Benchmark = require('benchmark');
 var pathToRegexp = require('path-to-regexp');
 var RouteRecognizer = require('route-recognizer');
+var RouteTrie = require('route-trie');
 var Router = require('../');
 
 var api = [
@@ -293,6 +294,14 @@ api.forEach(function (i) {
   r.add([{ path: path, handler: function () {} }]);
 });
 
+var routes3 = {};
+api.forEach(function (i) {
+  var method = i[0],
+    path = i[1];
+  var r = routes3[method] || (routes3[method] = new RouteTrie());
+  r.define(path);
+});
+
 // add tests
 suite
   .add('Router', function() {
@@ -324,6 +333,16 @@ suite
         realpath = i[2];
       var r = routes2[method];
       var result = r.recognize(realpath);
+      assert.notEqual(null, result);
+    });
+  })
+  .add('route-trie', function() {
+    api.forEach(function(i) {
+      var method = i[0],
+        path = i[1],
+        realpath = i[2];
+      var r = routes3[method];
+      var result = r.match(realpath);
       assert.notEqual(null, result);
     });
   })
