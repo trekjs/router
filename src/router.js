@@ -133,62 +133,61 @@ class Router {
     let cn = this.trees[method]; // Current node as root
     let search = path;
     let n = 0; // Param count
-    let result = [null];
-    let params = [];
+    let result = [null, []];
+    let params = result[1];
 
-      while (true) {
-        if (search === '' || search === cn.prefix) {
-          // Found
-          result[0] = cn.handler;
-          result[1] = params;
-          return result;
-        }
-
-        let pl = cn.prefix.length;
-        let l = lcp(search, cn.prefix);
-
-        if (l === pl) {
-          search = search.substring(l);
-          switch (cn.has) {
-            case PNODE:
-              cn = cn.edges[0];
-              var i = 0;
-              l = search.length;
-              // `/`
-              for (; i < l && search.charCodeAt(i) !== 47; i++) {}
-
-              params[n] = {
-                name: cn.prefix.substring(1),
-                value: search.substring(0, i)
-              };
-              n++;
-
-              search = search.substring(i);
-
-              if (i === l) {
-                // All params read
-                continue;
-              }
-              break;
-            case ANODE:
-              params[n] = {
-                name: cn.prefix.substring(1),
-                value: search.substring(0, i)
-              };
-              search = ''; // End search
-              continue;
-          }
-
-          let e = cn.findEdge(search[0])
-          if (!e) {
-            // Not found
-            return result;
-          }
-          cn = e;
-          continue;
-        }
+    while (true) {
+      if (search === '' || search === cn.prefix) {
+        // Found
+        result[0] = cn.handler;
+        result[1] = params;
         return result;
       }
+
+      let pl = cn.prefix.length;
+      let l = lcp(search, cn.prefix);
+
+      if (l === pl) {
+        search = search.substring(l);
+        if (cn.has === PNODE) {
+          // Param node
+          cn = cn.edges[0];
+          var i = 0;
+          l = search.length;
+          // `/`
+          for (; i < l && search.charCodeAt(i) !== 47; i++) {}
+
+          params[n] = {
+            name: cn.prefix.substring(1),
+            value: search.substring(0, i)
+          };
+          n++;
+
+          search = search.substring(i)
+        } else if (cn.has === ANODE) {
+          // Catch-all node
+          params[n] = {
+            name: cn.prefix.substring(1),
+            value: search.substring(0, i)
+          };
+          search = ''; // End search
+        }
+
+        if (search.length === 0) {
+          continue;
+        }
+
+        // Dig more
+        let e = cn.findEdge(search[0])
+        if (!e) {
+          // Not found
+          return result;
+        }
+        cn = e;
+        continue;
+      }
+      return result;
+    }
   }
 
 }
