@@ -58,7 +58,8 @@ class Router {
       if (path.charCodeAt(i) === 58) {
         this.insert(method, path.substring(0, i), null, PNODE);
         // `/`
-        for (; i < l && path.charCodeAt(i) !== 47; i++) {}
+        for (; i < l && (path.charCodeAt(i) !== 47); i++) {}
+        // for (; i < l && (path.charCodeAt(i) ^ 47); i++) {}
         if (i === l) {
           this.insert(method, path.substring(0, i), handler, SNODE);
           return;
@@ -138,7 +139,8 @@ class Router {
     let params = result[1];
 
     while (true) {
-      if (search === '' || search === cn.prefix) {
+      // search ==== ''
+      if (search.length === 0 || search === cn.prefix) {
         // Found
         result[0] = cn.handler;
         result[1] = params;
@@ -153,10 +155,10 @@ class Router {
         if (cn.has === PNODE) {
           // Param node
           cn = cn.edges[0];
-          let i = 0;
           l = search.length;
           // `/`
-          for (; i < l && search.charCodeAt(i) !== 47; i++) {}
+          for (var i = 0; i < l && (search.charCodeAt(i) !== 47); i++) {}
+          // for (var i = 0; i < l && (search.charCodeAt(i) ^ 47); i++) {}
 
           params[n] = {
             name: cn.prefix.substring(1),
@@ -174,6 +176,7 @@ class Router {
           search = ''; // End search
         }
 
+        // search === ''
         if (search.length === 0) {
           continue;
         }

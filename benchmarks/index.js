@@ -3,6 +3,7 @@ var Benchmark = require('benchmark');
 var pathToRegexp = require('path-to-regexp');
 var RouteRecognizer = require('route-recognizer');
 var RouteTrie = require('route-trie');
+var Routington = require('routington');
 var Router = require('../');
 
 var api = [
@@ -302,9 +303,17 @@ api.forEach(function (i) {
   r.define(path);
 });
 
+var routes4 = {};
+api.forEach(function (i) {
+  var method = i[0],
+    path = i[1];
+  var r = routes4[method] || (routes4[method] = new Routington());
+  r.define(path);
+});
+
 // add tests
 suite
-  .add('Router', function() {
+  .add('trek-router', function() {
     api.forEach(function(i) {
       var method = i[0],
         path = i[1],
@@ -314,7 +323,7 @@ suite
       assert.notEqual(null, handler);
     });
   })
-  .add('pathToRegexp', function() {
+  .add('path-to-regexp', function() {
     api.forEach(function(i) {
       var method = i[0],
         path = i[1],
@@ -346,10 +355,20 @@ suite
       assert.notEqual(null, result);
     });
   })
+  .add('routington', function() {
+    api.forEach(function(i) {
+      var method = i[0],
+        path = i[1],
+        realpath = i[2];
+      var r = routes4[method];
+      var result = r.match(realpath);
+      assert.notEqual(null, result);
+    });
+  })
   // add listeners
   .on('cycle', function(event) {
     console.log(String(event.target));
-    console.log(process.memoryUsage());
+    console.log('memoryUsage:', process.memoryUsage());
   })
   .on('complete', function() {
     console.log('Fastest is ' + this.filter('fastest').pluck('name'));

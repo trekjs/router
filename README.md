@@ -18,19 +18,22 @@ See [benchmarks](benchmarks), use GitHub API Routes.
 * [path-to-regexp][]
 * [route-recognizer][]
 * [route-trie][]
+* [routington][]
 
 ```bash
 $ npm run benchmark
 
-Router x 2,659 ops/sec ±0.99% (86 runs sampled)
-{ rss: 40484864, heapTotal: 27330560, heapUsed: 10963168 }
-pathToRegexp x 388 ops/sec ±0.93% (89 runs sampled)
-{ rss: 43233280, heapTotal: 30414336, heapUsed: 12261616 }
-route-recognizer x 285 ops/sec ±1.20% (82 runs sampled)
-{ rss: 45744128, heapTotal: 32478208, heapUsed: 19188888 }
-route-trie x 1,131 ops/sec ±1.34% (91 runs sampled)
-{ rss: 64806912, heapTotal: 52072960, heapUsed: 23980736 }
-Fastest is Router
+trek-router x 2,953 ops/sec ±0.82% (86 runs sampled)
+memoryUsage: { rss: 41099264, heapTotal: 27330560, heapUsed: 12131640 }
+path-to-regexp x 398 ops/sec ±0.91% (84 runs sampled)
+memoryUsage: { rss: 44023808, heapTotal: 31446272, heapUsed: 13515744 }
+route-recognizer x 280 ops/sec ±1.81% (79 runs sampled)
+memoryUsage: { rss: 63115264, heapTotal: 51041024, heapUsed: 18087664 }
+route-trie x 1,098 ops/sec ±1.16% (86 runs sampled)
+memoryUsage: { rss: 64200704, heapTotal: 51041024, heapUsed: 20905648 }
+routington x 1,156 ops/sec ±1.56% (87 runs sampled)
+memoryUsage: { rss: 64397312, heapTotal: 51041024, heapUsed: 12043280 }
+Fastest is trek-router
 ```
 
 ## Usage
@@ -43,7 +46,7 @@ let r = new Router();
 r.add('GET', '/folders/files/bolt.gif', () => {});
 // param route
 r.add('GET', '/users/:id', () => {});
-// all star
+// catch-all route
 r.add('GET', '/books/*', () => {});
 
 let result = r.find('GET', '/users/233')
@@ -62,6 +65,7 @@ let result = r.find('GET', '/photos/233')
 [path-to-regexp]: https://github.com/pillarjs/path-to-regexp
 [route-recognizer]: https://github.com/tildeio/route-recognizer
 [route-trie]: https://github.com/zensh/route-trie
+[routington]: https://github.com/pillarjs/routington
 
 [npm-img]: https://img.shields.io/npm/v/trek-router.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trek-router
