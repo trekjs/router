@@ -52,7 +52,28 @@ class Router {
     });
   }
 
+  format(path) {
+    let p = path;
+    let k = 0;
+    let alias = [];
+    for (let i = 0, l = path.length; i < l; i++) {
+      if (path.charCodeAt(i) === 58) {
+        let j = 0;
+        k++;
+        for (; i < l && (path.charCodeAt(i) !== 47); i++) {
+          j++;
+        }
+        p = p.substring(0, i - j + 1 + (p.length - path.length)) + '$' + k + path.substring(i);
+        alias.push(path.substring(i - j + 1, i));
+      }
+    }
+    return [p, alias];
+  }
+
   add(method, path, handler) {
+    let [p, alias] = this.format(path);
+    if (handler) handler.alias = alias
+    path = p;
     for (let i = 0, l = path.length; i < l; i++) {
       // `:`
       if (path.charCodeAt(i) === 58) {
@@ -144,6 +165,11 @@ class Router {
         // Found
         result[0] = cn.handler;
         result[1] = params;
+        if (cn.handler) {
+          cn.handler.alias.forEach((a, i) => {
+            params[i].name = a;
+          });
+        }
         return result;
       }
 

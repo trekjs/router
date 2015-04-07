@@ -13,7 +13,7 @@ A fast HTTP router, inspired by [Echo](https://github.com/labstack/echo)'s Route
 
 See [benchmarks](benchmarks), use GitHub API Routes.
 
-**trek-router** VS
+**VS**
 
 * [path-to-regexp][]
 * [route-recognizer][]
@@ -53,6 +53,7 @@ let result = r.find('GET', '/users/233')
 // => [handler, params]
 // => [()=>{}, [{name: id, value: 233}]]
 
+// Not Found
 let result = r.find('GET', '/photos/233')
 // => [handler, params]
 // => [null, []]

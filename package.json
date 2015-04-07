@@ -23,9 +23,9 @@
   "devDependencies": {
     "babel": "^5.x",
     "benchmark": "^1.0.0",
-    "isparta": "^3.0.0",
+    "isparta": "^3.x",
     "istanbul": "^0.3.13",
-    "mocha": "^2.2.1",
+    "mocha": "^2.x",
     "path-to-regexp": "^1.0.3",
     "route-recognizer": "^0.1.5",
     "route-trie": "^0.2.0",

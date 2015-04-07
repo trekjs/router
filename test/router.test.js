@@ -91,7 +91,6 @@ describe('Router', () => {
     r.add('GET', '/users/:id', () => {})
     r.add('GET', '/users/:userId/photos/:photoId', () => {})
     r.trees['GET'].printTree('', true)
-    /*
     let [h, params] = r.find('GET', '/users/233');
     assert.notEqual(null, h);
     assert.equal('id', params[0].name);
@@ -102,7 +101,6 @@ describe('Router', () => {
     assert.equal(233, params2[0].value);
     assert.equal('photoId', params2[1].name);
     assert.equal(377, params2[1].value);
-    */
   });
 
   it('params resource', () => {
