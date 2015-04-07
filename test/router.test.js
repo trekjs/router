@@ -1,19 +1,17 @@
 import assert from 'assert';
-import Router, {
-  Node
-}
-from '../src/router';
+import { format } from 'util';
+import Router, { Node } from '../src/router';
 
 function prefix(tail, p, on, off) {
   if (tail) {
-    return `${p}${on}`;
+    return format('%s%s', p, on);
   }
-  return `${p}${off}`;
+    return format('%s%s', p, off);
 }
 
 Node.prototype.printTree = function printTree(pfx, tail) {
   let p = prefix(tail, pfx, '└── ', '├── ');
-  console.log(`%s%s has=%d h=%s edges=%s`, p, this.prefix, this.has, this.handler === null ? null : 'function', this.edges.length);
+  console.log('%s%s has=%d h=%s edges=%s', p, this.prefix, this.has, this.handler === null ? null : 'function', this.edges.length);
 
   let nodes = this.edges;
   let l = nodes.length;
