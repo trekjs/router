@@ -155,6 +155,7 @@ class Router {
     this.insert(method, path, handler, SNODE, true);
   }
 
+  // if bool is ture, push it to the top index of edges
   insert(method, path, handler, has, bool = false) {
     let cn = this.trees[method]; // Current node as root
     let search = path;
