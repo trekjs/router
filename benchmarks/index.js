@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var assert = require('assert');
 var Benchmark = require('benchmark');
 var pathToRegexp = require('path-to-regexp');
@@ -10,14 +11,14 @@ var api = require('../test/github-api');
 var suite = new Benchmark.Suite;
 
 var routes0 = new Router();
-api.forEach(function(i) {
+_.shuffle(api).forEach(function(i) {
   var method = i[0],
     path = i[1];
   routes0.add(method, path, function() {});
 });
 
 var routes1 = {};
-api.forEach(function(i) {
+_.shuffle(api).forEach(function(i) {
   var keys = [];
   var method = i[0],
     path = i[1];
@@ -26,7 +27,7 @@ api.forEach(function(i) {
 });
 
 var routes2 = {};
-api.forEach(function(i) {
+_.shuffle(api).forEach(function(i) {
   var method = i[0],
     path = i[1];
   var r = routes2[method] || (routes2[method] = new RouteRecognizer());
@@ -37,7 +38,7 @@ api.forEach(function(i) {
 });
 
 var routes3 = {};
-api.forEach(function(i) {
+_.shuffle(api).forEach(function(i) {
   var method = i[0],
     path = i[1];
   var r = routes3[method] || (routes3[method] = new RouteTrie());
@@ -45,7 +46,7 @@ api.forEach(function(i) {
 });
 
 var routes4 = {};
-api.forEach(function(i) {
+_.shuffle(api).forEach(function(i) {
   var method = i[0],
     path = i[1];
   var r = routes4[method] || (routes4[method] = new Routington());
@@ -55,7 +56,7 @@ api.forEach(function(i) {
 // add tests
 suite
   .add('trek-router', function() {
-    api.forEach(function(i) {
+    _.shuffle(api).forEach(function(i) {
       var method = i[0],
         path = i[1],
         realpath = i[2];
@@ -65,7 +66,7 @@ suite
     });
   })
   .add('path-to-regexp', function() {
-    api.forEach(function(i) {
+    _.shuffle(api).forEach(function(i) {
       var method = i[0],
         path = i[1],
         realpath = i[2];
@@ -77,7 +78,7 @@ suite
     });
   })
   .add('route-recognizer', function() {
-    api.forEach(function(i) {
+    _.shuffle(api).forEach(function(i) {
       var method = i[0],
         path = i[1],
         realpath = i[2];
@@ -87,7 +88,7 @@ suite
     });
   })
   .add('route-trie', function() {
-    api.forEach(function(i) {
+    _.shuffle(api).forEach(function(i) {
       var method = i[0],
         path = i[1],
         realpath = i[2];
@@ -97,7 +98,7 @@ suite
     });
   })
   .add('routington', function() {
-    api.forEach(function(i) {
+    _.shuffle(api).forEach(function(i) {
       var method = i[0],
         path = i[1],
         realpath = i[2];

@@ -340,9 +340,9 @@ describe('Router', () => {
 
     beforeEach(() => {
       r = new Router();
-      api.forEach((i) => {
+      _.shuffle(api).forEach((i) => {
         let [method, path] = i;
-        r.add(method, path, () => {});
+        r.add(method, path, createFunc(_.camelCase(path)));
       });
 
     });
@@ -351,12 +351,13 @@ describe('Router', () => {
       r.trees['GET'].printTree('', true)
     });
 
-    api.forEach((i) => {
+    _.shuffle(api).forEach((i) => {
       let [method, path, realpath] = i;
       it(path, () => {
         let [handler, params] = r.find(method, realpath);
         // console.log(path, realpath, params);
         assert.notEqual(null, handler);
+        assert.equal(_.camelCase(path), handler.name);
         assert.equal((path.match(/\:/g) || []).length, params.length);
       });
     });

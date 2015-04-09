@@ -233,7 +233,7 @@ module.exports = [
   ['GET', '/search/issues', '/search/issues'],
   ['GET', '/search/users', '/search/users'],
   ['GET', '/legacy/issues/search/:owner/:repository/:state/:keyword', '/legacy/issues/search/trekjs/trek/open/iojs'],
-  ['GET', '/legacy/repos/search/:keyword', '/legacy/user/search/trekjs'],
+  ['GET', '/legacy/repos/search/:keyword', '/legacy/repos/search/trekjs'],
   ['GET', '/legacy/user/search/:keyword', '/legacy/user/search/go+iojs'],
   ['GET', '/legacy/user/email/:email', '/legacy/user/email/cfddream@gmail.com'],
 
