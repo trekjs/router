@@ -3,10 +3,6 @@ sudo: false
 node_js:
   - "iojs"
 
-branches:
-  only:
-    - master
-
 script: "npm run test-ci"
 after_script:
   - "npm run benchmark"
