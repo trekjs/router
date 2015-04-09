@@ -5,7 +5,7 @@ var RouteRecognizer = require('route-recognizer');
 var RouteTrie = require('route-trie');
 var Routington = require('routington');
 var Router = require('../');
-var api = require('../test/github-api')
+var api = require('../test/github-api');
 
 var suite = new Benchmark.Suite;
 
@@ -26,15 +26,18 @@ api.forEach(function(i) {
 });
 
 var routes2 = {};
-api.forEach(function (i) {
+api.forEach(function(i) {
   var method = i[0],
     path = i[1];
   var r = routes2[method] || (routes2[method] = new RouteRecognizer());
-  r.add([{ path: path, handler: function () {} }]);
+  r.add([{
+    path: path,
+    handler: function() {}
+  }]);
 });
 
 var routes3 = {};
-api.forEach(function (i) {
+api.forEach(function(i) {
   var method = i[0],
     path = i[1];
   var r = routes3[method] || (routes3[method] = new RouteTrie());
@@ -42,7 +45,7 @@ api.forEach(function (i) {
 });
 
 var routes4 = {};
-api.forEach(function (i) {
+api.forEach(function(i) {
   var method = i[0],
     path = i[1];
   var r = routes4[method] || (routes4[method] = new Routington());
