@@ -94,18 +94,26 @@ describe('Router', () => {
       ['/users', 'users'],
       ['/users/new', 'newUser'],
       ['/users/:id', 'user'],
+      ['/users/:id/:action', 'actionUser'],
       ['/users/:id/edit', 'editUser']
     ]).forEach((i) => {
       r.add('GET', i[0], createFunc(i[1]));
     });
     r.trees['GET'].printTree('', true);
 
+    result = r.find('GET', '/users/377/delete');
+    assert.notEqual(null, result[0]);
+    assert.equal('actionUser', result[0].name);
+    assert.equal('id', result[1][0].name);
+    assert.equal('377', result[1][0].value);
     result = r.find('GET', '/users/377/edit');
     assert.notEqual(null, result[0]);
+    assert.equal('editUser', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('377', result[1][0].value);
     result = r.find('GET', '/users/233');
     assert.notEqual(null, result[0]);
+    assert.equal('user', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('233', result[1][0].value);
     result = r.find('GET', '/users/new');
@@ -113,6 +121,7 @@ describe('Router', () => {
     assert.equal('newUser', result[0].name);
     result = r.find('GET', '/users');
     assert.notEqual(null, result[0]);
+    assert.equal('users', result[0].name);
     assert.equal('users', result[0].name);
   });
 
@@ -361,6 +370,6 @@ describe('Router', () => {
         assert.equal((path.match(/\:/g) || []).length, params.length);
       });
     });
-
   });
+
 });

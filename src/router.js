@@ -41,66 +41,6 @@ class Node {
     return null;
   }
 
-  find(path, n = 0, params = []) {
-    let cn = this;
-    let search = path;
-    let result = [null, params];
-
-    if (search.length === 0 || search === cn.prefix) {
-      result[0] = cn.handler;
-      if (cn.handler) {
-        cn.handler.alias.forEach((a, i) => {
-          params[i].name = a;
-        });
-      }
-      return result;
-    }
-
-    let pl = cn.prefix.length;
-    let l = lcp(search, cn.prefix);
-    if (l === pl) {
-      search = search.substring(l);
-    }
-
-    for (let i = 0, k = cn.edges.length, e; i < k; i++) {
-      e = cn.edges[i];
-      let has = e.label === 58 ? PNODE : (e.label === 42 ? CNODE : 0);
-      if (has === CNODE) {
-        // console.log('cnode', e.prefix)
-        params[n] = {
-          name: '_name',
-          value: search
-        };
-        search = '';
-      } else if (has === PNODE) {
-        // console.log('pnode', e.prefix)
-        l = search.length;
-        // `/`
-        for (var j = 0; j < l && (search.charCodeAt(j) !== 47); j++) {}
-
-        params[n] = {
-          name: e.prefix.substring(1),
-          value: search.substring(0, j)
-        };
-        n++;
-        // console.log(search, search.substring(j))
-        search = search.substring(j);
-      }
-
-      // console.log(e.label, e.prefix, has)
-      let x = cn.findEdge(search.charCodeAt(0));
-      if (x) {
-        result = x.find(search, n, params);
-        if (result[0]) break;
-      } else {
-        result = e.find(search, n, params);
-        // if (result[0]) break;
-      }
-    }
-
-    return result;
-  }
-
 }
 
 class Router {
@@ -112,35 +52,35 @@ class Router {
     });
   }
 
-  format(path) {
-    let p = path;
-    let k = -1;
-    let alias = [];
-    for (let i = 0, l = path.length; i < l; i++) {
-      if (path.charCodeAt(i) === 58) {
-        let j = 0;
-        k++;
-        for (; i < l && (path.charCodeAt(i) !== 47); i++) {
-          j++;
-        }
-        p = p.substring(0, i - j + 1 + (p.length - path.length)) + '$' + k + path.substring(i);
-        alias.push(path.substring(i - j + 1, i));
-      }
-    }
-    return [p, alias];
-  }
-
   add(method, path, handler) {
-    let [p, alias] = this.format(path);
-    if (handler) handler.alias = alias
-    path = p;
+    // count params
+    let count = -1;
+    // store param keys
+    let keys = [];
+    if (handler) handler.keys = keys;
+
     for (let i = 0, l = path.length; i < l; i++) {
       // `:`
       if (path.charCodeAt(i) === 58) {
+        // param start index
+        let j = i + 1;
+        count++;
+
         this.insert(method, path.substring(0, i), null, PNODE);
         // `/`
         for (; i < l && (path.charCodeAt(i) !== 47); i++) {}
-        // for (; i < l && (path.charCodeAt(i) ^ 47); i++) {}
+
+        // new param key `$n`
+        let param = '$' + count;
+        let prefix = path.substring(0, j) + param;
+        // store original param key
+        keys.push(path.substring(j, i));
+        // override path
+        path = prefix + path.substring(i);
+        // override i, l
+        i = prefix.length;
+        l = path.length;
+
         if (i === l) {
           this.insert(method, path.substring(0, i), handler, 0);
           return;
@@ -190,8 +130,8 @@ class Router {
         } else {
           // Need to fork a node
           let n = new Node(search.substring(l), has, handler, null);
-          if (bool) cn.edges.unshift(n);
-          else cn.edges.push(n);
+          // cn.edges.push(n);
+          cn.edges[bool ? 'unshift' : 'push'](n);
         }
       } else if (l < sl) {
         search = search.substring(l);
@@ -201,10 +141,10 @@ class Router {
           cn = e;
           continue;
         }
+        // Create child node
         let n = new Node(search, has, handler, null);
         // cn.edges.push(n);
-        if (bool) cn.edges.unshift(n);
-        else cn.edges.push(n);
+        cn.edges[bool ? 'unshift' : 'push'](n);
       } else {
         // Node already exists
         if (handler) {
@@ -215,9 +155,60 @@ class Router {
     }
   }
 
-  find(method, path) {
-    let cn = this.trees[method];
-    return cn.find(path);
+  find(method, path, cn, n = 0, params = []) {
+    cn = cn || this.trees[method];
+    let search = path;
+    let result = [null, params];
+
+    if (search.length === 0 || search === cn.prefix) {
+      result[0] = cn.handler;
+      if (cn.handler && cn.handler.keys) {
+        cn.handler.keys.forEach((a, i) => {
+          params[i].name = a;
+        });
+      }
+      return result;
+    }
+
+    let pl = cn.prefix.length;
+    let l = lcp(search, cn.prefix);
+    if (l === pl) {
+      search = search.substring(l);
+    }
+
+    for (let i = 0, k = cn.edges.length, e; i < k; i++) {
+      e = cn.edges[i];
+      let has = e.label === 58 ? PNODE : (e.label === 42 ? CNODE : 0);
+      if (has === PNODE) {
+        l = search.length;
+        // `/`
+        for (var j = 0; j < l && (search.charCodeAt(j) !== 47); j++) {}
+
+        params[n] = {
+          name: e.prefix.substring(1),
+          value: search.substring(0, j)
+        };
+        n++;
+        search = search.substring(j);
+      } else if (has === CNODE) {
+        params[n] = {
+          name: '_name',
+          value: search
+        };
+        search = '';
+      }
+
+      let x = cn.findEdge(search.charCodeAt(0));
+      if (x) {
+        result = this.find(method, search, x, n, params);
+        if (result[0]) break;
+      } else {
+        result = this.find(method, search, e, n, params);
+        // if (result[0]) break;
+      }
+    }
+
+    return result;
   }
 
 }
