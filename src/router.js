@@ -59,7 +59,8 @@ class Router {
     let keys = [];
     if (handler) handler.keys = keys;
 
-    for (let i = 0, l = path.length; i < l; i++) {
+    let i = 0, l = path.length;
+    for (; i < l; ++i) {
       // `:`
       if (path.charCodeAt(i) === 58) {
         // param start index
@@ -176,13 +177,15 @@ class Router {
       search = search.substring(l);
     }
 
-    for (let i = 0, k = cn.edges.length, e; i < k; ++i) {
+    let i = 0, k = cn.edges.length, e;
+    for (; i < k; ++i) {
       e = cn.edges[i];
       let has = e.label === 58 ? PNODE : (e.label === 42 ? CNODE : 0);
       if (has === PNODE) {
         l = search.length;
         // `/`
-        for (var j = 0; j < l && (search.charCodeAt(j) !== 47); ++j) {}
+        let j = 0;
+        for (; j < l && (search.charCodeAt(j) !== 47); ++j) {}
 
         params[n] = {
           name: e.prefix.substring(1),
