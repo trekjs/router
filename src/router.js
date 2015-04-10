@@ -33,7 +33,7 @@ class Node {
 
   findEdge(c) {
     let [i, l, e] = [0, this.edges.length, void 0];
-    for (; i < l; i++) {
+    for (; i < l; ++i) {
       e = this.edges[i];
       // compare charCode
       if (e.label === c) return e;
@@ -60,16 +60,17 @@ class Router {
     if (handler) handler.keys = keys;
 
     let i = 0, l = path.length;
+    let ch;
     for (; i < l; ++i) {
-      // `:`
-      if (path.charCodeAt(i) === 58) {
+      ch = path.charCodeAt(i);
+      if (ch === 0x3A /*':'*/) {
         // param start index
         let j = i + 1;
         count++;
 
         this.insert(method, path.substring(0, i), null, PNODE);
-        // `/`
-        for (; i < l && (path.charCodeAt(i) !== 47); ++i) {}
+        // 47,`/`
+        for (; i < l && (path.charCodeAt(i) !== 0x2F); ++i) {}
 
         // new param key `$n`
         let param = '$' + count;
@@ -87,8 +88,7 @@ class Router {
           return;
         }
         this.insert(method, path.substring(0, i), null, 0);
-        // `*`
-      } else if (path.charCodeAt(i) === 42) {
+      } else if (ch === 0x2A /*'*'*/) {
         this.insert(method, path.substring(0, i), null, CNODE);
         this.insert(method, path.substring(0, l), handler, 0);
       }
@@ -180,12 +180,11 @@ class Router {
     let i = 0, k = cn.edges.length, e;
     for (; i < k; ++i) {
       e = cn.edges[i];
-      let has = e.label === 58 ? PNODE : (e.label === 42 ? CNODE : 0);
+      let has = e.label === 0x3A /*':'*/ ? PNODE : (e.label === 0x2A /*'*'*/ ? CNODE : 0);
       if (has === PNODE) {
         l = search.length;
-        // `/`
         let j = 0;
-        for (; j < l && (search.charCodeAt(j) !== 47); ++j) {}
+        for (; j < l && (search.charCodeAt(j) !== 0x2F /*'/'*/); ++j) {}
 
         params[n] = {
           name: e.prefix.substring(1),
