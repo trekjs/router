@@ -27,8 +27,7 @@ class Node {
     this.prefix = prefix;
     this.has = has;
     this.handler = handler;
-    this.edges = edges;
-    if (!edges) this.edges = [];
+    this.edges = edges || [];
   }
 
   findEdge(c) {
@@ -59,11 +58,10 @@ class Router {
     let keys = [];
     if (handler) handler.keys = keys;
 
-    let i = 0, l = path.length;
-    let ch;
+    let i = 0, l = path.length, ch;
     for (; i < l; ++i) {
       ch = path.charCodeAt(i);
-      if (ch === 0x3A /*':'*/) {
+      if (ch === 0x3A /*':'*/ ) {
         // param start index
         let j = i + 1;
         count++;
@@ -88,7 +86,7 @@ class Router {
           return;
         }
         this.insert(method, path.substring(0, i), null, 0);
-      } else if (ch === 0x2A /*'*'*/) {
+      } else if (ch === 0x2A /*'*'*/ ) {
         this.insert(method, path.substring(0, i), null, CNODE);
         this.insert(method, path.substring(0, l), handler, 0);
       }
@@ -130,7 +128,7 @@ class Router {
           cn.handler = handler;
         } else {
           // Need to fork a node
-          let n = new Node(search.substring(l), has, handler, null);
+          let n = new Node(search.substring(l), has, handler);
           // cn.edges.push(n);
           cn.edges[bool ? 'unshift' : 'push'](n);
         }
@@ -143,7 +141,7 @@ class Router {
           continue;
         }
         // Create child node
-        let n = new Node(search, has, handler, null);
+        let n = new Node(search, has, handler);
         // cn.edges.push(n);
         cn.edges[bool ? 'unshift' : 'push'](n);
       } else {
@@ -184,7 +182,7 @@ class Router {
       if (has === PNODE) {
         l = search.length;
         let j = 0;
-        for (; j < l && (search.charCodeAt(j) !== 0x2F /*'/'*/); ++j) {}
+        for (; j < l && (search.charCodeAt(j) !== 0x2F /*'/'*/ ); ++j) {}
 
         params[n] = {
           name: e.prefix.substring(1),
