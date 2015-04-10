@@ -31,7 +31,7 @@ class Node {
   }
 
   findEdge(c) {
-    let [i, l, e] = [0, this.edges.length, void 0];
+    let [i, l, e] = [0, this.edges.length, undefined];
     for (; i < l; ++i) {
       e = this.edges[i];
       // compare charCode
