@@ -68,7 +68,7 @@ class Router {
 
         this.insert(method, path.substring(0, i), null, PNODE);
         // `/`
-        for (; i < l && (path.charCodeAt(i) !== 47); i++) {}
+        for (; i < l && (path.charCodeAt(i) !== 47); ++i) {}
 
         // new param key `$n`
         let param = '$' + count;
@@ -163,9 +163,9 @@ class Router {
     if (search.length === 0 || search === cn.prefix) {
       result[0] = cn.handler;
       if (cn.handler && cn.handler.keys) {
-        cn.handler.keys.forEach((a, i) => {
-          params[i].name = a;
-        });
+        for (let i = 0, l = cn.handler.keys.length; i < l; ++i) {
+          params[i].name = cn.handler.keys[i];
+        }
       }
       return result;
     }
@@ -176,13 +176,13 @@ class Router {
       search = search.substring(l);
     }
 
-    for (let i = 0, k = cn.edges.length, e; i < k; i++) {
+    for (let i = 0, k = cn.edges.length, e; i < k; ++i) {
       e = cn.edges[i];
       let has = e.label === 58 ? PNODE : (e.label === 42 ? CNODE : 0);
       if (has === PNODE) {
         l = search.length;
         // `/`
-        for (var j = 0; j < l && (search.charCodeAt(j) !== 47); j++) {}
+        for (var j = 0; j < l && (search.charCodeAt(j) !== 47); ++j) {}
 
         params[n] = {
           name: e.prefix.substring(1),
@@ -217,7 +217,7 @@ class Router {
 function lcp(a, b) {
   let i = 0;
   let max = Math.min(a.length, b.length);
-  for (; i < max && (a.charCodeAt(i) === b.charCodeAt(i)); i++) {}
+  for (; i < max && (a.charCodeAt(i) === b.charCodeAt(i)); ++i) {}
   return i;
 }
 
