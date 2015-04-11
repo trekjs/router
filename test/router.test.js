@@ -39,25 +39,31 @@ describe('Router', () => {
   it('static', () => {
     r.add('GET', '/folders/files/bolt.gif', () => {})
     r.trees['GET'].printTree('', true)
-    let [h, params] = r.find('GET', '/folders/files/bolt.gif');
-    assert.notEqual(null, h);
-    let result = r.find('GET', '/folders/files/bolt.hash.gif');
+
+    result = r.find('GET', '/folders/files/bolt.gif');
+    assert.notEqual(null, result[0]);
+
+    result = r.find('GET', '/folders/files/bolt.hash.gif');
     assert.equal(null, result[0]);
-    let result2 = r.find('GET', '/folders/bolt .gif');
-    assert.equal(null, result2[0]);
+
+    result = r.find('GET', '/folders/bolt .gif');
+    assert.equal(null, result[0]);
   });
 
   it('catch all', () => {
     r.add('GET', '/static/*', () => {})
     r.trees['GET'].printTree('', true)
-    let [h, params] = r.find('GET', '/static/*');
-    assert.notEqual(null, h);
+
+    result = r.find('GET', '/static/*');
+    assert.notEqual(null, result[0]);
+
     result = r.find('GET', '/static/js');
     assert.notEqual(null, result[0]);
     assert.deepEqual([{
       name: '_name',
       value: 'js'
     }], result[1]);
+
     result = r.find('GET', '/static/css');
     assert.notEqual(null, result[0]);
     assert.deepEqual([{
@@ -67,14 +73,34 @@ describe('Router', () => {
   });
 
   it('resource', () => {
-    _.shuffle([
+    [
       ['/geocoder', 'geocoder'],
       ['/geocoder/new', 'newGeocoder'],
-      ['/geocoder/edit', 'editGeocoder']
-    ]).forEach((i) => {
+      ['/geocoder/edit', 'editGeocoder'],
+      ['/geocoder/edit/email', 'editEmailGeocoder'],
+      ['/geocoder/edit/:item', 'editItemGeocoder'],
+      ['/geocoder/any*', 'anyGeocoder'],
+      ['/geocoder/:action', 'actionGeocoder'],
+    ].forEach((i) => {
       r.add('GET', i[0], createFunc(i[1]));
     });
     r.trees['GET'].printTree('', true);
+
+    result = r.find('GET', '/geocoder/delete');
+    assert.notEqual(null, result[0]);
+    assert.equal('actionGeocoder', result[0].name);
+
+    result = r.find('GET', '/geocoder/anyone');
+    assert.notEqual(null, result[0]);
+    assert.equal('anyGeocoder', result[0].name);
+
+    result = r.find('GET', '/geocoder/edit/trekjs');
+    assert.notEqual(null, result[0]);
+    assert.equal('editItemGeocoder', result[0].name);
+
+    result = r.find('GET', '/geocoder/edit/email');
+    assert.notEqual(null, result[0]);
+    assert.equal('editEmailGeocoder', result[0].name);
 
     result = r.find('GET', '/geocoder/edit');
     assert.notEqual(null, result[0]);
@@ -101,27 +127,30 @@ describe('Router', () => {
     });
     r.trees['GET'].printTree('', true);
 
-    result = r.find('GET', '/users/377/delete');
+    result = r.find('GET', '/users/2323/delete');
     assert.notEqual(null, result[0]);
     assert.equal('actionUser', result[0].name);
     assert.equal('id', result[1][0].name);
-    assert.equal('377', result[1][0].value);
+    assert.equal('2323', result[1][0].value);
+
     result = r.find('GET', '/users/377/edit');
     assert.notEqual(null, result[0]);
     assert.equal('editUser', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('377', result[1][0].value);
+
     result = r.find('GET', '/users/233');
     assert.notEqual(null, result[0]);
     assert.equal('user', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('233', result[1][0].value);
+
     result = r.find('GET', '/users/new');
     assert.notEqual(null, result[0]);
     assert.equal('newUser', result[0].name);
+
     result = r.find('GET', '/users');
     assert.notEqual(null, result[0]);
-    assert.equal('users', result[0].name);
     assert.equal('users', result[0].name);
   });
 
@@ -158,24 +187,29 @@ describe('Router', () => {
     assert.equal('changeBook', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('377', result[1][0].value);
+
     result = r.find('GET', '/books/377/event');
     assert.notEqual(null, result[0]);
     assert.equal('eventBook', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('377', result[1][0].value);
+
     result = r.find('GET', '/books/377/edit');
     assert.notEqual(null, result[0]);
     assert.equal('editBook', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('377', result[1][0].value);
+
     result = r.find('GET', '/books/233');
     assert.notEqual(null, result[0]);
     assert.equal('book', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('233', result[1][0].value);
+
     result = r.find('GET', '/books/new');
     assert.equal('newBook', result[0].name);
     assert.notEqual(null, result[0]);
+
     result = r.find('GET', '/books');
     assert.notEqual(null, result[0]);
     assert.equal('books', result[0].name);
@@ -185,24 +219,29 @@ describe('Router', () => {
     assert.equal('changeUser', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('377', result[1][0].value);
+
     result = r.find('GET', '/users/377/event');
     assert.notEqual(null, result[0]);
     assert.equal('eventUser', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('377', result[1][0].value);
+
     result = r.find('GET', '/users/377/edit');
     assert.notEqual(null, result[0]);
     assert.equal('editUser', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('377', result[1][0].value);
+
     result = r.find('GET', '/users/233');
     assert.notEqual(null, result[0]);
     assert.equal('user', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('233', result[1][0].value);
+
     result = r.find('GET', '/users/new');
     assert.equal('newUser', result[0].name);
     assert.notEqual(null, result[0]);
+
     result = r.find('GET', '/users');
     assert.notEqual(null, result[0]);
     assert.equal('users', result[0].name);
@@ -212,24 +251,29 @@ describe('Router', () => {
     assert.equal('eventPhoto', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('377', result[1][0].value);
+
     result = r.find('GET', '/photos/377/change');
     assert.notEqual(null, result[0]);
     assert.equal('changePhoto', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('377', result[1][0].value);
+
     result = r.find('GET', '/photos/377/edit');
     assert.notEqual(null, result[0]);
     assert.equal('editPhoto', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('377', result[1][0].value);
+
     result = r.find('GET', '/photos/233');
     assert.notEqual(null, result[0]);
     assert.equal('photo', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('233', result[1][0].value);
+
     result = r.find('GET', '/photos/new');
     assert.equal('newPhoto', result[0].name);
     assert.notEqual(null, result[0]);
+
     result = r.find('GET', '/photos');
     assert.notEqual(null, result[0]);
     assert.equal('photos', result[0].name);
@@ -251,14 +295,17 @@ describe('Router', () => {
     assert.equal('editArticle', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('377', result[1][0].value);
+
     result = r.find('GET', '/admin/articles/233');
     assert.notEqual(null, result[0]);
     assert.equal('article', result[0].name);
     assert.equal('id', result[1][0].name);
     assert.equal('233', result[1][0].value);
+
     result = r.find('GET', '/admin/articles/new');
     assert.notEqual(null, result[0]);
     assert.equal('newArticle', result[0].name);
+
     result = r.find('GET', '/admin/articles');
     assert.notEqual(null, result[0]);
     assert.equal('articles', result[0].name);
@@ -286,6 +333,7 @@ describe('Router', () => {
     assert.equal('233', result[1][0].value);
     assert.equal('id', result[1][1].name);
     assert.equal('377', result[1][1].value);
+
     result = r.find('GET', '/magazines/233/articles/377');
     assert.notEqual(null, result[0]);
     assert.equal('article', result[0].name);
@@ -293,11 +341,13 @@ describe('Router', () => {
     assert.equal('233', result[1][0].value);
     assert.equal('id', result[1][1].name);
     assert.equal('377', result[1][1].value);
+
     result = r.find('GET', '/magazines/233/articles/new');
     assert.notEqual(null, result[0]);
     assert.equal('newArticle', result[0].name);
     assert.equal('mid', result[1][0].name);
     assert.equal('233', result[1][0].value);
+
     result = r.find('GET', '/magazines/233/articles');
     assert.notEqual(null, result[0]);
     assert.equal('articles', result[0].name);
@@ -311,6 +361,7 @@ describe('Router', () => {
     assert.equal('233', result[1][0].value);
     assert.equal('id', result[1][1].name);
     assert.equal('377', result[1][1].value);
+
     result = r.find('GET', '/magazines/233/photos/377');
     assert.notEqual(null, result[0]);
     assert.equal('photo', result[0].name);
@@ -318,11 +369,13 @@ describe('Router', () => {
     assert.equal('233', result[1][0].value);
     assert.equal('id', result[1][1].name);
     assert.equal('377', result[1][1].value);
+
     result = r.find('GET', '/magazines/233/photos/new');
     assert.notEqual(null, result[0]);
     assert.equal('newPhoto', result[0].name);
     assert.equal('m_id', result[1][0].name);
     assert.equal('233', result[1][0].value);
+
     result = r.find('GET', '/magazines/233/photos');
     assert.notEqual(null, result[0]);
     assert.equal('photos', result[0].name);
@@ -364,7 +417,7 @@ describe('Router', () => {
       let [method, path, realpath] = i;
       it(path, () => {
         let [handler, params] = r.find(method, realpath);
-        // console.log(path, realpath, params);
+        // console.log(path, realpath, handler, params);
         assert.notEqual(null, handler);
         assert.equal(_.camelCase(path), handler.name);
         assert.equal((path.match(/\:/g) || []).length, params.length);

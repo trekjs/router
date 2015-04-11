@@ -27,6 +27,10 @@ const CNODE = 3; // Catch-all node
  *
  * @class Node
  * @constructor
+ * @param {String} path
+ * @param {Number} has
+ * @param {Function|GeneratorFunction} handler
+ * @param {Array} [edges]
  */
 class Node {
 
@@ -38,11 +42,17 @@ class Node {
     this.edges = edges || [];
   }
 
+  /**
+   * Find edge by charCode
+   *
+   * @param {Number} char code
+   * @return {Node|undefined} node
+   */
   findEdge(c) {
     let [i, l, e] = [0, this.edges.length, undefined];
     for (; i < l; ++i) {
       e = this.edges[i];
-      // compare charCode
+      // Compare charCode
       if (e.label === c) return e;
     }
     return undefined;
@@ -74,31 +84,34 @@ class Router {
    * @param {Function|GeneratorFunction} handler
    */
   add(method, path, handler) {
-    // count params
+    // Count params
     let count = -1;
-    // store param keys
+    // Store param keys
     let keys = [];
     if (handler) handler.keys = keys;
 
-    let i = 0, l = path.length, ch;
+    let i = 0;
+    let l = path.length
+    let ch;
+
     for (; i < l; ++i) {
       ch = path.charCodeAt(i);
-      if (ch === 0x3A /*':'*/ ) {
-        // param start index
+      if (ch === 0x3A /*':'*/) {
+        // Param start index
         let j = i + 1;
         count++;
 
         this.insert(method, path.slice(0, i), null, PNODE);
         for (; i < l && (path.charCodeAt(i) !== 0x2F /*'/'*/); ++i) {}
 
-        // new param key `$n`
+        // Create param key `$n`
         let param = '$' + count;
         let prefix = path.slice(0, j) + param;
-        // store original param key
+        // Store original param key
         keys.push(path.slice(j, i));
-        // override path
+        // Override path
         path = prefix + path.slice(i);
-        // override i, l
+        // Override i, l
         i = prefix.length;
         l = path.length;
 
@@ -107,7 +120,7 @@ class Router {
           return;
         }
         this.insert(method, path.slice(0, i), null, 0);
-      } else if (ch === 0x2A /*'*'*/ ) {
+      } else if (ch === 0x2A /*'*'*/) {
         this.insert(method, path.slice(0, i), null, CNODE);
         this.insert(method, path.slice(0, l), handler, 0);
       }
@@ -198,7 +211,7 @@ class Router {
    * @property {NULL|Function|GeneratorFunction} result[0]
    * @property {Array} result[1]
    */
-  find(method, path, cn, n = 0, params = []) {
+  oldFind(method, path, cn, n = 0, params = []) {
     cn = cn || this.trees[method];
     let search = path;
     let result = Array(2);
@@ -227,7 +240,7 @@ class Router {
       if (has === PNODE) {
         l = search.length;
         let j = 0;
-        for (; j < l && (search.charCodeAt(j) !== 0x2F /*'/'*/ ); ++j) {}
+        for (; j < l && (search.charCodeAt(j) !== 0x2F /*'/'*/); ++j) {}
 
         params[n] = {
           name: e.prefix.slice(1),
@@ -254,6 +267,91 @@ class Router {
     }
 
     return result;
+  }
+
+  /**
+   * Find route by method and path
+   *
+   * @method find
+   * @param {String} method
+   * @param {String} path
+   * @return {Array} result
+   * @property {NULL|Function|GeneratorFunction} result[0]
+   * @property {Array} result[1]
+   */
+  find(method, path) {
+    let cn = this.trees[method]; // Current node as root
+    let search = path;
+    let n = 0; // Param count
+    let result = Array(2);
+    let params = result[1] = [];
+
+    while (true) {
+      // search ==== ''
+      if (search.length === 0 || search === cn.prefix) {
+        // Found
+        result[0] = cn.handler;
+        result[1] = params;
+        if (cn.handler) {
+          let keys = cn.handler.keys;
+          for (let i = 0, l = keys.length; i < l; ++i) {
+            params[i].name = keys[i];
+          }
+        }
+        return result;
+      }
+
+      let pl = cn.prefix.length;
+      let l = lcp(search, cn.prefix);
+      let e;
+
+      if (l === pl) {
+        search = search.substring(l);
+      }
+
+      // Search SNODE
+      e = cn.findEdge(search.charCodeAt(0));
+      if (e) {
+        cn = e;
+        continue;
+      }
+
+      // Search PNODE
+      e = cn.findEdge(0x3A /*':'*/);
+      if (e) {
+        cn = e;
+        l = search.length;
+        for (var i = 0; i < l && (search.charCodeAt(i) !== 0x2F /*'/'*/); i++) {}
+
+        params[n] = {
+          name: e.prefix.substring(1),
+          value: search.substring(0, i)
+        };
+        n++;
+
+        search = search.substring(i)
+        continue;
+      } else {
+        // Search CNODE
+        e = cn.findEdge(0x2A /*'*'*/);
+        if (e) {
+          cn = e;
+          // Catch-all node
+          params[n] = {
+            name: '_name',
+            value: search
+          };
+          search = ''; // End search
+        }
+
+        if (search.length === 0) {
+          continue;
+        }
+
+      }
+
+      return result;
+    }
   }
 
 }

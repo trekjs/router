@@ -72,7 +72,7 @@ suite
         realpath = i[2];
       var r = routes1[method];
       var result = r.filter(function(j) {
-        return realpath.match(j);
+        return j.exec(realpath);
       })[0];
       assert.notEqual(null, result);
     });
