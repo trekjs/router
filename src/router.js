@@ -71,7 +71,7 @@ class Router {
   constructor() {
     this.trees = Object.create(null);
     METHODS.forEach((m) => {
-      this.trees[m.toUpperCase()] = new Node('', null, null, []);
+      this.trees[m.toUpperCase()] = new Node('/', null, null, []);
     });
   }
 

@@ -169,6 +169,9 @@ describe('Router', () => {
     assert.equal('id', result[1][0].name);
     assert.equal('233', result[1][0].value);
 
+    result = r.find('GET', '/users/new/preview');
+    assert.equal(null, result[0]);
+
     result = r.find('GET', '/users/new');
     assert.notEqual(null, result[0]);
     assert.equal('newUser', result[0].name);
@@ -176,6 +179,9 @@ describe('Router', () => {
     result = r.find('GET', '/users');
     assert.notEqual(null, result[0]);
     assert.equal('users', result[0].name);
+
+    result = r.find('GET', '/repos');
+    assert.equal(null, result[0]);
   });
 
   it('multi resources', () => {
