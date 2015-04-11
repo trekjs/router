@@ -80,6 +80,7 @@ describe('Router', () => {
 
   it('resource', () => {
     [
+      ['/', 'root'],
       ['/geocoder', 'geocoder'],
       ['/geocoder/new', 'newGeocoder'],
       ['/geocoder/edit', 'editGeocoder'],
@@ -94,6 +95,10 @@ describe('Router', () => {
       r.add('GET', i[0], createFunc(i[1]));
     });
     r.trees['GET'].printTree('', true);
+
+    result = r.find('GET', '/');
+    assert.notEqual(null, result[0]);
+    assert.equal('root', result[0].name);
 
     result = r.find('GET', '/geocoder/delete');
     assert.notEqual(null, result[0]);
