@@ -204,77 +204,6 @@ class Router {
    * @method find
    * @param {String} method
    * @param {String} path
-   * @param {Node} [cn]
-   * @param {Number} {n=0}
-   * @param {Array} {params=[]}
-   * @return {Array} result
-   * @property {NULL|Function|GeneratorFunction} result[0]
-   * @property {Array} result[1]
-   */
-  oldFind(method, path, cn, n = 0, params = []) {
-    cn = cn || this.trees[method];
-    let search = path;
-    let result = Array(2);
-    result[1] = params;
-
-    if (search.length === 0 || search === cn.prefix) {
-      result[0] = cn.handler;
-      if (cn.handler && cn.handler.keys) {
-        for (let i = 0, l = cn.handler.keys.length; i < l; ++i) {
-          params[i].name = cn.handler.keys[i];
-        }
-      }
-      return result;
-    }
-
-    let pl = cn.prefix.length;
-    let l = lcp(search, cn.prefix);
-    if (l === pl) {
-      search = search.substring(l);
-    }
-
-    let i = 0, k = cn.edges.length, e;
-    for (; i < k; ++i) {
-      e = cn.edges[i];
-      let has = e.label === 0x3A /*':'*/ ? PNODE : (e.label === 0x2A /*'*'*/ ? CNODE : 0);
-      if (has === PNODE) {
-        l = search.length;
-        let j = 0;
-        for (; j < l && (search.charCodeAt(j) !== 0x2F /*'/'*/); ++j) {}
-
-        params[n] = {
-          name: e.prefix.substring(1),
-          value: search.substring(0, j)
-        };
-        n++;
-        search = search.substring(j);
-      } else if (has === CNODE) {
-        params[n] = {
-          name: '_name',
-          value: search
-        };
-        search = '';
-      }
-
-      let x = cn.findEdge(search.charCodeAt(0));
-      if (x === undefined) {
-        result = this.find(method, search, e, n, params);
-        // if (result[0]) break;
-      } else {
-        result = this.find(method, search, x, n, params);
-        if (result[0]) break;
-      }
-    }
-
-    return result;
-  }
-
-  /**
-   * Find route by method and path
-   *
-   * @method find
-   * @param {String} method
-   * @param {String} path
    * @return {Array} result
    * @property {NULL|Function|GeneratorFunction} result[0]
    * @property {Array} result[1]
@@ -331,23 +260,22 @@ class Router {
 
         search = search.substring(i);
         continue;
-      } else {
-        // Search CNODE
-        e = cn.findEdge(0x2A /*'*'*/);
-        if (e) {
-          cn = e;
-          // Catch-all node
-          params[n] = {
-            name: '_name',
-            value: search
-          };
-          search = ''; // End search
-        }
+      }
 
-        if (search.length === 0) {
-          continue;
-        }
+      // Search CNODE
+      e = cn.findEdge(0x2A /*'*'*/);
+      if (e) {
+        cn = e;
+        // Catch-all node
+        params[n] = {
+          name: '_name',
+          value: search
+        };
+        search = ''; // End search
+      }
 
+      if (search.length === 0) {
+        continue;
       }
 
       return result;
