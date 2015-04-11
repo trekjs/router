@@ -306,7 +306,7 @@ class Router {
       let e;
 
       if (l === pl) {
-        search = search.substring(l);
+        search = search.slice(l);
       }
 
       // Search SNODE
@@ -324,12 +324,12 @@ class Router {
         for (var i = 0; i < l && (search.charCodeAt(i) !== 0x2F /*'/'*/); i++) {}
 
         params[n] = {
-          name: e.prefix.substring(1),
-          value: search.substring(0, i)
+          name: e.prefix.slice(1),
+          value: search.slice(0, i)
         };
         n++;
 
-        search = search.substring(i)
+        search = search.slice(i);
         continue;
       } else {
         // Search CNODE
