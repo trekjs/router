@@ -71,6 +71,7 @@ class Router {
   constructor() {
     this.trees = Object.create(null);
     METHODS.forEach((m) => {
+      // Start from '/'
       this.trees[m.toUpperCase()] = new Node('/', null, null, []);
     });
   }
@@ -179,7 +180,7 @@ class Router {
       } else if (l < sl) {
         search = search.substring(l);
         let e = cn.findEdge(search.charCodeAt(0));
-        if (e) {
+        if (e !== undefined) {
           // Go deeper
           cn = e;
           continue;
@@ -231,22 +232,27 @@ class Router {
 
       let pl = cn.prefix.length;
       let l = lcp(search, cn.prefix);
+      let leq = l === pl;
       let e;
 
-      if (l === pl) {
+      if (leq) {
         search = search.substring(l);
       }
 
       // Search SNODE
       e = cn.findEdge(search.charCodeAt(0));
-      if (e) {
+      if (e !== undefined) {
         cn = e;
         continue;
       }
 
+      if (!leq) {
+        return result;
+      }
+
       // Search PNODE
       e = cn.findEdge(0x3A /*':'*/);
-      if (e) {
+      if (e !== undefined) {
         cn = e;
         l = search.length;
         for (var i = 0; i < l && (search.charCodeAt(i) !== 0x2F /*'/'*/); i++) {}
@@ -263,7 +269,7 @@ class Router {
 
       // Search CNODE
       e = cn.findEdge(0x2A /*'*'*/);
-      if (e) {
+      if (e !== undefined) {
         cn = e;
         // Catch-all node
         params[n] = {

@@ -85,6 +85,9 @@ describe('Router', () => {
       ['/geocoder/edit', 'editGeocoder'],
       ['/geocoder/edit/email', 'editEmailGeocoder'],
       ['/geocoder/edit/:item', 'editItemGeocoder'],
+      ['/geocoder/exchange', 'exchangeGeocoder'],
+      ['/geocoder/exchange/email', 'exchangeEmailGeocoder'],
+      ['/geocoder/exchange/:item', 'exchangeItemGeocoder'],
       ['/geocoder/any*', 'anyGeocoder'],
       ['/geocoder/:action', 'actionGeocoder'],
     ].forEach((i) => {
@@ -96,9 +99,33 @@ describe('Router', () => {
     assert.notEqual(null, result[0]);
     assert.equal('actionGeocoder', result[0].name);
 
+    result = r.find('GET', '/geocoder/delete/');
+    assert.equal(null, result[0]);
+
     result = r.find('GET', '/geocoder/anyone');
     assert.notEqual(null, result[0]);
     assert.equal('anyGeocoder', result[0].name);
+
+    result = r.find('GET', '/geocoder/exchange/trekjs');
+    assert.notEqual(null, result[0]);
+    assert.equal('exchangeItemGeocoder', result[0].name);
+
+    result = r.find('GET', '/geocoder/exchange/trekjs/');
+    assert.equal(null, result[0]);
+
+    result = r.find('GET', '/geocoder/exchange/email');
+    assert.notEqual(null, result[0]);
+    assert.equal('exchangeEmailGeocoder', result[0].name);
+
+    result = r.find('GET', '/geocoder/exchange/email/');
+    assert.equal(null, result[0]);
+
+    result = r.find('GET', '/geocoder/exchange');
+    assert.notEqual(null, result[0]);
+    assert.equal('exchangeGeocoder', result[0].name);
+
+    result = r.find('GET', '/geocoder/exchange/');
+    assert.equal(null, result[0]);
 
     result = r.find('GET', '/geocoder/edit/trekjs');
     assert.notEqual(null, result[0]);
@@ -108,17 +135,32 @@ describe('Router', () => {
     assert.notEqual(null, result[0]);
     assert.equal('editEmailGeocoder', result[0].name);
 
+    result = r.find('GET', '/geocoder/edit/email/');
+    assert.equal(null, result[0]);
+
     result = r.find('GET', '/geocoder/edit');
     assert.notEqual(null, result[0]);
     assert.equal('editGeocoder', result[0].name);
+
+    result = r.find('GET', '/geocoder/edit/');
+    assert.equal(null, result[0]);
 
     result = r.find('GET', '/geocoder/new');
     assert.notEqual(null, result[0]);
     assert.equal('newGeocoder', result[0].name);
 
+    result = r.find('GET', '/geocoder/new/');
+    assert.equal(null, result[0]);
+
     result = r.find('GET', '/geocoder');
     assert.notEqual(null, result[0]);
     assert.equal('geocoder', result[0].name);
+
+    result = r.find('GET', '/geocoder/');
+    assert.equal(null, result[0]);
+
+    result = r.find('GET', '/repos');
+    assert.equal(null, result[0]);
   });
 
   it('resources', () => {
@@ -135,6 +177,9 @@ describe('Router', () => {
     });
     r.trees['GET'].printTree('', true);
 
+    result = r.find('GET', '/users/610/books/987/edit');
+    assert.equal(null, result[0]);
+
     result = r.find('GET', '/users/610/books/987');
     assert.notEqual(null, result[0]);
     assert.equal('book', result[0].name);
@@ -142,6 +187,9 @@ describe('Router', () => {
     assert.equal('610', result[1][0].value);
     assert.equal('id', result[1][1].name);
     assert.equal('987', result[1][1].value);
+
+    result = r.find('GET', '/users/610/photos');
+    assert.equal(null, result[0]);
 
     result = r.find('GET', '/users/610/photos/1024');
     assert.notEqual(null, result[0]);
@@ -179,6 +227,9 @@ describe('Router', () => {
     result = r.find('GET', '/users');
     assert.notEqual(null, result[0]);
     assert.equal('users', result[0].name);
+
+    result = r.find('GET', '/users/');
+    assert.equal(null, result[0]);
 
     result = r.find('GET', '/repos');
     assert.equal(null, result[0]);
