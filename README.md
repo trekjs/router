@@ -56,7 +56,7 @@ let result = r.find('GET', '/users/233')
 // Not Found
 let result = r.find('GET', '/photos/233')
 // => [handler, params]
-// => [null, []]
+// => [undefined, []]
 ```
 
 ## License
