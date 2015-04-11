@@ -20,6 +20,12 @@ const SNODE = 1; // Static node
 const PNODE = 2; // Param node
 const CNODE = 3; // Catch-all node
 
+/**
+ * Node
+ *
+ * @class Node
+ * @constructor
+ */
 class Node {
 
   constructor(prefix, has, handler, edges) {
@@ -37,11 +43,17 @@ class Node {
       // compare charCode
       if (e.label === c) return e;
     }
-    return null;
+    return undefined;
   }
 
 }
 
+/**
+ * Router
+ *
+ * @class Router
+ * @constructor
+ */
 class Router {
 
   constructor() {
@@ -51,6 +63,14 @@ class Router {
     });
   }
 
+  /**
+   * Add new route
+   *
+   * @method add
+   * @param {String} method
+   * @param {String} path
+   * @param {Function|GeneratorFunction} handler
+   */
   add(method, path, handler) {
     // count params
     let count = -1;
@@ -67,8 +87,7 @@ class Router {
         count++;
 
         this.insert(method, path.slice(0, i), null, PNODE);
-        // 47,`/`
-        for (; i < l && (path.charCodeAt(i) !== 0x2F); ++i) {}
+        for (; i < l && (path.charCodeAt(i) !== 0x2F /*'/'*/); ++i) {}
 
         // new param key `$n`
         let param = '$' + count;
@@ -94,7 +113,17 @@ class Router {
     this.insert(method, path, handler, SNODE, true);
   }
 
-  // if bool is ture, push it to the top index of edges
+  /**
+   * Insert new route
+   *
+   * @method insert
+   * @private
+   * @param {String} method
+   * @param {String} path
+   * @param {Function|GeneratorFunction} handler
+   * @param {Number} has
+   * @param {Boolean} [bool=false] if bool is true, unshift it to edges
+   */
   insert(method, path, handler, has, bool = false) {
     let cn = this.trees[method]; // Current node as root
     let search = path;
@@ -154,6 +183,19 @@ class Router {
     }
   }
 
+  /**
+   * Find route by method and path
+   *
+   * @method find
+   * @param {String} method
+   * @param {String} path
+   * @param {Node} [cn]
+   * @param {Number} {n=0}
+   * @param {Array} {params=[]}
+   * @return {Array} result
+   * @property {NULL|Function|GeneratorFunction} result[0]
+   * @property {Array} result[1]
+   */
   find(method, path, cn, n = 0, params = []) {
     cn = cn || this.trees[method];
     let search = path;
@@ -199,12 +241,12 @@ class Router {
       }
 
       let x = cn.findEdge(search.charCodeAt(0));
-      if (x) {
-        result = this.find(method, search, x, n, params);
-        if (result[0]) break;
-      } else {
+      if (x === undefined) {
         result = this.find(method, search, e, n, params);
         // if (result[0]) break;
+      } else {
+        result = this.find(method, search, x, n, params);
+        if (result[0]) break;
       }
     }
 
