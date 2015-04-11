@@ -125,6 +125,7 @@ class Router {
         this.insert(method, path.substring(0, l), handler, 0);
       }
     }
+    // unshift node
     this.insert(method, path, handler, SNODE, true);
   }
 
@@ -173,7 +174,6 @@ class Router {
         } else {
           // Need to fork a node
           let n = new Node(search.substring(l), has, handler);
-          // cn.edges.push(n);
           cn.edges[bool ? 'unshift' : 'push'](n);
         }
       } else if (l < sl) {
@@ -186,7 +186,6 @@ class Router {
         }
         // Create child node
         let n = new Node(search, has, handler);
-        // cn.edges.push(n);
         cn.edges[bool ? 'unshift' : 'push'](n);
       } else {
         // Node already exists
