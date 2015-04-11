@@ -1,7 +1,7 @@
 {
   "name": "trek-router",
-  "version": "0.0.13",
-  "description": "A fast HTTP router router",
+  "version": "0.1.0",
+  "description": "A fast HTTP router",
   "repository": "trekjs/router",
   "main": "lib/router.js",
   "author": "fundon cfddream@gmail.com",
