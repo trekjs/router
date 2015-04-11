@@ -199,7 +199,8 @@ class Router {
   find(method, path, cn, n = 0, params = []) {
     cn = cn || this.trees[method];
     let search = path;
-    let result = [null, params];
+    let result = new Array(2);
+    result[1] = params;
 
     if (search.length === 0 || search === cn.prefix) {
       result[0] = cn.handler;
