@@ -101,28 +101,28 @@ class Router {
         let j = i + 1;
         count++;
 
-        this.insert(method, path.slice(0, i), null, PNODE);
+        this.insert(method, path.substring(0, i), null, PNODE);
         for (; i < l && (path.charCodeAt(i) !== 0x2F /*'/'*/); ++i) {}
 
         // Create param key `$n`
         let param = '$' + count;
-        let prefix = path.slice(0, j) + param;
+        let prefix = path.substring(0, j) + param;
         // Store original param key
-        keys.push(path.slice(j, i));
+        keys.push(path.substring(j, i));
         // Override path
-        path = prefix + path.slice(i);
+        path = prefix + path.substring(i);
         // Override i, l
         i = prefix.length;
         l = path.length;
 
         if (i === l) {
-          this.insert(method, path.slice(0, i), handler, 0);
+          this.insert(method, path.substring(0, i), handler, 0);
           return;
         }
-        this.insert(method, path.slice(0, i), null, 0);
+        this.insert(method, path.substring(0, i), null, 0);
       } else if (ch === 0x2A /*'*'*/) {
-        this.insert(method, path.slice(0, i), null, CNODE);
-        this.insert(method, path.slice(0, l), handler, 0);
+        this.insert(method, path.substring(0, i), null, CNODE);
+        this.insert(method, path.substring(0, l), handler, 0);
       }
     }
     this.insert(method, path, handler, SNODE, true);
@@ -158,12 +158,12 @@ class Router {
         }
       } else if (l < pl) {
         // Split node
-        let n = new Node(cn.prefix.slice(l), cn.has, cn.handler, cn.edges);
+        let n = new Node(cn.prefix.substring(l), cn.has, cn.handler, cn.edges);
         cn.edges = [n]; // Add to parent
 
         // Reset parent node
         cn.label = cn.prefix.charCodeAt(0);
-        cn.prefix = cn.prefix.slice(0, l);
+        cn.prefix = cn.prefix.substring(0, l);
         cn.has = 0;
         cn.handler = null;
 
@@ -172,12 +172,12 @@ class Router {
           cn.handler = handler;
         } else {
           // Need to fork a node
-          let n = new Node(search.slice(l), has, handler);
+          let n = new Node(search.substring(l), has, handler);
           // cn.edges.push(n);
           cn.edges[bool ? 'unshift' : 'push'](n);
         }
       } else if (l < sl) {
-        search = search.slice(l);
+        search = search.substring(l);
         let e = cn.findEdge(search.charCodeAt(0));
         if (e) {
           // Go deeper
@@ -230,7 +230,7 @@ class Router {
     let pl = cn.prefix.length;
     let l = lcp(search, cn.prefix);
     if (l === pl) {
-      search = search.slice(l);
+      search = search.substring(l);
     }
 
     let i = 0, k = cn.edges.length, e;
@@ -243,11 +243,11 @@ class Router {
         for (; j < l && (search.charCodeAt(j) !== 0x2F /*'/'*/); ++j) {}
 
         params[n] = {
-          name: e.prefix.slice(1),
-          value: search.slice(0, j)
+          name: e.prefix.substring(1),
+          value: search.substring(0, j)
         };
         n++;
-        search = search.slice(j);
+        search = search.substring(j);
       } else if (has === CNODE) {
         params[n] = {
           name: '_name',
@@ -306,7 +306,7 @@ class Router {
       let e;
 
       if (l === pl) {
-        search = search.slice(l);
+        search = search.substring(l);
       }
 
       // Search SNODE
@@ -324,12 +324,12 @@ class Router {
         for (var i = 0; i < l && (search.charCodeAt(i) !== 0x2F /*'/'*/); i++) {}
 
         params[n] = {
-          name: e.prefix.slice(1),
-          value: search.slice(0, i)
+          name: e.prefix.substring(1),
+          value: search.substring(0, i)
         };
         n++;
 
-        search = search.slice(i);
+        search = search.substring(i);
         continue;
       } else {
         // Search CNODE
