@@ -246,6 +246,7 @@ class Router {
         continue;
       }
 
+      // Not found SNODE, should return
       if (!leq) {
         return result;
       }
