@@ -121,11 +121,29 @@ describe('Router', () => {
       ['/users/new', 'newUser'],
       ['/users/:id', 'user'],
       ['/users/:id/:action', 'actionUser'],
-      ['/users/:id/edit', 'editUser']
+      ['/users/:id/edit', 'editUser'],
+      ['/users/:userId/photos/:id', 'photo'],
+      ['/users/:userId/books/:id', 'book']
     ]).forEach((i) => {
       r.add('GET', i[0], createFunc(i[1]));
     });
     r.trees['GET'].printTree('', true);
+
+    result = r.find('GET', '/users/610/books/987');
+    assert.notEqual(null, result[0]);
+    assert.equal('book', result[0].name);
+    assert.equal('userId', result[1][0].name);
+    assert.equal('610', result[1][0].value);
+    assert.equal('id', result[1][1].name);
+    assert.equal('987', result[1][1].value);
+
+    result = r.find('GET', '/users/610/photos/1024');
+    assert.notEqual(null, result[0]);
+    assert.equal('photo', result[0].name);
+    assert.equal('userId', result[1][0].name);
+    assert.equal('610', result[1][0].value);
+    assert.equal('id', result[1][1].name);
+    assert.equal('1024', result[1][1].value);
 
     result = r.find('GET', '/users/2323/delete');
     assert.notEqual(null, result[0]);
