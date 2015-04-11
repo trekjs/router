@@ -4,6 +4,8 @@
  * MIT Licensed
  */
 
+const min = Math.min;
+
 const METHODS = [
   'CONNECT',
   'DELETE',
@@ -199,7 +201,7 @@ class Router {
   find(method, path, cn, n = 0, params = []) {
     cn = cn || this.trees[method];
     let search = path;
-    let result = new Array(2);
+    let result = Array(2);
     result[1] = params;
 
     if (search.length === 0 || search === cn.prefix) {
@@ -259,7 +261,7 @@ class Router {
 // Length of longest common prefix
 function lcp(a, b) {
   let i = 0;
-  let max = Math.min(a.length, b.length);
+  let max = min(a.length, b.length);
   for (; i < max && (a.charCodeAt(i) === b.charCodeAt(i)); ++i) {}
   return i;
 }
