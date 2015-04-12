@@ -6,7 +6,7 @@ var RouteRecognizer = require('route-recognizer');
 var RouteTrie = require('route-trie');
 var Routington = require('routington');
 var Router = require('../');
-var api = _.shuffle(require('../test/github-api'));
+var api = _.shuffle(require('../test/fixtures/github-api'));
 
 var suite = new Benchmark.Suite;
 
