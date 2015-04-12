@@ -1,40 +1,12 @@
 import _ from 'lodash';
 import assert from 'assert';
-import { format } from 'util';
 import Router, { Node } from '../src/router';
+import './node';
 
 function createFunc(name) {
   var a = `(function ${name||''}(){})`;
   return eval(a);
 }
-
-function prefix(tail, p, on, off) {
-  if (tail) {
-    return format('%s%s', p, on);
-  }
-  return format('%s%s', p, off);
-}
-
-Node.prototype.printTree = function printTree(pfx, tail) {
-  let p = prefix(tail, pfx, '└── ', '├── ');
-  console.log(
-    '%s%s has=%d h=%s edges=%s',
-    p,
-    this.prefix,
-    this.has,
-    this.handler === null ? null : 'function',
-    this.edges.length);
-
-  let nodes = this.edges;
-  let l = nodes.length;
-  p = prefix(tail, pfx, '    ', '│   ')
-  for (let i = 0; i < l - 1; i++) {
-    nodes[i].printTree(p, false)
-  }
-  if (l > 0) {
-    nodes[l - 1].printTree(p, true)
-  }
-};
 
 describe('Router', () => {
   let r, result;
@@ -83,6 +55,8 @@ describe('Router', () => {
       ['/', 'root'],
       ['/geocoder', 'geocoder'],
       ['/geocoder/new', 'newGeocoder'],
+      ['/geocoder/notify', 'notifyGeocoder'],
+      ['/geocoder/nnn', 'nnnGeocoder'],
       ['/geocoder/edit', 'editGeocoder'],
       ['/geocoder/edit/email', 'editEmailGeocoder'],
       ['/geocoder/edit/:item', 'editItemGeocoder'],
@@ -153,6 +127,10 @@ describe('Router', () => {
     result = r.find('GET', '/geocoder/new');
     assert.notEqual(null, result[0]);
     assert.equal('newGeocoder', result[0].name);
+
+    result = r.find('GET', '/geocoder/nnn');
+    assert.notEqual(null, result[0]);
+    assert.equal('nnnGeocoder', result[0].name);
 
     result = r.find('GET', '/geocoder/new/');
     assert.equal(null, result[0]);
@@ -485,35 +463,6 @@ describe('Router', () => {
       assert.equal('/users', node.prefix);
       // `/`
       assert.equal(47, node.label);
-    });
-  });
-
-  describe('GitHub API', () => {
-    let r;
-    let api = require('./github-api');
-
-    beforeEach(() => {
-      r = new Router();
-      _.shuffle(api).forEach((i) => {
-        let [method, path] = i;
-        r.add(method, path, createFunc(_.camelCase(path)));
-      });
-
-    });
-
-    it('GitHub API routes', () => {
-      r.trees['GET'].printTree('', true)
-    });
-
-    _.shuffle(api).forEach((i) => {
-      let [method, path, realpath] = i;
-      it(path, () => {
-        let [handler, params] = r.find(method, realpath);
-        // console.log(path, realpath, handler, params);
-        assert.notEqual(null, handler);
-        assert.equal(_.camelCase(path), handler.name);
-        assert.equal((path.match(/\:/g) || []).length, params.length);
-      });
     });
   });
 
