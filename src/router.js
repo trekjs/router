@@ -85,35 +85,29 @@ class Router {
    * @param {Function|GeneratorFunction} handler
    */
   add(method, path, handler) {
-    // Count params
-    let count = -1;
     // Store param keys
     let keys = [];
     if (handler) handler.keys = keys;
 
     let i = 0;
     let l = path.length
-    let ch;
+    let ch, j;
 
     for (; i < l; ++i) {
       ch = path.charCodeAt(i);
       if (ch === COLON) {
         // Param start index
-        let j = i + 1;
-        count++;
+        j = i + 1;
 
         this.insert(method, path.substring(0, i));
         for (; i < l && (path.charCodeAt(i) !== SLASH); ++i) {}
 
-        // Create param key `$n`
-        let param = '$' + count;
-        let prefix = path.substring(0, j) + param;
         // Store original param key
         keys.push(path.substring(j, i));
         // Override path
-        path = prefix + path.substring(i);
+        path = path.substring(0, j) + path.substring(i);
         // Override i, l
-        i = prefix.length;
+        i = j;
         l = path.length;
 
         if (i === l) {
