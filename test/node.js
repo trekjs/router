@@ -11,11 +11,10 @@ function prefix(tail, p, on, off) {
 Node.prototype.printTree = function printTree(pfx, tail) {
   let p = prefix(tail, pfx, '└── ', '├── ');
   console.log(
-    '%s%s has=%d h=%s edges=%s',
+    '%s%s h=%s edges=%s',
     p,
     this.prefix,
-    this.has,
-    this.handler === null ? null : 'function',
+    this.handler ? 'function' : undefined,
     this.edges.length);
 
   let nodes = this.edges;

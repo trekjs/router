@@ -3,15 +3,15 @@ import assert from 'assert';
 import Router from '../src/router';
 import './node';
 
-let api = require('./fixtures/github-api');
-let funcPrefix = 'github-api';
+let api = require('./fixtures/gplus-api');
+let funcPrefix = 'gplus-api';
 
 function createFunc(name) {
   var a = `(function ${name||''}(){})`;
   return eval(a);
 }
 
-describe('GitHub API', () => {
+describe('GPlus API', () => {
   let r;
 
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe('GitHub API', () => {
 
   });
 
-  it('GitHub API routes', () => {
+  it('GPlus API routes', () => {
     r.trees['GET'].printTree('', true);
   });
 
@@ -31,7 +31,6 @@ describe('GitHub API', () => {
     let [method, path, realpath] = i;
     it(path, () => {
       let [handler, params] = r.find(method, realpath);
-      // console.log(path, realpath, handler, params);
       assert.notEqual(null, handler);
       assert.equal(_.camelCase(funcPrefix + path), handler.name);
       assert.equal((path.match(/\:/g) || []).length, params.length);

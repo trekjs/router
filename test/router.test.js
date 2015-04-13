@@ -56,7 +56,7 @@ describe('Router', () => {
       ['/geocoder', 'geocoder'],
       ['/geocoder/new', 'newGeocoder'],
       ['/geocoder/notify', 'notifyGeocoder'],
-      ['/geocoder/nnn', 'nnnGeocoder'],
+      // ['/geocoder/nnn', 'nnnGeocoder'],
       ['/geocoder/edit', 'editGeocoder'],
       ['/geocoder/edit/email', 'editEmailGeocoder'],
       ['/geocoder/edit/:item', 'editItemGeocoder'],
@@ -130,7 +130,7 @@ describe('Router', () => {
 
     result = r.find('GET', '/geocoder/nnn');
     assert.notEqual(null, result[0]);
-    assert.equal('nnnGeocoder', result[0].name);
+    assert.equal('actionGeocoder', result[0].name);
 
     result = r.find('GET', '/geocoder/new/');
     assert.equal(null, result[0]);
@@ -147,15 +147,15 @@ describe('Router', () => {
   });
 
   it('resources', () => {
-    _.shuffle([
+    [
       ['/users', 'users'],
       ['/users/new', 'newUser'],
       ['/users/:id', 'user'],
-      ['/users/:id/:action', 'actionUser'],
       ['/users/:id/edit', 'editUser'],
+      ['/users/:id/:action', 'actionUser'],
       ['/users/:userId/photos/:id', 'photo'],
       ['/users/:userId/books/:id', 'book']
-    ]).forEach((i) => {
+    ].forEach((i) => {
       r.add('GET', i[0], createFunc(i[1]));
     });
     r.trees['GET'].printTree('', true);
@@ -204,7 +204,10 @@ describe('Router', () => {
     assert.equal(null, result[0]);
 
     result = r.find('GET', '/users/news');
-    assert.equal(null, result[0]);
+    assert.notEqual(null, result[0]);
+    assert.equal('user', result[0].name);
+    assert.equal('id', result[1][0].name);
+    assert.equal('news', result[1][0].value);
 
     result = r.find('GET', '/users/new');
     assert.notEqual(null, result[0]);

@@ -4,8 +4,6 @@
  * MIT Licensed
  */
 
-const min = Math.min;
-
 const METHODS = [
   'CONNECT',
   'DELETE',
@@ -18,9 +16,11 @@ const METHODS = [
   'TRACE'
 ];
 
-const SNODE = 1; // Static node
-const PNODE = 2; // Param node
-const CNODE = 3; // Catch-all node
+const min = Math.min;
+
+const STAR = 42; // '*'
+const SLASH = 47; // '/'
+const COLON = 58; // ':'
 
 /**
  * Node
@@ -28,18 +28,18 @@ const CNODE = 3; // Catch-all node
  * @class Node
  * @constructor
  * @param {String} path
- * @param {Number} has
- * @param {Function|GeneratorFunction} handler
+ * @param {Node} parent
  * @param {Array} [edges]
+ * @param {Function|GeneratorFunction} handler
  */
 class Node {
 
-  constructor(prefix, has, handler, edges) {
+  constructor(prefix, parent, edges, handler) {
     this.label = prefix.charCodeAt(0);
     this.prefix = prefix;
-    this.has = has;
-    this.handler = handler;
+    this.parent = parent;
     this.edges = edges || [];
+    this.handler = handler;
   }
 
   /**
@@ -72,7 +72,7 @@ class Router {
     this.trees = Object.create(null);
     METHODS.forEach((m) => {
       // Start from '/'
-      this.trees[m.toUpperCase()] = new Node('/', null, null, []);
+      this.trees[m.toUpperCase()] = new Node('/');
     });
   }
 
@@ -97,13 +97,13 @@ class Router {
 
     for (; i < l; ++i) {
       ch = path.charCodeAt(i);
-      if (ch === 0x3A /*':'*/) {
+      if (ch === COLON) {
         // Param start index
         let j = i + 1;
         count++;
 
-        this.insert(method, path.substring(0, i), null, PNODE);
-        for (; i < l && (path.charCodeAt(i) !== 0x2F /*'/'*/); ++i) {}
+        this.insert(method, path.substring(0, i));
+        for (; i < l && (path.charCodeAt(i) !== SLASH); ++i) {}
 
         // Create param key `$n`
         let param = '$' + count;
@@ -117,17 +117,17 @@ class Router {
         l = path.length;
 
         if (i === l) {
-          this.insert(method, path.substring(0, i), handler, 0);
+          this.insert(method, path.substring(0, i), handler);
           return;
         }
-        this.insert(method, path.substring(0, i), null, 0);
-      } else if (ch === 0x2A /*'*'*/) {
-        this.insert(method, path.substring(0, i), null, CNODE);
-        this.insert(method, path.substring(0, l), handler, 0);
+        this.insert(method, path.substring(0, i));
+      } else if (ch === STAR) {
+        this.insert(method, path.substring(0, i));
+        this.insert(method, path.substring(0, l), handler);
       }
     }
     // unshift node
-    this.insert(method, path, handler, SNODE, true);
+    this.insert(method, path, handler);
   }
 
   /**
@@ -138,10 +138,9 @@ class Router {
    * @param {String} method
    * @param {String} path
    * @param {Function|GeneratorFunction} handler
-   * @param {Number} has
    * @param {Boolean} [bool=false] if bool is true, unshift it to edges
    */
-  insert(method, path, handler, has, bool = false) {
+  insert(method, path, handler) {
     let cn = this.trees[method]; // Current node as root
     let search = path;
 
@@ -154,28 +153,26 @@ class Router {
         // At root node
         cn.label = search.charCodeAt(0);
         cn.prefix = search;
-        cn.has = has;
         if (handler) {
           cn.handler = handler;
         }
       } else if (l < pl) {
         // Split node
-        let n = new Node(cn.prefix.substring(l), cn.has, cn.handler, cn.edges);
+        let n = new Node(cn.prefix.substring(l), cn, cn.edges, cn.handler);
         cn.edges = [n]; // Add to parent
 
         // Reset parent node
         cn.label = cn.prefix.charCodeAt(0);
         cn.prefix = cn.prefix.substring(0, l);
-        cn.has = 0;
-        cn.handler = null;
+        cn.handler = undefined;
 
         if (l === sl) {
           // At parent node
           cn.handler = handler;
         } else {
-          // Need to fork a node
-          let n = new Node(search.substring(l), has, handler);
-          cn.edges[bool ? 'unshift' : 'push'](n);
+          // Create child node
+          let n = new Node(search.substring(l), cn, [], handler);
+          cn.edges.push(n);
         }
       } else if (l < sl) {
         search = search.substring(l);
@@ -186,8 +183,8 @@ class Router {
           continue;
         }
         // Create child node
-        let n = new Node(search, has, handler);
-        cn.edges[bool ? 'unshift' : 'push'](n);
+        let n = new Node(search, cn, [], handler);
+        cn.edges.push(n);
       } else {
         // Node already exists
         if (handler) {
@@ -214,78 +211,89 @@ class Router {
     let n = 0; // Param count
     let result = Array(2);
     let params = result[1] = [];
+    let preSearch = search; // Pre search
 
-    while (true) {
-      // search ==== ''
-      if (search.length === 0 || search === cn.prefix) {
-        // Found
-        result[0] = cn.handler;
-        result[1] = params;
-        if (cn.handler) {
-          let keys = cn.handler.keys;
-          for (let i = 0, l = keys.length; i < l; ++i) {
-            params[i].name = keys[i];
+    // Search order static > param > catch-all
+    walk:
+      while (true) {
+        if (search.length === 0 || search === cn.prefix) {
+          // Found
+          result[0] = cn.handler;
+          result[1] = params;
+          if (cn.handler !== undefined) {
+            let keys = cn.handler.keys;
+            for (let i = 0, l = keys.length; i < l; ++i) {
+              params[i].name = keys[i];
+            }
           }
+          return result;
         }
-        return result;
+
+        let pl = cn.prefix.length;
+        let l = lcp(search, cn.prefix);
+        let leq = l === pl;
+        let e;
+
+        if (leq) {
+          search = search.substring(l);
+        }
+
+        // Static node
+        e = cn.findEdge(search.charCodeAt(0));
+        if (e !== undefined) {
+          cn = e;
+          preSearch = search;
+          continue;
+        }
+
+        // Not found static node
+        if (!leq) {
+          return result;
+        }
+
+        // Param node
+        param:
+          while (true) {
+
+            e = cn.findEdge(COLON);
+            if (e !== undefined) {
+              l = search.length;
+              for (var i = 0; i < l && (search.charCodeAt(i) !== SLASH); i++) {}
+
+              params[n] = {
+                name: e.prefix.substring(1),
+                value: search.substring(0, i)
+              };
+              n++;
+
+              cn = e;
+              preSearch = search;
+              search = search.substring(i);
+              continue walk;
+            }
+
+            // Catch-all node
+            e = cn.findEdge(STAR);
+            if (e !== undefined) {
+              params[n] = {
+                name: '_name',
+                value: search
+              };
+              cn = e;
+              search = ''; // End search
+              continue walk;
+            }
+
+            if (cn.parent !== undefined) {
+              cn = cn.parent;
+              search = preSearch;
+              continue param;
+            }
+
+            return result;
+          }
+
       }
-
-      let pl = cn.prefix.length;
-      let l = lcp(search, cn.prefix);
-      let leq = l === pl;
-      let e;
-
-      if (leq) {
-        search = search.substring(l);
-      }
-
-      // Search SNODE
-      e = cn.findEdge(search.charCodeAt(0));
-      if (e !== undefined) {
-        cn = e;
-        continue;
-      }
-
-      // Not found SNODE, should return
-      if (!leq) {
-        return result;
-      }
-
-      // Search PNODE
-      e = cn.findEdge(0x3A /*':'*/);
-      if (e !== undefined) {
-        cn = e;
-        l = search.length;
-        for (var i = 0; i < l && (search.charCodeAt(i) !== 0x2F /*'/'*/); i++) {}
-
-        params[n] = {
-          name: e.prefix.substring(1),
-          value: search.substring(0, i)
-        };
-        n++;
-
-        search = search.substring(i);
-        continue;
-      }
-
-      // Search CNODE
-      e = cn.findEdge(0x2A /*'*'*/);
-      if (e !== undefined) {
-        cn = e;
-        // Catch-all node
-        params[n] = {
-          name: '_name',
-          value: search
-        };
-        search = ''; // End search
-      }
-
-      if (search.length === 0) {
-        continue;
-      }
-
-      return result;
-    }
   }
 
 }
