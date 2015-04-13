@@ -30,6 +30,7 @@ describe('Parse API', () => {
     let [method, path, realpath] = i;
     it(path, () => {
       let [handler, params] = r.find(method, realpath);
+      // console.log(path, realpath, handler, params);
       assert.notEqual(null, handler);
       assert.equal(_.camelCase('parse-api' + path), handler.name);
       assert.equal((path.match(/\:/g) || []).length, params.length);

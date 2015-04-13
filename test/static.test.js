@@ -185,6 +185,7 @@ describe('Router', () => {
     let [method, path] = i;
     it(path, () => {
       let [handler, params] = r.find(method, path);
+      // console.log(path, handler, params);
       assert.notEqual(null, handler);
       assert.equal(_.camelCase(funcPrefx + path), handler.name);
       assert.equal((path.match(/\:/g) || []).length, params.length);
