@@ -92,9 +92,10 @@ api0.forEach(function(i) {
   r.define(path);
 });
 
+console.log('\nGitHub API, %s routes:', api.length);
 // add tests
 suite
-  .add('trek-router GitHub API', function() {
+  .add('trek-router', function() {
     api.forEach(function(i) {
       var method = i[0],
         path = i[1],
@@ -104,7 +105,7 @@ suite
       assert.notEqual(null, handler);
     });
   })
-  .add('path-to-regexp GitHub API', function() {
+  .add('path-to-regexp', function() {
     api.forEach(function(i) {
       var method = i[0],
         path = i[1],
@@ -116,7 +117,7 @@ suite
       assert.notEqual(null, result);
     });
   })
-  .add('route-recognizer GitHub API', function() {
+  .add('route-recognizer', function() {
     api.forEach(function(i) {
       var method = i[0],
         path = i[1],
@@ -126,7 +127,7 @@ suite
       assert.notEqual(null, result);
     });
   })
-  .add('route-trie GitHub API', function() {
+  .add('route-trie', function() {
     api.forEach(function(i) {
       var method = i[0],
         path = i[1],
@@ -136,7 +137,7 @@ suite
       assert.notEqual(null, result);
     });
   })
-  .add('routington GitHub API', function() {
+  .add('routington', function() {
     api.forEach(function(i) {
       var method = i[0],
         path = i[1],
@@ -161,9 +162,10 @@ suite
 
 var suite0 = new Benchmark.Suite;
 
+console.log('\nDiscourse API, %s routes:', api0.length);
 // add tests
 suite0
-  .add('trek-router Discourse API', function() {
+  .add('trek-router', function() {
     api0.forEach(function(i) {
       var method = 'GET',
         path = i[0],
@@ -173,7 +175,7 @@ suite0
       assert.notEqual(null, handler);
     });
   })
-  .add('path-to-regexp Discourse API', function() {
+  .add('path-to-regexp', function() {
     api0.forEach(function(i) {
       var method = 'GET',
         path = i[0],
@@ -185,7 +187,7 @@ suite0
       assert.notEqual(null, result);
     });
   })
-  .add('route-recognizer Discourse API', function() {
+  .add('route-recognizer', function() {
     api0.forEach(function(i) {
       var method = 'GET',
         path = i[0],
@@ -195,7 +197,7 @@ suite0
       assert.notEqual(null, result);
     });
   })
-  .add('route-trie Discourse API', function() {
+  .add('route-trie', function() {
     api0.forEach(function(i) {
       var method = 'GET',
         path = i[0],
@@ -205,7 +207,7 @@ suite0
       assert.notEqual(null, result);
     });
   })
-  .add('routington Discourse API', function() {
+  .add('routington', function() {
     api0.forEach(function(i) {
       var method = 'GET',
         path = i[0],
