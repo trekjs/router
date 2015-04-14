@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import assert from 'assert';
-import Router, { Node } from '../src/router';
+import Router, { Node, METHODS } from '../src/router';
 import './node';
 
 function createFunc(name) {
@@ -506,4 +506,9 @@ describe('Router', () => {
     });
   });
 
+  describe('METHODS', () => {
+    it('Router.METHODS', () => {
+      assert.notEqual(null, METHODS);
+    });
+  });
 });

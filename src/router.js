@@ -290,6 +290,8 @@ function lcp(a, b) {
   return i;
 }
 
+Router.METHODS = METHODS;
+
 Router.Node = Node;
 
 export default Router;
