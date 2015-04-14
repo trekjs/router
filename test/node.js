@@ -2,10 +2,7 @@ import { format } from 'util';
 import { Node } from '../src/router';
 
 function prefix(tail, p, on, off) {
-  if (tail) {
-    return format('%s%s', p, on);
-  }
-  return format('%s%s', p, off);
+  return format('%s%s', p, tail ? on : off);
 }
 
 Node.prototype.printTree = function printTree(pfx, tail) {
@@ -15,15 +12,16 @@ Node.prototype.printTree = function printTree(pfx, tail) {
     p,
     this.prefix,
     this.handler ? 'function' : undefined,
-    this.edges.length);
+    this.edges.length
+  );
 
   let nodes = this.edges;
   let l = nodes.length;
-  p = prefix(tail, pfx, '    ', '│   ')
-  for (let i = 0; i < l - 1; i++) {
-    nodes[i].printTree(p, false)
+  p = prefix(tail, pfx, '    ', '│   ');
+  for (let i = 0; i < l - 1; ++i) {
+    nodes[i].printTree(p, false);
   }
   if (l > 0) {
-    nodes[l - 1].printTree(p, true)
+    nodes[l - 1].printTree(p, true);
   }
 };
