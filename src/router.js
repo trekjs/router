@@ -28,16 +28,14 @@ const COLON = 58; // ':'
  * @class Node
  * @constructor
  * @param {String} path
- * @param {Node} parent
  * @param {Array} [edges]
  * @param {Function|GeneratorFunction} handler
  */
 class Node {
 
-  constructor(prefix, parent, edges, handler) {
+  constructor(prefix, edges, handler) {
     this.label = prefix.charCodeAt(0);
     this.prefix = prefix;
-    this.parent = parent;
     this.edges = edges || [];
     this.handler = handler;
   }
@@ -120,7 +118,6 @@ class Router {
         this.insert(method, path.substring(0, l), handler);
       }
     }
-    // unshift node
     this.insert(method, path, handler);
   }
 
@@ -137,11 +134,12 @@ class Router {
   insert(method, path, handler) {
     let cn = this.trees[method]; // Current node as root
     let search = path;
+    let sl, pl, l, n, e;
 
     while (true) {
-      let sl = search.length;
-      let pl = cn.prefix.length;
-      let l = lcp(search, cn.prefix);
+      sl = search.length;
+      pl = cn.prefix.length;
+      l = lcp(search, cn.prefix);
 
       if (l === 0) {
         // At root node
@@ -152,7 +150,7 @@ class Router {
         }
       } else if (l < pl) {
         // Split node
-        let n = new Node(cn.prefix.substring(l), cn, cn.edges, cn.handler);
+        n = new Node(cn.prefix.substring(l), cn.edges, cn.handler);
         cn.edges = [n]; // Add to parent
 
         // Reset parent node
@@ -165,19 +163,19 @@ class Router {
           cn.handler = handler;
         } else {
           // Create child node
-          let n = new Node(search.substring(l), cn, [], handler);
+          n = new Node(search.substring(l), [], handler);
           cn.edges.push(n);
         }
       } else if (l < sl) {
         search = search.substring(l);
-        let e = cn.findEdge(search.charCodeAt(0));
+        e = cn.findEdge(search.charCodeAt(0));
         if (e !== undefined) {
           // Go deeper
           cn = e;
           continue;
         }
         // Create child node
-        let n = new Node(search, cn, [], handler);
+        n = new Node(search, [], handler);
         cn.edges.push(n);
       } else {
         // Node already exists
@@ -199,95 +197,88 @@ class Router {
    * @property {NULL|Function|GeneratorFunction} result[0]
    * @property {Array} result[1]
    */
-  find(method, path) {
-    let cn = this.trees[method]; // Current node as root
+  find(method, path, cn, n, result) {
+    n = n || 0; // Param count
+    cn = cn || this.trees[method]; // Current node as root
+    result = result || [undefined, []];
+    // let n = 0; // Param count
+    // let cn = this.trees[method]; // Current node as root
+    // let result = [undefined, []];
     let search = path;
-    let n = 0; // Param count
-    let result = Array(2);
-    let params = result[1] = [];
-    let preSearch = search; // Pre search
+    let params = result[1];
+    let pl, l, leq, e;
+    let preSearch; // Pre search
 
-    // Search order static > param > catch-all
-    walk:
-      while (true) {
-        if (search.length === 0 || search === cn.prefix) {
-          // Found
-          result[0] = cn.handler;
-          result[1] = params;
-          if (cn.handler !== undefined) {
-            let keys = cn.handler.keys;
-            for (let i = 0, l = keys.length; i < l; ++i) {
-              params[i].name = keys[i];
-            }
-          }
-          return result;
+    if (search.length === 0 || search === cn.prefix) {
+      // Found
+      result[0] = cn.handler;
+      result[1] = params;
+      if (cn.handler !== undefined) {
+        let keys = cn.handler.keys;
+        let i = 0, l = keys.length;
+        for (; i < l; ++i) {
+          params[i].name = keys[i];
         }
-
-        let pl = cn.prefix.length;
-        let l = lcp(search, cn.prefix);
-        let leq = l === pl;
-        let e;
-
-        if (leq) {
-          search = search.substring(l);
-        }
-
-        // Static node
-        e = cn.findEdge(search.charCodeAt(0));
-        if (e !== undefined) {
-          cn = e;
-          preSearch = search;
-          continue;
-        }
-
-        // Not found static node
-        if (!leq) {
-          return result;
-        }
-
-        // Param node
-        param:
-          while (true) {
-
-            e = cn.findEdge(COLON);
-            if (e !== undefined) {
-              l = search.length;
-              for (var i = 0; i < l && (search.charCodeAt(i) !== SLASH); i++) {}
-
-              params[n] = {
-                name: e.prefix.substring(1),
-                value: search.substring(0, i)
-              };
-              n++;
-
-              cn = e;
-              preSearch = search;
-              search = search.substring(i);
-              continue walk;
-            }
-
-            // Catch-all node
-            e = cn.findEdge(STAR);
-            if (e !== undefined) {
-              params[n] = {
-                name: '_name',
-                value: search
-              };
-              cn = e;
-              search = ''; // End search
-              continue walk;
-            }
-
-            if (cn.parent !== undefined) {
-              cn = cn.parent;
-              search = preSearch;
-              continue param;
-            }
-
-            return result;
-          }
-
       }
+      return result;
+    }
+
+    pl = cn.prefix.length;
+    l = lcp(search, cn.prefix);
+    leq = l === pl;
+
+    if (leq) {
+      search = search.substring(l);
+    }
+    preSearch = search;
+
+    // Static node
+    e = cn.findEdge(search.charCodeAt(0));
+    if (e !== undefined) {
+      this.find(method, search, e, n, result);
+      if (result[0] !== undefined) return result;
+      search = preSearch;
+    }
+
+    // Not found static node
+    if (!leq) {
+      return result;
+    }
+
+    e = cn.findEdge(COLON);
+    if (e !== undefined) {
+      l = search.length;
+      for (var i = 0; i < l && (search.charCodeAt(i) !== SLASH); i++) {}
+
+      params[n] = {
+        name: e.prefix.substring(1),
+        value: search.substring(0, i)
+      };
+
+      n++;
+      preSearch = search;
+      search = search.substring(i);
+
+      this.find(method, search, e, n, result);
+      if (result[0] !== undefined) return result;
+
+      n--;
+      params.shift()
+      search = preSearch;
+    }
+
+    // Catch-all node
+    e = cn.findEdge(STAR);
+    if (e !== undefined) {
+      params[n] = {
+        name: '_name',
+        value: search
+      };
+      search = ''; // End search
+      this.find(method, search, e, n, result);
+    }
+
+    return result;
   }
 
 }
