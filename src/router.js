@@ -28,28 +28,28 @@ const COLON = 58; // ':'
  * @class Node
  * @constructor
  * @param {String} path
- * @param {Array} [edges]
+ * @param {Array} [children]
  * @param {Function|GeneratorFunction} handler
  */
 class Node {
 
-  constructor(prefix, edges, handler) {
+  constructor(prefix, children, handler) {
     this.label = prefix.charCodeAt(0);
     this.prefix = prefix;
-    this.edges = edges || [];
+    this.children = children || [];
     this.handler = handler;
   }
 
   /**
-   * Find edge by charCode
+   * Find child by charCode
    *
    * @param {Number} char code
    * @return {Node|undefined} node
    */
-  findEdge(c) {
-    let [i, l, e] = [0, this.edges.length, undefined];
+  findChild(c) {
+    let [i, l, e] = [0, this.children.length, undefined];
     for (; i < l; ++i) {
-      e = this.edges[i];
+      e = this.children[i];
       // Compare charCode
       if (e.label === c) return e;
     }
@@ -129,7 +129,6 @@ class Router {
    * @param {String} method
    * @param {String} path
    * @param {Function|GeneratorFunction} handler
-   * @param {Boolean} [bool=false] if bool is true, unshift it to edges
    */
   insert(method, path, handler) {
     let cn = this.trees[method]; // Current node as root
@@ -150,8 +149,8 @@ class Router {
         }
       } else if (l < pl) {
         // Split node
-        n = new Node(cn.prefix.substring(l), cn.edges, cn.handler);
-        cn.edges = [n]; // Add to parent
+        n = new Node(cn.prefix.substring(l), cn.children, cn.handler);
+        cn.children = [n]; // Add to parent
 
         // Reset parent node
         cn.label = cn.prefix.charCodeAt(0);
@@ -164,11 +163,11 @@ class Router {
         } else {
           // Create child node
           n = new Node(search.substring(l), [], handler);
-          cn.edges.push(n);
+          cn.children.push(n);
         }
       } else if (l < sl) {
         search = search.substring(l);
-        e = cn.findEdge(search.charCodeAt(0));
+        e = cn.findChild(search.charCodeAt(0));
         if (e !== undefined) {
           // Go deeper
           cn = e;
@@ -176,7 +175,7 @@ class Router {
         }
         // Create child node
         n = new Node(search, [], handler);
-        cn.edges.push(n);
+        cn.children.push(n);
       } else {
         // Node already exists
         if (handler) {
@@ -233,7 +232,7 @@ class Router {
     preSearch = search;
 
     // Static node
-    e = cn.findEdge(search.charCodeAt(0));
+    e = cn.findChild(search.charCodeAt(0));
     if (e !== undefined) {
       this.find(method, search, e, n, result);
       if (result[0] !== undefined) return result;
@@ -245,7 +244,7 @@ class Router {
       return result;
     }
 
-    e = cn.findEdge(COLON);
+    e = cn.findChild(COLON);
     if (e !== undefined) {
       l = search.length;
       for (var i = 0; i < l && (search.charCodeAt(i) !== SLASH); i++) {}
@@ -268,7 +267,7 @@ class Router {
     }
 
     // Catch-all node
-    e = cn.findEdge(STAR);
+    e = cn.findChild(STAR);
     if (e !== undefined) {
       params[n] = {
         name: '_name',

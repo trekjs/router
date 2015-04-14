@@ -8,14 +8,14 @@ function prefix(tail, p, on, off) {
 Node.prototype.printTree = function printTree(pfx, tail) {
   let p = prefix(tail, pfx, '└── ', '├── ');
   console.log(
-    '%s%s h=%s edges=%s',
+    '%s%s h=%s children=%s',
     p,
     this.prefix,
     this.handler ? 'function' : undefined,
-    this.edges.length
+    this.children.length
   );
 
-  let nodes = this.edges;
+  let nodes = this.children;
   let l = nodes.length;
   p = prefix(tail, pfx, '    ', '│   ');
   for (let i = 0; i < l - 1; ++i) {
