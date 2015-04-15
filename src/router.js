@@ -30,14 +30,16 @@ const COLON = 58; // ':'
  * @param {String} path
  * @param {Array} [children]
  * @param {Function|GeneratorFunction} handler
+ * @param {Array} [keys]
  */
 class Node {
 
-  constructor(prefix, children, handler) {
+  constructor(prefix, children, handler, keys) {
     this.label = prefix.charCodeAt(0);
     this.prefix = prefix;
     this.children = children || [];
     this.handler = handler;
+    this.keys = keys;
   }
 
   /**
@@ -83,12 +85,10 @@ class Router {
    * @param {Function|GeneratorFunction} handler
    */
   add(method, path, handler) {
-    // Store param keys
-    let keys = [];
-    if (handler) handler.keys = keys;
-
     let i = 0;
     let l = path.length
+    // Store param keys
+    let keys = [];
     let ch, j;
 
     for (; i < l; ++i) {
@@ -109,16 +109,16 @@ class Router {
         l = path.length;
 
         if (i === l) {
-          this.insert(method, path.substring(0, i), handler);
+          this.insert(method, path.substring(0, i), handler, keys);
           return;
         }
         this.insert(method, path.substring(0, i));
       } else if (ch === STAR) {
         this.insert(method, path.substring(0, i));
-        this.insert(method, path.substring(0, l), handler);
+        this.insert(method, path.substring(0, l), handler, keys);
       }
     }
-    this.insert(method, path, handler);
+    this.insert(method, path, handler, keys);
   }
 
   /**
@@ -130,7 +130,7 @@ class Router {
    * @param {String} path
    * @param {Function|GeneratorFunction} handler
    */
-  insert(method, path, handler) {
+  insert(method, path, handler, keys) {
     let cn = this.trees[method]; // Current node as root
     let search = path;
     let sl, pl, l, n, e;
@@ -144,25 +144,26 @@ class Router {
         // At root node
         cn.label = search.charCodeAt(0);
         cn.prefix = search;
-        if (handler) {
-          cn.handler = handler;
-        }
+        if (handler) cn.handler = handler;
+        if (keys) cn.keys = keys;
       } else if (l < pl) {
         // Split node
-        n = new Node(cn.prefix.substring(l), cn.children, cn.handler);
+        n = new Node(cn.prefix.substring(l), cn.children, cn.handler, cn.keys);
         cn.children = [n]; // Add to parent
 
         // Reset parent node
         cn.label = cn.prefix.charCodeAt(0);
         cn.prefix = cn.prefix.substring(0, l);
         cn.handler = undefined;
+        cn.keys = undefined;
 
         if (l === sl) {
           // At parent node
-          cn.handler = handler;
+          if (handler) cn.handler = handler;
+          if (keys) cn.keys = keys;
         } else {
           // Create child node
-          n = new Node(search.substring(l), [], handler);
+          n = new Node(search.substring(l), [], handler, keys);
           cn.children.push(n);
         }
       } else if (l < sl) {
@@ -174,13 +175,12 @@ class Router {
           continue;
         }
         // Create child node
-        n = new Node(search, [], handler);
+        n = new Node(search, [], handler, keys);
         cn.children.push(n);
       } else {
         // Node already exists
-        if (handler) {
-          cn.handler = handler;
-        }
+        if (handler) cn.handler = handler;
+        if (keys) cn.keys = keys;
       }
       return;
     }
@@ -200,9 +200,6 @@ class Router {
     n = n || 0; // Param count
     cn = cn || this.trees[method]; // Current node as root
     result = result || [undefined, []];
-    // let n = 0; // Param count
-    // let cn = this.trees[method]; // Current node as root
-    // let result = [undefined, []];
     let search = path;
     let params = result[1];
     let pl, l, leq, e;
@@ -213,10 +210,12 @@ class Router {
       result[0] = cn.handler;
       result[1] = params;
       if (cn.handler !== undefined) {
-        let keys = cn.handler.keys;
-        let i = 0, l = keys.length;
-        for (; i < l; ++i) {
-          params[i].name = keys[i];
+        let keys = cn.keys;
+        if (keys !== undefined) {
+          let i = 0, l = keys.length;
+          for (; i < l; ++i) {
+            params[i].name = keys[i];
+          }
         }
       }
       return result;
