@@ -11,7 +11,7 @@ A fast HTTP router, inspired by [Echo](https://github.com/labstack/echo)'s Route
 
 ## Benchmarks
 
-See [benchmarks](benchmarks), use GitHub API Routes.
+See [benchmarks](benchmarks), use GitHub API Routes and Discourse API Routes.
 
 **VS**
 
