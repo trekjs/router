@@ -11,7 +11,7 @@ A fast HTTP router, inspired by [Echo](https://github.com/labstack/echo)'s Route
 
 ## Benchmarks
 
-See [benchmarks](benchmarks), use GitHub API Routes and Discourse API Routes.
+See [benchmarks](benchmarks), use [GitHub API Routes][] and [Discourse API Routes][].
 
 **VS**
 
@@ -81,6 +81,9 @@ let result = r.find('GET', '/photos/233')
 [route-recognizer]: https://github.com/tildeio/route-recognizer
 [route-trie]: https://github.com/zensh/route-trie
 [routington]: https://github.com/pillarjs/routington
+
+[GitHub API Routes]: test/fixtures/github-api.js
+[Discourse API Routes]: test/fixtures/discourse-api.js
 
 [npm-img]: https://img.shields.io/npm/v/trek-router.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/trek-router
