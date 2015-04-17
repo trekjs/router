@@ -23,7 +23,7 @@ const SLASH = 47; // '/'
 const COLON = 58; // ':'
 
 /**
- * Node
+ * Route Node
  *
  * @class Node
  * @constructor
@@ -43,7 +43,7 @@ class Node {
   }
 
   /**
-   * Find child by charCode
+   * Find child node by charCode
    *
    * @param {Number} char code
    * @return {Node|undefined} node
@@ -128,7 +128,8 @@ class Router {
    * @private
    * @param {String} method
    * @param {String} path
-   * @param {Function|GeneratorFunction} handler
+   * @param {Function|GeneratorFunction} [handler]
+   * @param {Array} [keys]
    */
   insert(method, path, handler, keys) {
     let cn = this.trees[method]; // Current node as root
@@ -193,7 +194,7 @@ class Router {
    * @param {String} method
    * @param {String} path
    * @return {Array} result
-   * @property {NULL|Function|GeneratorFunction} result[0]
+   * @property {Undefined|Function|GeneratorFunction} result[0]
    * @property {Array} result[1]
    */
   find(method, path, cn, n, result) {
