@@ -87,8 +87,7 @@ class Router {
   add(method, path, handler) {
     let i = 0;
     let l = path.length
-    // Store param keys
-    let keys = [];
+    let keys = []; // Store param keys
     let ch, j;
 
     for (; i < l; ++i) {
@@ -206,14 +205,15 @@ class Router {
     let pl, l, leq, e;
     let preSearch; // Pre search
 
-    if (search.length === 0 || search === cn.prefix) {
+    if (search.length === 0 || equalsLower(search, cn.prefix)) {
       // Found
       result[0] = cn.handler;
       result[1] = params;
       if (cn.handler !== undefined) {
         let keys = cn.keys;
         if (keys !== undefined) {
-          let i = 0, l = keys.length;
+          let i = 0;
+          let l = keys.length;
           for (; i < l; ++i) {
             params[i].name = keys[i];
           }
@@ -288,6 +288,18 @@ function lcp(a, b) {
   let max = min(a.length, b.length);
   for (; i < max && (a.charCodeAt(i) === b.charCodeAt(i)); ++i) {}
   return i;
+}
+
+function equalsLower(a, b) {
+  let aLen = a.length;
+  let bLen = b.length;
+  if (aLen !== bLen) return false;
+  let i = 0;
+  let max = min(aLen, bLen);
+  for (; i < max && (a.charCodeAt(i) !== b.charCodeAt(i)); ++i) {
+    return false;
+  }
+  return true;
 }
 
 Router.METHODS = METHODS;
