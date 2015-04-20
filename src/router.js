@@ -247,7 +247,7 @@ class Router {
     e = cn.findChild(COLON);
     if (e !== undefined) {
       l = search.length;
-      for (var i = 0; i < l && (search.charCodeAt(i) !== SLASH); i++) {}
+      for (var i = 0; i < l && (search.charCodeAt(i) !== SLASH); ++i) {}
 
       params[n] = {
         name: e.prefix.substring(1),
