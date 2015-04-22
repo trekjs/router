@@ -295,8 +295,7 @@ function equalsLower(a, b) {
   let bLen = b.length;
   if (aLen !== bLen) return false;
   let i = 0;
-  let max = min(aLen, bLen);
-  for (; i < max && (a.charCodeAt(i) !== b.charCodeAt(i)); ++i) {
+  for (; i < aLen && (a.charCodeAt(i) !== b.charCodeAt(i)); ++i) {
     return false;
   }
   return true;
