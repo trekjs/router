@@ -250,7 +250,6 @@ class Router {
       for (var i = 0; i < l && (search.charCodeAt(i) !== SLASH); ++i) {}
 
       params[n] = {
-        name: c.prefix.substring(1),
         value: search.substring(0, i)
       };
 
