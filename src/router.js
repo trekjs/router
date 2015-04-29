@@ -30,16 +30,16 @@ const COLON = 58; // ':'
  * @param {String} path
  * @param {Array} [children]
  * @param {Function|GeneratorFunction} handler
- * @param {Array} [keys]
+ * @param {Array} [pnames]
  */
 class Node {
 
-  constructor(prefix, children, handler, keys) {
+  constructor(prefix, children, handler, pnames) {
     this.label = prefix.charCodeAt(0);
     this.prefix = prefix;
     this.children = children || [];
     this.handler = handler;
-    this.keys = keys;
+    this.pnames = pnames;
   }
 
   /**
@@ -87,37 +87,33 @@ class Router {
   add(method, path, handler) {
     let i = 0;
     let l = path.length
-    let keys = []; // Store param keys
+    let pnames = []; // Param names
     let ch, j;
 
     for (; i < l; ++i) {
       ch = path.charCodeAt(i);
       if (ch === COLON) {
-        // Param start index
         j = i + 1;
 
         this.insert(method, path.substring(0, i));
         for (; i < l && (path.charCodeAt(i) !== SLASH); ++i) {}
 
-        // Store original param key
-        keys.push(path.substring(j, i));
-        // Override path
+        pnames.push(path.substring(j, i));
         path = path.substring(0, j) + path.substring(i);
-        // Override i, l
         i = j;
         l = path.length;
 
         if (i === l) {
-          this.insert(method, path.substring(0, i), handler, keys);
+          this.insert(method, path.substring(0, i), handler, pnames);
           return;
         }
         this.insert(method, path.substring(0, i));
       } else if (ch === STAR) {
         this.insert(method, path.substring(0, i));
-        this.insert(method, path.substring(0, l), handler, keys);
+        this.insert(method, path.substring(0, l), handler, pnames);
       }
     }
-    this.insert(method, path, handler, keys);
+    this.insert(method, path, handler, pnames);
   }
 
   /**
@@ -128,12 +124,12 @@ class Router {
    * @param {String} method
    * @param {String} path
    * @param {Function|GeneratorFunction} [handler]
-   * @param {Array} [keys]
+   * @param {Array} [pnames]
    */
-  insert(method, path, handler, keys) {
+  insert(method, path, handler, pnames) {
     let cn = this.trees[method]; // Current node as root
     let search = path;
-    let sl, pl, l, n, e;
+    let sl, pl, l, n, c;
 
     while (true) {
       sl = search.length;
@@ -144,43 +140,47 @@ class Router {
         // At root node
         cn.label = search.charCodeAt(0);
         cn.prefix = search;
-        if (handler) cn.handler = handler;
-        if (keys) cn.keys = keys;
+        if (handler) {
+          cn.handler = handler;
+          cn.pnames = pnames;
+        }
       } else if (l < pl) {
         // Split node
-        n = new Node(cn.prefix.substring(l), cn.children, cn.handler, cn.keys);
+        n = new Node(cn.prefix.substring(l), cn.children, cn.handler, cn.pnames);
         cn.children = [n]; // Add to parent
 
         // Reset parent node
         cn.label = cn.prefix.charCodeAt(0);
         cn.prefix = cn.prefix.substring(0, l);
         cn.handler = undefined;
-        cn.keys = undefined;
+        cn.pnames = undefined;
 
         if (l === sl) {
           // At parent node
-          if (handler) cn.handler = handler;
-          if (keys) cn.keys = keys;
+          cn.handler = handler;
+          cn.pnames = pnames;
         } else {
           // Create child node
-          n = new Node(search.substring(l), [], handler, keys);
+          n = new Node(search.substring(l), [], handler, pnames);
           cn.children.push(n);
         }
       } else if (l < sl) {
         search = search.substring(l);
-        e = cn.findChild(search.charCodeAt(0));
-        if (e !== undefined) {
+        c = cn.findChild(search.charCodeAt(0));
+        if (c !== undefined) {
           // Go deeper
-          cn = e;
+          cn = c;
           continue;
         }
         // Create child node
-        n = new Node(search, [], handler, keys);
+        n = new Node(search, [], handler, pnames);
         cn.children.push(n);
       } else {
         // Node already exists
-        if (handler) cn.handler = handler;
-        if (keys) cn.keys = keys;
+        if (handler) {
+          cn.handler = handler;
+          cn.pnames = pnames;
+        }
       }
       return;
     }
@@ -202,20 +202,19 @@ class Router {
     result = result || [undefined, []];
     let search = path;
     let params = result[1];
-    let pl, l, leq, e;
+    let pl, l, leq, c;
     let preSearch; // Pre search
 
     if (search.length === 0 || equalsLower(search, cn.prefix)) {
       // Found
       result[0] = cn.handler;
-      result[1] = params;
       if (cn.handler !== undefined) {
-        let keys = cn.keys;
-        if (keys !== undefined) {
+        let pnames = cn.pnames;
+        if (pnames !== undefined) {
           let i = 0;
-          let l = keys.length;
+          let l = pnames.length;
           for (; i < l; ++i) {
-            params[i].name = keys[i];
+            params[i].name = pnames[i];
           }
         }
       }
@@ -232,9 +231,9 @@ class Router {
     preSearch = search;
 
     // Static node
-    e = cn.findChild(search.charCodeAt(0));
-    if (e !== undefined) {
-      this.find(method, search, e, n, result);
+    c = cn.findChild(search.charCodeAt(0));
+    if (c !== undefined) {
+      this.find(method, search, c, n, result);
       if (result[0] !== undefined) return result;
       search = preSearch;
     }
@@ -244,13 +243,14 @@ class Router {
       return result;
     }
 
-    e = cn.findChild(COLON);
-    if (e !== undefined) {
+    // Param node
+    c = cn.findChild(COLON);
+    if (c !== undefined) {
       l = search.length;
       for (var i = 0; i < l && (search.charCodeAt(i) !== SLASH); ++i) {}
 
       params[n] = {
-        name: e.prefix.substring(1),
+        name: c.prefix.substring(1),
         value: search.substring(0, i)
       };
 
@@ -258,7 +258,7 @@ class Router {
       preSearch = search;
       search = search.substring(i);
 
-      this.find(method, search, e, n, result);
+      this.find(method, search, c, n, result);
       if (result[0] !== undefined) return result;
 
       n--;
@@ -267,14 +267,14 @@ class Router {
     }
 
     // Catch-all node
-    e = cn.findChild(STAR);
-    if (e !== undefined) {
+    c = cn.findChild(STAR);
+    if (c !== undefined) {
       params[n] = {
         name: '_name',
         value: search
       };
       search = ''; // End search
-      this.find(method, search, e, n, result);
+      this.find(method, search, c, n, result);
     }
 
     return result;
