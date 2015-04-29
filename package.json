@@ -21,7 +21,7 @@
     "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
   },
   "devDependencies": {
-    "babel": "^5.1.11",
+    "babel": "^5.1.13",
     "benchmark": "^1.0.0",
     "isparta": "^3.x",
     "istanbul": "^0.3.13",
@@ -29,7 +29,7 @@
     "mocha": "^2.2.4",
     "path-to-regexp": "^1.0.3",
     "route-recognizer": "^0.1.5",
-    "route-trie": "^0.2.0",
+    "route-trie": "^0.2.1",
     "routington": "^1.0.3"
   },
   "files": [
