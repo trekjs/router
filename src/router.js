@@ -238,7 +238,7 @@ class Router {
       search = preSearch;
     }
 
-    // Not found static node
+    // Not found node
     if (!leq) {
       return result;
     }
