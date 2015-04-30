@@ -111,6 +111,7 @@ class Router {
       } else if (ch === STAR) {
         this.insert(method, path.substring(0, i));
         this.insert(method, path.substring(0, l), handler, pnames);
+        return;
       }
     }
     this.insert(method, path, handler, pnames);
@@ -197,14 +198,15 @@ class Router {
    * @property {Array} result[1]
    */
   find(method, path, cn, n, result) {
-    n = n || 0; // Param count
     cn = cn || this.trees[method]; // Current node as root
+    n = n || 0; // Param count
     result = result || [undefined, []];
     let search = path;
-    let params = result[1];
+    let params = result[1]; // Params
     let pl, l, leq, c;
     let preSearch; // Pre search
 
+    // Search order static > param > match-any
     if (search.length === 0 || equalsLower(search, cn.prefix)) {
       // Found
       result[0] = cn.handler;
@@ -265,7 +267,7 @@ class Router {
       search = preSearch;
     }
 
-    // Catch-all node
+    // Match-any node
     c = cn.findChild(STAR);
     if (c !== undefined) {
       params[n] = {

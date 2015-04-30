@@ -60,7 +60,7 @@ let r = new Router();
 r.add('GET', '/folders/files/bolt.gif', () => {});
 // param route
 r.add('GET', '/users/:id', () => {});
-// catch-all route
+// match-any route
 r.add('GET', '/books/*', () => {});
 
 let result = r.find('GET', '/users/233')
