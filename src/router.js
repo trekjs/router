@@ -292,11 +292,10 @@ function lcp(a, b) {
 }
 
 function equalsLower(a, b) {
-  let aLen = a.length;
-  let bLen = b.length;
-  if (aLen !== bLen) return false;
+  let l = a.length;
+  if (l !== b.length) return false;
   let i = 0;
-  for (; i < aLen && (a.charCodeAt(i) !== b.charCodeAt(i)); ++i) {
+  for (; i < l && (a.charCodeAt(i) !== b.charCodeAt(i)); ++i) {
     return false;
   }
   return true;
