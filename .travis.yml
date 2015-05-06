@@ -1,7 +1,8 @@
 language: node_js
 sudo: false
 node_js:
-  - "iojs"
+  - "iojs-v1"
+  - "iojs-v2"
 
 script: "npm run test-ci"
 after_script:
