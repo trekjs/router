@@ -22,7 +22,7 @@
     "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
   },
   "devDependencies": {
-    "babel": "^5.2.15",
+    "babel": "^5.2.17",
     "benchmark": "^1.0.0",
     "isparta": "^3.x",
     "istanbul": "^0.3.13",
@@ -42,5 +42,7 @@
     "node": ">= 0.8.0",
     "iojs": "1.x.x"
   },
-  "dependencies": {}
+  "dependencies": {
+    "slow-equals": "0.0.2"
+  }
 }

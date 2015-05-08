@@ -4,6 +4,8 @@
  * MIT Licensed
  */
 
+import slowEquals from 'slow-equals';
+
 const METHODS = [
   'CONNECT',
   'DELETE',
@@ -207,7 +209,7 @@ class Router {
     let preSearch; // Pre search
 
     // Search order static > param > match-any
-    if (search.length === 0 || equalsLower(search, cn.prefix)) {
+    if (search.length === 0 || slowEquals(search, cn.prefix)) {
       // Found
       result[0] = cn.handler;
       if (cn.handler !== undefined) {
@@ -289,16 +291,6 @@ function lcp(a, b) {
   let max = min(a.length, b.length);
   for (; i < max && (a.charCodeAt(i) === b.charCodeAt(i)); ++i) {}
   return i;
-}
-
-function equalsLower(a, b) {
-  let l = a.length;
-  if (l !== b.length) return false;
-  let i = 0;
-  for (; i < l && (a.charCodeAt(i) !== b.charCodeAt(i)); ++i) {
-    return false;
-  }
-  return true;
 }
 
 Router.METHODS = METHODS;
