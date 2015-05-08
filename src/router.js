@@ -4,8 +4,6 @@
  * MIT Licensed
  */
 
-import slowEquals from 'slow-equals';
-
 const METHODS = [
   'CONNECT',
   'DELETE',
@@ -209,7 +207,7 @@ class Router {
     let preSearch; // Pre search
 
     // Search order static > param > match-any
-    if (search.length === 0 || slowEquals(search, cn.prefix)) {
+    if (search.length === 0 || search === cn.prefix) {
       // Found
       result[0] = cn.handler;
       if (cn.handler !== undefined) {

@@ -41,8 +41,5 @@
   "engines": {
     "node": ">= 0.8.0",
     "iojs": "1.x.x"
-  },
-  "dependencies": {
-    "slow-equals": "0.0.2"
   }
 }
