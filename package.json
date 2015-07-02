@@ -7,11 +7,11 @@
   "author": "fundon cfddream@gmail.com",
   "license": "MIT",
   "keywords": [
-    "router",
     "route",
+    "router",
     "routing",
-    "trek-router",
-    "trek"
+    "trek",
+    "trek-router"
   ],
   "scripts": {
     "benchmark": "node benchmarks",
@@ -25,8 +25,8 @@
     "babel": "^5.6.14",
     "benchmark": "^1.0.0",
     "isparta": "^3.x",
-    "istanbul": "^0.3.16",
-    "lodash": "^3.9.3",
+    "istanbul": "^0.3.17",
+    "lodash": "^3.10.0",
     "mocha": "~2.2.5",
     "path-to-regexp": "^1.2.0",
     "route-recognizer": "^0.1.5",
@@ -34,12 +34,12 @@
     "routington": "^1.0.3"
   },
   "files": [
-    "LICENSE",
     "HISTORY.md",
+    "LICENSE",
     "lib"
   ],
   "engines": {
-    "node": ">= 0.8.0",
-    "iojs": "*"
+    "iojs": "*",
+    "node": ">= 0.8.0"
   }
 }
