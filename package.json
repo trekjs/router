@@ -22,14 +22,14 @@
     "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
   },
   "devDependencies": {
-    "babel": "^5.6.14",
+    "babel": "^5.6.23",
     "benchmark": "^1.0.0",
     "isparta": "^3.x",
     "istanbul": "^0.3.17",
     "lodash": "^3.10.0",
     "mocha": "~2.2.5",
     "path-to-regexp": "^1.2.0",
-    "route-recognizer": "^0.1.5",
+    "route-recognizer": "^0.1.7",
     "route-trie": "^1.0.0",
     "routington": "^1.0.3"
   },
