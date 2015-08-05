@@ -26,11 +26,11 @@
     "benchmark": "^1.0.0",
     "isparta": "^3.x",
     "istanbul": "^0.3.17",
-    "lodash": "^3.10.0",
+    "lodash": "^3.10.1",
     "mocha": "~2.2.5",
     "path-to-regexp": "^1.2.0",
     "route-recognizer": "^0.1.7",
-    "route-trie": "^1.0.0",
+    "route-trie": "^1.0.1",
     "routington": "^1.0.3"
   },
   "files": [
