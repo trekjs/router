@@ -31,7 +31,8 @@
     "path-to-regexp": "^1.2.1",
     "route-recognizer": "^0.1.7",
     "route-trie": "^1.0.1",
-    "routington": "^1.0.3"
+    "routington": "^1.0.3",
+    "should": "^7.1.0"
   },
   "files": [
     "HISTORY.md",
