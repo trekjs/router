@@ -3,6 +3,7 @@ sudo: false
 node_js:
   - "iojs-v1"
   - "iojs-v2"
+  - "iojs-v3"
 
 script: "npm run test-ci"
 after_script:
