@@ -1,4 +1,7 @@
 import _ from 'lodash';
+import http from 'http';
+import finalhandler from 'finalhandler';
+import request from 'supertest';
 import assert from 'assert';
 import Router, { Node, METHODS } from '../src/router';
 import './node';
@@ -511,4 +514,66 @@ describe('Router', () => {
       assert.notEqual(null, METHODS);
     });
   });
+
+  describe('HTTP Methods functions', () => {
+    it('#GET()', () => {
+      r.get('/folders/files/bolt.gif', () => {})
+      r.trees['GET'].printTree('', true)
+
+      result = r.find('GET', '/folders/files/bolt.gif');
+      assert.notEqual(null, result[0]);
+
+      result = r.find('GET', '/folders/files/bolt.hash.gif');
+      assert.equal(null, result[0]);
+
+      result = r.find('GET', '/folders/bolt .gif');
+      assert.equal(null, result[0]);
+    });
+  });
+
+  describe('HTTP Server', () => {
+    it('should be used for http server', (done) => {
+      r.get('/', helloWorld);
+
+      let server = createServer(r);
+
+      request(server)
+        .get('/')
+        .expect(200, 'hello, world', done)
+    });
+
+    it('should return params', (done) => {
+      r.get('/:anyway', sawParams);
+
+      let server = createServer(r);
+
+      request(server)
+        .get('/233')
+        .expect(200, '[{"value":"233","name":"anyway"}]', done)
+    });
+
+  });
 });
+
+function createServer(router) {
+  return http.createServer(function onRequest(req, res) {
+    var result = router.find(req.method, req.url);
+    if (result) {
+      req.params = result[1];
+      return result[0](req, res);
+    }
+    finalhandler(req, res);
+  });
+}
+
+function helloWorld(req, res) {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('hello, world');
+}
+
+function sawParams(req, res) {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify(req.params));
+}

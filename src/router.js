@@ -4,17 +4,7 @@
  * MIT Licensed
  */
 
-const METHODS = [
-  'CONNECT',
-  'DELETE',
-  'GET',
-  'HEAD',
-  'OPTIONS',
-  'PATCH',
-  'POST',
-  'PUT',
-  'TRACE'
-];
+import METHODS from 'methods';
 
 const min = Math.min;
 
@@ -72,7 +62,16 @@ class Router {
     this.trees = Object.create(null);
     METHODS.forEach((m) => {
       // Start from '/'
-      this.trees[m.toUpperCase()] = new Node('/');
+      Object.defineProperty(this.trees, m.toUpperCase(), {
+        value: new Node('/')
+      });
+      Object.defineProperty(this, m, {
+        get() {
+          return function verb(path, handler) {
+            return this.add(m.toUpperCase(), path, handler);
+          };
+        }
+      });
     });
   }
 

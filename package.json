@@ -1,6 +1,6 @@
 {
   "name": "trek-router",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "A fast HTTP router",
   "repository": "trekjs/router",
   "main": "lib/router.js",
@@ -24,6 +24,7 @@
   "devDependencies": {
     "babel": "^5.8.23",
     "benchmark": "^1.0.0",
+    "finalhandler": "^0.4.0",
     "isparta": "^3.x",
     "istanbul": "^0.3.18",
     "lodash": "^3.10.1",
@@ -32,7 +33,8 @@
     "route-recognizer": "^0.1.7",
     "route-trie": "^1.0.1",
     "routington": "^1.0.3",
-    "should": "^7.1.0"
+    "should": "^7.1.0",
+    "supertest": "^1.1.0"
   },
   "files": [
     "HISTORY.md",
@@ -42,5 +44,8 @@
   "engines": {
     "iojs": "*",
     "node": ">= 0.8.0"
+  },
+  "dependencies": {
+    "methods": "^1.1.1"
   }
 }

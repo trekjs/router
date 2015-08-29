@@ -53,24 +53,44 @@ Fastest is trek-router
 ## Usage
 
 ```js
+import http from 'http';
+import finalhandler from 'finalhandler';
 import Router from 'trek-router';
 
-let r = new Router();
-// static route
-r.add('GET', '/folders/files/bolt.gif', () => {});
-// param route
-r.add('GET', '/users/:id', () => {});
-// match-any route
-r.add('GET', '/books/*', () => {});
+let router = Router()
 
-let result = r.find('GET', '/users/233')
+// static route
+router.add('GET', '/folders/files/bolt.gif', () => {});
+// param route
+router.add('GET', '/users/:id', () => {});
+// match-any route
+router.add('GET', '/books/*', () => {});
+
+let result = router.find('GET', '/users/233')
 // => [handler, params]
 // => [()=>{}, [{name: id, value: 233}]]
 
 // Not Found
-let result = r.find('GET', '/photos/233')
+let result = router.find('GET', '/photos/233')
 // => [handler, params]
 // => [undefined, []]
+
+// Or use HTTP Verb function to add path
+router.get('/', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.end('Hello World!');
+});
+
+let server = http.createServer(function(req, res) {
+  let result = router.find(req.method, req.url);
+  if (result) {
+    req.params = result[1];
+    return result[0](req, res);
+  }
+  finalhandler(req, res);
+});
+
+server.listen(3000)
 ```
 
 ## License
