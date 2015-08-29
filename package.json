@@ -16,7 +16,6 @@
   "scripts": {
     "benchmark": "node benchmarks",
     "compile": "babel src --out-dir lib --copy-files",
-    "prepublish": "npm run compile",
     "test": "mocha --require babel/register --reporter spec --bail --check-leaks test/**/*.test.js",
     "test-ci": "babel-node node_modules/.bin/isparta cover node_modules/.bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/**/*.test.js",
     "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
