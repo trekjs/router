@@ -26,7 +26,7 @@
     "benchmark": "^1.0.0",
     "finalhandler": "^0.4.0",
     "isparta": "^3.x",
-    "istanbul": "^0.3.18",
+    "istanbul": "^0.3.x",
     "lodash": "^3.10.1",
     "mocha": "~2.2.5",
     "path-to-regexp": "^1.2.1",
