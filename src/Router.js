@@ -270,7 +270,7 @@ class Router {
     c = cn.findChild(STAR);
     if (c !== undefined) {
       params[n] = {
-        name: '_name',
+        name: '_*',
         value: search
       };
       search = ''; // End search
