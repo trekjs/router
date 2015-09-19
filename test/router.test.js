@@ -3,7 +3,7 @@ import http from 'http';
 import finalhandler from 'finalhandler';
 import request from 'supertest';
 import assert from 'assert';
-import Router, { Node, METHODS } from '../src/router';
+import Router, { Node, METHODS } from '../src/Router';
 import './node';
 
 function createFunc(name) {
@@ -41,7 +41,7 @@ describe('Router', () => {
     result = r.find('GET', '/static/js');
     assert.notEqual(null, result[0]);
     assert.deepEqual([{
-      name: '_name',
+      name: '_*',
       value: 'js'
     }], result[1]);
     assert.equal(1, result[1].length);
@@ -49,7 +49,7 @@ describe('Router', () => {
     result = r.find('GET', '/static/css');
     assert.notEqual(null, result[0]);
     assert.deepEqual([{
-      name: '_name',
+      name: '_*',
       value: 'css'
     }], result[1]);
     assert.equal(1, result[1].length);
@@ -96,14 +96,14 @@ describe('Router', () => {
     result = r.find('GET', '/geocoder/delete/');
     assert.equal('anyGeocoder', result[0].name);
     assert.equal(1, result[1].length);
-    assert.equal('_name', result[1][0].name);
+    assert.equal('_*', result[1][0].name);
     assert.equal('delete/', result[1][0].value);
 
     result = r.find('GET', '/geocoder/any/action');
     assert.notEqual(null, result[0]);
     assert.equal('anyGeocoder', result[0].name);
     assert.equal(1, result[1].length);
-    assert.equal('_name', result[1][0].name);
+    assert.equal('_*', result[1][0].name);
     assert.equal('any/action', result[1][0].value);
 
     result = r.find('GET', '/geocoder/exchange/trekjs');
@@ -191,7 +191,7 @@ describe('Router', () => {
     assert.notEqual(null, result[0]);
     assert.equal('anyUser', result[0].name);
     assert.equal(1, result[1].length);
-    assert.equal('_name', result[1][0].name);
+    assert.equal('_*', result[1][0].name);
     assert.equal('610/books/987/edit', result[1][0].value);
 
     result = r.find('GET', '/users/610/books/987');

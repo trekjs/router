@@ -1,5 +1,5 @@
 import { format } from 'util';
-import { Node } from '../src/router';
+import { Node } from '../src/Router';
 
 function prefix(tail, p, on, off) {
   return format('%s%s', p, tail ? on : off);

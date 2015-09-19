@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import assert from 'assert';
-import Router from '../src/router';
+import Router from '../src/Router';
 import './node';
 
 let api = require('./fixtures/github-api');
