@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import assert from 'assert';
+import assert from 'power-assert';
 import Router from '../src/Router';
 import './node';
 

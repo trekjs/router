@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import http from 'http';
+import assert from 'power-assert';
 import finalhandler from 'finalhandler';
 import request from 'supertest';
-import assert from 'assert';
 import Router, { Node, METHODS } from '../src/Router';
 import './node';
 

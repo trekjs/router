@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import assert from 'assert';
+import assert from 'power-assert';
 import Router from '../src/Router';
 import './node';
 
@@ -10,6 +10,9 @@ function createFunc(name) {
 
 let api = [
   ["GET", "/"],
+  ["GET", "/c"],
+  ["GET", "/cm"],
+  ["GET", "/cmd"],
   ["GET", "/cmd.html"],
   ["GET", "/code.html"],
   ["GET", "/contrib.html"],

@@ -17,8 +17,8 @@
     "benchmark": "node benchmarks",
     "compile": "babel src --out-dir lib --copy-files",
     "prepublish": "npm run compile",
-    "test": "mocha --require babel/register --require should --reporter spec --bail --check-leaks test/**/*.test.js",
-    "test-ci": "babel-node node_modules/.bin/isparta cover node_modules/.bin/_mocha --report lcovonly -- --require should --reporter spec --check-leaks test/**/*.test.js",
+    "test": "mocha --require babel/register --reporter spec --bail --check-leaks test/**/*.test.js",
+    "test-ci": "babel-node node_modules/.bin/isparta cover node_modules/.bin/_mocha --report lcovonly --  --reporter spec --check-leaks test/**/*.test.js",
     "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
   },
   "devDependencies": {
@@ -28,12 +28,12 @@
     "isparta": "^3.x",
     "istanbul": "^0.3.20",
     "lodash": "^3.10.1",
-    "mocha": "^2.3.2",
+    "mocha": "^2.3.3",
     "path-to-regexp": "^1.2.1",
+    "power-assert": "^1.0.1",
     "route-recognizer": "^0.1.7",
     "route-trie": "^1.0.1",
     "routington": "^1.0.3",
-    "should": "^7.1.0",
     "supertest": "^1.1.0"
   },
   "files": [
