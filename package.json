@@ -15,8 +15,8 @@
   ],
   "scripts": {
     "benchmark": "node benchmarks",
-    "compile": "babel src --out-dir lib --copy-files",
-    "prepublish": "npm run compile",
+    "build": "babel src --out-dir lib",
+    "prepublish": "npm run build",
     "test": "mocha --require babel/register --reporter spec --bail --check-leaks test/**/*.test.js",
     "test-ci": "babel-node node_modules/.bin/isparta cover node_modules/.bin/_mocha --report lcovonly --  --reporter spec --check-leaks test/**/*.test.js",
     "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
@@ -26,7 +26,7 @@
     "benchmark": "^1.0.0",
     "finalhandler": "^0.4.0",
     "isparta": "^3.x",
-    "istanbul": "^0.3.20",
+    "istanbul": "^0.3.x",
     "lodash": "^3.10.1",
     "mocha": "^2.3.3",
     "path-to-regexp": "^1.2.1",
@@ -42,8 +42,7 @@
     "lib"
   ],
   "engines": {
-    "iojs": "*",
-    "node": ">= 0.8.0"
+    "node": ">= 4"
   },
   "dependencies": {
     "methods": "^1.1.1"
