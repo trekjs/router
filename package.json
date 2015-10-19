@@ -1,6 +1,6 @@
 {
   "name": "trek-router",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A fast HTTP router",
   "repository": "trekjs/router",
   "main": "lib/Router.js",
@@ -26,7 +26,7 @@
     "benchmark": "^1.0.0",
     "finalhandler": "^0.4.0",
     "isparta": "^3.x",
-    "istanbul": "^0.3.x",
+    "istanbul": "^0.4.0",
     "lodash": "^3.10.1",
     "mocha": "^2.3.3",
     "path-to-regexp": "^1.2.1",
@@ -46,5 +46,15 @@
   },
   "dependencies": {
     "methods": "^1.1.1"
+  },
+  "babel": {
+    "blacklist": [
+      "regenerator",
+      "es6.constants",
+      "es6.properties.computed",
+      "es6.properties.shorthand",
+      "es6.tailCall",
+      "es6.templateLiterals"
+    ]
   }
 }
