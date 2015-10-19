@@ -1,6 +1,6 @@
 {
   "name": "trek-router",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A fast HTTP router",
   "repository": "trekjs/router",
   "main": "lib/Router.js",
@@ -50,6 +50,7 @@
   "babel": {
     "blacklist": [
       "regenerator",
+      "es6.classes",
       "es6.constants",
       "es6.properties.computed",
       "es6.properties.shorthand",
