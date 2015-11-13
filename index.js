@@ -1,10 +1,12 @@
+'use strict'
+
 /*!
  * router
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
 
-import METHODS from 'methods'
+const METHODS = require('methods')
 
 const min = Math.min
 
@@ -39,7 +41,9 @@ class Node {
    * @return {Node|undefined} node
    */
   findChild(c) {
-    let [i, l, e] = [0, this.children.length, undefined]
+    const l = this.children.length
+    let i = 0
+    let e
     for (; i < l; ++i) {
       e = this.children[i]
       // Compare charCode
@@ -284,8 +288,8 @@ class Router {
 
 // Length of longest common prefix
 function lcp(a, b) {
-  let i = 0
   const max = min(a.length, b.length)
+  let i = 0
   for (; i < max && (a.charCodeAt(i) === b.charCodeAt(i)); ++i) {}
   return i
 }
@@ -294,4 +298,4 @@ Router.METHODS = METHODS
 
 Router.Node = Node
 
-export default Router
+module.exports = Router

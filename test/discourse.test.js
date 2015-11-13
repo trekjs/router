@@ -1,40 +1,40 @@
-import _ from 'lodash';
-import assert from 'power-assert';
-import Router from '../src/Router';
-import './node';
+import _ from 'lodash'
+import assert from 'power-assert'
+import Router from '..'
+import './node'
 
-let api = require('./fixtures/discourse-api');
-let funcPrefx = 'discourse-api';
+const api = require('./fixtures/discourse-api')
+const funcPrefx = 'discourse-api'
 
 function createFunc(name) {
-  var a = `(function ${name||''}(){})`;
-  return eval(a);
+  var a = `(function ${name||''}(){})`
+  return eval(a)
 }
 
 describe('Discourse API', () => {
-  let r;
+  let r
 
   beforeEach(() => {
-    r = new Router();
+    r = new Router()
     api.forEach((i) => {
-      let [path] = i;
-      r.add('GET', path, createFunc(_.camelCase(funcPrefx + path)));
-    });
+      let [path] = i
+      r.add('GET', path, createFunc(_.camelCase(funcPrefx + path)))
+    })
 
-  });
+  })
 
   it('Discourse API routes', () => {
-    r.trees['GET'].printTree('', true);
-  });
+    r.trees['GET'].printTree('', true)
+  })
 
   api.forEach((i) => {
-    let [path, realpath] = i;
+    let [path, realpath] = i
     it(path, () => {
-      let [handler, params] = r.find('GET', realpath);
-      // console.log(path, realpath, handler, params);
-      assert.notEqual(null, handler);
-      assert.equal(_.camelCase(funcPrefx + path), handler.name);
-      assert.equal((path.match(/\:|\*/g) || []).length, params.length);
-    });
-  });
-});
+      let [handler, params] = r.find('GET', realpath)
+      // console.log(path, realpath, handler, params)
+      assert.notEqual(null, handler)
+      assert.equal(_.camelCase(funcPrefx + path), handler.name)
+      assert.equal((path.match(/\:|\*/g) || []).length, params.length)
+    })
+  })
+})

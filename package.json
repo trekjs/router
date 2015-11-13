@@ -1,9 +1,9 @@
 {
   "name": "trek-router",
-  "version": "0.5.2",
+  "version": "1.0.0",
   "description": "A fast HTTP router",
   "repository": "trekjs/router",
-  "main": "lib/Router.js",
+  "main": "index.js",
   "author": "Fangdun Cai <cfddream@gmail.com>",
   "license": "MIT",
   "keywords": [
@@ -15,14 +15,14 @@
   ],
   "scripts": {
     "benchmark": "node benchmarks",
-    "build": "babel src --out-dir lib",
-    "prepublish": "npm run build",
-    "test": "mocha --require babel/register --reporter spec --bail --check-leaks test/**/*.test.js",
+    "test": "mocha --compilers js:babel-core/register --reporter spec --bail --check-leaks test/**/*.test.js",
     "test-ci": "babel-node node_modules/.bin/isparta cover node_modules/.bin/_mocha --report lcovonly --  --reporter spec --check-leaks test/**/*.test.js",
     "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
   },
   "devDependencies": {
-    "babel": "^5.8.23",
+    "babel-cli": "^6.1.18",
+    "babel-core": "^6.1.19",
+    "babel-preset-es2015": "^6.1.18",
     "benchmark": "^1.0.0",
     "finalhandler": "^0.4.0",
     "isparta": "^3.x",
@@ -39,7 +39,7 @@
   "files": [
     "HISTORY.md",
     "LICENSE",
-    "lib"
+    "index.js"
   ],
   "engines": {
     "node": ">= 4"
@@ -48,14 +48,8 @@
     "methods": "^1.1.1"
   },
   "babel": {
-    "blacklist": [
-      "regenerator",
-      "es6.classes",
-      "es6.constants",
-      "es6.properties.computed",
-      "es6.properties.shorthand",
-      "es6.tailCall",
-      "es6.templateLiterals"
+    "presets": [
+      "es2015"
     ]
   }
 }
