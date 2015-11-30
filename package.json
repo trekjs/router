@@ -20,21 +20,20 @@
     "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
   },
   "devDependencies": {
-    "babel-cli": "^6.1.18",
-    "babel-core": "^6.1.19",
-    "babel-preset-es2015": "^6.1.18",
-    "benchmark": "^1.0.0",
-    "finalhandler": "^0.4.0",
+    "babel-cli": "^6.x",
+    "babel-core": "^6.x",
+    "babel-preset-es2015": "^6.x",
+    "benchmark": "^1.x",
+    "finalhandler": "^0.x",
     "isparta": "^3.x",
-    "istanbul": "^0.4.0",
-    "lodash": "^3.10.1",
-    "mocha": "^2.3.3",
-    "path-to-regexp": "^1.2.1",
-    "power-assert": "^1.0.1",
-    "route-recognizer": "^0.1.7",
-    "route-trie": "^1.0.1",
-    "routington": "^1.0.3",
-    "supertest": "^1.1.0"
+    "lodash": "^3.x",
+    "mocha": "^2.x",
+    "path-to-regexp": "^1.x",
+    "power-assert": "^1.x",
+    "route-recognizer": "^0.x",
+    "route-trie": "^1.x",
+    "routington": "^1.x",
+    "supertest": "^1.x"
   },
   "files": [
     "HISTORY.md",
@@ -45,7 +44,7 @@
     "node": ">= 4"
   },
   "dependencies": {
-    "methods": "^1.1.1"
+    "methods": "^1.x"
   },
   "babel": {
     "presets": [
