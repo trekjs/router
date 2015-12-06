@@ -1,10 +1,10 @@
-'use strict'
-
 /*!
  * router
  * Copyright(c) 2015 Fangdun Cai
  * MIT Licensed
  */
+
+'use strict'
 
 const METHODS = require('methods')
 
@@ -21,7 +21,7 @@ const COLON = 58 // ':'
  * @constructor
  * @param {String} path
  * @param {Array} [children]
- * @param {Function|GeneratorFunction} handler
+ * @param {Function} handler
  * @param {Array} [pnames]
  */
 class Node {
@@ -49,7 +49,7 @@ class Node {
       // Compare charCode
       if (e.label === c) return e
     }
-    return undefined
+    return
   }
 
 }
@@ -85,7 +85,7 @@ class Router {
    * @method add
    * @param {String} method
    * @param {String} path
-   * @param {Function|GeneratorFunction} handler
+   * @param {Function} handler
    */
   add(method, path, handler) {
     let i = 0
@@ -127,7 +127,7 @@ class Router {
    * @private
    * @param {String} method
    * @param {String} path
-   * @param {Function|GeneratorFunction} [handler]
+   * @param {Function} [handler]
    * @param {Array} [pnames]
    */
   insert(method, path, handler, pnames) {
@@ -197,12 +197,12 @@ class Router {
    * @param {String} method
    * @param {String} path
    * @return {Array} result
-   * @property {Undefined|Function|GeneratorFunction} result[0]
+   * @property {Undefined|Function} result[0]
    * @property {Array} result[1]
    */
   find(method, path, cn, n, result) {
     cn = cn || this.trees[method] // Current node as root
-    n = n || 0 // Param count
+    n = n | 0 // Param count
     result = result || [undefined, []]
     let search = path
     let params = result[1] // Params
