@@ -65,15 +65,14 @@ class Router {
   constructor() {
     this.trees = Object.create(null)
     METHODS.forEach((m) => {
+      const M = m.toUpperCase()
       // Start from '/'
-      Object.defineProperty(this.trees, m.toUpperCase(), {
+      Object.defineProperty(this.trees, M, {
         value: new Node('/')
       })
       Object.defineProperty(this, m, {
-        get() {
-          return function verb(path, handler) {
-            return this.add(m.toUpperCase(), path, handler)
-          }
+        value: function verb(path, handler) {
+          return this.add(M, path, handler)
         }
       })
     })
