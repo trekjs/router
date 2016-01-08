@@ -1,4 +1,10 @@
 
+1.0.2 / 2016-01-08
+==================
+
+  * improve define property
+  * upgrade benchmark to v2
+
 1.0.0 / 2015-11-13
 ==================
 
