@@ -23,7 +23,7 @@
     "babel-cli": "6",
     "babel-core": "6",
     "babel-preset-es2015": "6",
-    "benchmark": "1",
+    "benchmark": "2",
     "finalhandler": "0",
     "isparta": "4",
     "lodash": "3",
