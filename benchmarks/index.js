@@ -133,7 +133,7 @@ suite
   console.log('memoryUsage:', process.memoryUsage())
 })
 .on('complete', function() {
-  console.log('Fastest is ' + _.pluck(this.filter('fastest'), 'name'))
+  console.log('Fastest is ' + _.map(this.filter('fastest'), 'name'))
 })
 // run async
 .run({
@@ -193,6 +193,6 @@ suite0
   console.log('memoryUsage:', process.memoryUsage())
 })
 .on('complete', function() {
-  console.log('Fastest is ' + _.pluck(this.filter('fastest'), 'name'))
+  console.log('Fastest is ' + _.map(this.filter('fastest'), 'name'))
 })
 .run()
