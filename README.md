@@ -70,6 +70,12 @@ let result = router.find('GET', '/users/233')
 // => [handler, params]
 // => [()=>{}, [{name: id, value: 233}]]
 
+let params
+if (result[0]) {
+  result[1].forEach(param => params[param.name] = param.value)
+  // => { id: 233 }
+}
+
 // Not Found
 let result = router.find('GET', '/photos/233')
 // => [handler, params]
