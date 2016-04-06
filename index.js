@@ -265,7 +265,7 @@ class Router {
       if (result[0] !== undefined) return result
 
       n--
-      params.shift()
+      params.pop()
       search = preSearch
     }
 
