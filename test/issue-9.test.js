@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import assert from 'power-assert'
 import Router, { Node, METHODS } from '..'
 import './node'
 
@@ -14,13 +15,12 @@ describe('Issue #9', () => {
     r.trees['GET'].printTree('', true)
 
     let [h0, p0] = r.find('GET', '/xxx/people/377/activities/333')
-    console.log(h0)
-    console.log(p0)
+    assert.notEqual(null, h0)
+    assert.deepEqual(p0[p0.length - 1], { value: '333', name: 'collection' })
 
     let [h1, p1] = r.find('GET', '/xxx/people/377/activities')
-    console.log(h1)
-    console.log(p1)
-
+    assert.notEqual(null, h1)
+    assert.deepEqual(p1[p1.length - 1], { name: '_*', value: '377/activities' })
   })
 
 })
