@@ -1,6 +1,6 @@
 /*!
  * router
- * Copyright(c) 2015 Fangdun Cai
+ * Copyright(c) 2015-2016 Fangdun Cai
  * MIT Licensed
  */
 
@@ -26,7 +26,7 @@ const COLON = 58 // ':'
  */
 class Node {
 
-  constructor(prefix, children, handler, pnames) {
+  constructor (prefix, children, handler, pnames) {
     this.label = prefix.charCodeAt(0)
     this.prefix = prefix
     this.children = children || []
@@ -40,7 +40,7 @@ class Node {
    * @param {Number} char code
    * @return {Node|undefined} node
    */
-  findChild(c) {
+  findChild (c) {
     const l = this.children.length
     let i = 0
     let e
@@ -62,16 +62,16 @@ class Node {
  */
 class Router {
 
-  constructor() {
+  constructor () {
     this.trees = Object.create(null)
-    METHODS.forEach((m) => {
+    METHODS.forEach(m => {
       const M = m.toUpperCase()
       // Start from '/'
       Object.defineProperty(this.trees, M, {
         value: new Node('/')
       })
       Object.defineProperty(this, m, {
-        value: function verb(path, handler) {
+        value: function verb (path, handler) {
           return this.add(M, path, handler)
         }
       })
@@ -86,7 +86,7 @@ class Router {
    * @param {String} path
    * @param {Function} handler
    */
-  add(method, path, handler) {
+  add (method, path, handler) {
     let i = 0
     let l = path.length
     let pnames = [] // Param names
@@ -129,7 +129,7 @@ class Router {
    * @param {Function} [handler]
    * @param {Array} [pnames]
    */
-  insert(method, path, handler, pnames) {
+  insert (method, path, handler, pnames) {
     let cn = this.trees[method] // Current node as root
     let search = path
     let sl, pl, l, n, c
@@ -139,15 +139,16 @@ class Router {
       pl = cn.prefix.length
       l = lcp(search, cn.prefix)
 
-      if (l === 0) {
-        // At root node
-        cn.label = search.charCodeAt(0)
-        cn.prefix = search
-        if (handler) {
-          cn.handler = handler
-          cn.pnames = pnames
-        }
-      } else if (l < pl) {
+      // if (l === 0) {
+      //   // At root node
+      //   cn.label = search.charCodeAt(0)
+      //   cn.prefix = search
+      //   if (handler) {
+      //     cn.handler = handler
+      //     cn.pnames = pnames
+      //   }
+      // } else if (l < pl) {
+      if (l < pl) {
         // Split node
         n = new Node(cn.prefix.substring(l), cn.children, cn.handler, cn.pnames)
         cn.children = [n] // Add to parent
@@ -199,7 +200,7 @@ class Router {
    * @property {Undefined|Function} result[0]
    * @property {Array} result[1]
    */
-  find(method, path, cn, n, result) {
+  find (method, path, cn, n, result) {
     cn = cn || this.trees[method] // Current node as root
     n = n | 0 // Param count
     result = result || [undefined, []]
@@ -286,7 +287,7 @@ class Router {
 }
 
 // Length of longest common prefix
-function lcp(a, b) {
+function lcp (a, b) {
   const max = min(a.length, b.length)
   let i = 0
   for (; i < max && (a.charCodeAt(i) === b.charCodeAt(i)); ++i) {}

@@ -1,6 +1,6 @@
 {
   "name": "trek-router",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A fast HTTP router",
   "repository": "trekjs/router",
   "main": "index.js",
@@ -39,7 +39,7 @@
     "node": ">= 4"
   },
   "dependencies": {
-    "methods": "^1.x"
+    "methods": "1.x"
   },
   "files": [
     "HISTORY.md",
