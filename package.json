@@ -27,7 +27,7 @@
     "finalhandler": "0",
     "isparta": "4",
     "lodash": "4",
-    "mocha": "2",
+    "mocha": "2.5.0",
     "path-to-regexp": "1",
     "power-assert": "1",
     "route-recognizer": "0",
