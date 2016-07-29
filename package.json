@@ -33,7 +33,7 @@
     "route-recognizer": "0",
     "route-trie": "1",
     "routington": "1",
-    "supertest": "1"
+    "supertest": "2.0.0"
   },
   "engines": {
     "node": ">= 4"
