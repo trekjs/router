@@ -5,13 +5,14 @@ function prefix(tail, p, on, off) {
   return format('%s%s', p, tail ? on : off)
 }
 
-Node.prototype.printTree = function printTree(pfx, tail) {
+Node.prototype.printTree = function printTree(pfx, tail, method = 'GET') {
+  let map = this.maps[method]
   let p = prefix(tail, pfx, '└── ', '├── ')
   console.log(
     '%s%s h=%s children=%s',
     p,
     this.prefix,
-    this.handler ? 'function' : undefined,
+    map && map.handler ? map.handler.name : '',
     this.children.length
   )
 

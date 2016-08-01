@@ -34,12 +34,11 @@ const COLON = 58 // ':'
  */
 class Node {
 
-  constructor (prefix = '/', children, handlers, pnames) {
+  constructor (prefix = '/', children, maps) {
     this.label = prefix.charCodeAt(0)
     this.prefix = prefix
     this.children = children || []
-    this.handlers = handlers || Object.create(null)
-    this.pnames = pnames
+    this.maps = maps || Object.create(null)
   }
 
   /**
@@ -60,12 +59,12 @@ class Node {
     return
   }
 
-  addHandler (method, handler) {
-    this.handlers[method] = handler
+  addMap (method, map) {
+    this.maps[method] = map
   }
 
-  findHandler (method) {
-    return this.handlers[method]
+  findMap (method) {
+    return this.maps[method]
   }
 
 }
@@ -162,29 +161,25 @@ class Router {
         cn.label = search.charCodeAt(0)
         cn.prefix = search
         if (handler !== undefined) {
-          cn.pnames = pnames
-          cn.addHandler(method, handler)
+          cn.addMap(method, { pnames, handler })
         }
       } else if (l < pl) {
         // Split node
-        n = new Node(cn.prefix.substring(l), cn.children, cn.handlers, cn.pnames)
+        n = new Node(cn.prefix.substring(l), cn.children, cn.maps)
         cn.children = [n] // Add to parent
 
         // Reset parent node
         cn.label = cn.prefix.charCodeAt(0)
         cn.prefix = cn.prefix.substring(0, l)
-        cn.handler = undefined
-        cn.pnames = undefined
-        cn.handlers = Object.create(null)
+        cn.maps = Object.create(null)
 
         if (l === sl) {
           // At parent node
-          cn.pnames = pnames
-          cn.addHandler(method, handler)
+          cn.addMap(method, { pnames, handler })
         } else {
           // Create child node
-          n = new Node(search.substring(l), [], Object.create(null), pnames)
-          n.addHandler(method, handler)
+          n = new Node(search.substring(l), [])
+          n.addMap(method, { pnames, handler })
           cn.children.push(n)
         }
       } else if (l < sl) {
@@ -196,14 +191,13 @@ class Router {
           continue
         }
         // Create child node
-        n = new Node(search, [], Object.create(null), pnames)
-        n.addHandler(method, handler)
+        n = new Node(search, [])
+        n.addMap(method, { pnames, handler })
         cn.children.push(n)
       } else {
         // Node already exists
         if (handler !== undefined) {
-          cn.pnames = pnames
-          cn.addHandler(method, handler)
+          cn.addMap(method, { pnames, handler })
         }
       }
       return
@@ -232,8 +226,9 @@ class Router {
     // Search order static > param > match-any
     if (search.length === 0 || search === cn.prefix) {
       // Found
-      if ((result[0] = cn.findHandler(method)) !== undefined) {
-        let pnames = cn.pnames
+      let map = cn.findMap(method)
+      if ((result[0] = map && map.handler) !== undefined) {
+        let pnames = map.pnames
         if (pnames !== undefined) {
           for (let i = 0, l = pnames.length; i < l; ++i) {
             params[i].name = pnames[i]
