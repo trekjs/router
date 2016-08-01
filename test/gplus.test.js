@@ -24,7 +24,7 @@ describe('GPlus API', () => {
   })
 
   it('GPlus API routes', () => {
-    r.trees['GET'].printTree('', true)
+    r.tree.printTree('', true)
   })
 
   _.shuffle(api).forEach((i) => {

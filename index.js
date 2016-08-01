@@ -6,7 +6,17 @@
 
 'use strict'
 
-const METHODS = require('methods')
+const METHODS = [
+  'GET',
+  'POST',
+  'PUT',
+  'DELETE',
+  'CONNECT',
+  'HEAD',
+  'PATCH',
+  'OPTIONS',
+  'TRACE'
+]
 
 const min = Math.min
 
@@ -26,11 +36,11 @@ const COLON = 58 // ':'
  */
 class Node {
 
-  constructor (prefix, children, handler, pnames) {
+  constructor (prefix = '/', children, handlers, pnames) {
     this.label = prefix.charCodeAt(0)
     this.prefix = prefix
     this.children = children || []
-    this.handler = handler
+    this.handlers = handlers || Object.create(null)
     this.pnames = pnames
   }
 
@@ -52,6 +62,14 @@ class Node {
     return
   }
 
+  addHandler (method, handler) {
+    this.handlers[method] = handler
+  }
+
+  findHandler (method) {
+    return this.handlers[method]
+  }
+
 }
 
 /**
@@ -63,14 +81,9 @@ class Node {
 class Router {
 
   constructor () {
-    this.trees = Object.create(null)
-    METHODS.forEach(m => {
-      const M = m.toUpperCase()
-      // Start from '/'
-      Object.defineProperty(this.trees, M, {
-        value: new Node('/')
-      })
-      Object.defineProperty(this, m, {
+    this.tree = new Node()
+    METHODS.forEach(M => {
+      Object.defineProperty(this, M.toLowerCase(), {
         value: function verb (path, handler) {
           return this.add(M, path, handler)
         }
@@ -130,7 +143,7 @@ class Router {
    * @param {Array} [pnames]
    */
   insert (method, path, handler, pnames) {
-    let cn = this.trees[method] // Current node as root
+    let cn = this.tree // Current node as root
     let search = path
     let sl, pl, l, n, c
 
@@ -139,18 +152,19 @@ class Router {
       pl = cn.prefix.length
       l = lcp(search, cn.prefix)
 
-      // if (l === 0) {
-      //   // At root node
-      //   cn.label = search.charCodeAt(0)
-      //   cn.prefix = search
-      //   if (handler) {
-      //     cn.handler = handler
-      //     cn.pnames = pnames
-      //   }
-      // } else if (l < pl) {
-      if (l < pl) {
+      if (l === 0) {
+        // At root node
+        cn.label = search.charCodeAt(0)
+        cn.prefix = search
+        if (handler !== undefined) {
+          // cn.handler = handler
+          cn.pnames = pnames
+          cn.addHandler(method, handler)
+        }
+      } else if (l < pl) {
+      // if (l < pl) {
         // Split node
-        n = new Node(cn.prefix.substring(l), cn.children, cn.handler, cn.pnames)
+        n = new Node(cn.prefix.substring(l), cn.children, cn.handlers, cn.pnames)
         cn.children = [n] // Add to parent
 
         // Reset parent node
@@ -158,14 +172,17 @@ class Router {
         cn.prefix = cn.prefix.substring(0, l)
         cn.handler = undefined
         cn.pnames = undefined
+        cn.handlers = Object.create(null)
 
         if (l === sl) {
           // At parent node
-          cn.handler = handler
+          // cn.handler = handler
           cn.pnames = pnames
+          cn.addHandler(method, handler)
         } else {
           // Create child node
-          n = new Node(search.substring(l), [], handler, pnames)
+          n = new Node(search.substring(l), [], Object.create(null), pnames)
+          n.addHandler(method, handler)
           cn.children.push(n)
         }
       } else if (l < sl) {
@@ -177,13 +194,15 @@ class Router {
           continue
         }
         // Create child node
-        n = new Node(search, [], handler, pnames)
+        n = new Node(search, [], Object.create(null), pnames)
+        n.addHandler(method, handler)
         cn.children.push(n)
       } else {
         // Node already exists
-        if (handler) {
-          cn.handler = handler
+        if (handler !== undefined) {
+          // cn.handler = handler
           cn.pnames = pnames
+          cn.addHandler(method, handler)
         }
       }
       return
@@ -201,7 +220,7 @@ class Router {
    * @property {Array} result[1]
    */
   find (method, path, cn, n, result) {
-    cn = cn || this.trees[method] // Current node as root
+    cn = cn || this.tree // Current node as root
     n = n | 0 // Param count
     result = result || [undefined, []]
     let search = path
@@ -212,8 +231,8 @@ class Router {
     // Search order static > param > match-any
     if (search.length === 0 || search === cn.prefix) {
       // Found
-      result[0] = cn.handler
-      if (cn.handler !== undefined) {
+      result[0] = cn.findHandler(method)
+      if (result[0] !== undefined) {
         let pnames = cn.pnames
         if (pnames !== undefined) {
           let i = 0

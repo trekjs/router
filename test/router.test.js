@@ -19,7 +19,7 @@ describe('Router', () => {
 
   it('static', () => {
     r.add('GET', '/folders/files/bolt.gif', () => {})
-    r.trees['GET'].printTree('', true)
+    r.tree.printTree('', true)
 
     result = r.find('GET', '/folders/files/bolt.gif')
     assert.notEqual(null, result[0])
@@ -33,7 +33,7 @@ describe('Router', () => {
 
   it('catch all', () => {
     r.add('GET', '/static/*', () => {})
-    r.trees['GET'].printTree('', true)
+    r.tree.printTree('', true)
 
     result = r.find('GET', '/static/*')
     assert.notEqual(null, result[0])
@@ -74,7 +74,7 @@ describe('Router', () => {
     ].forEach((i) => {
       r.add('GET', i[0], createFunc(i[1]))
     })
-    r.trees['GET'].printTree('', true)
+    r.tree.printTree('', true)
 
     result = r.find('GET', '')
     assert.notEqual(null, result[0])
@@ -185,7 +185,7 @@ describe('Router', () => {
     ].forEach((i) => {
       r.add('GET', i[0], createFunc(i[1]))
     })
-    r.trees['GET'].printTree('', true)
+    r.tree.printTree('', true)
 
     result = r.find('GET', '/users/610/books/987/edit')
     assert.notEqual(null, result[0])
@@ -293,7 +293,7 @@ describe('Router', () => {
     ]).forEach((i) => {
       r.add('GET', i[0], createFunc(i[1]))
     })
-    r.trees['GET'].printTree('', true)
+    r.tree.printTree('', true)
 
     result = r.find('GET', '/books/377/change')
     assert.notEqual(null, result[0])
@@ -401,7 +401,7 @@ describe('Router', () => {
     ]).forEach((i) => {
       r.add('GET', i[0], createFunc(i[1]))
     })
-    r.trees['GET'].printTree('', true)
+    r.tree.printTree('', true)
 
     result = r.find('GET', '/admin/articles/377/edit')
     assert.notEqual(null, result[0])
@@ -437,7 +437,7 @@ describe('Router', () => {
     ]).forEach((i) => {
       r.add('GET', i[0], createFunc(i[1]))
     })
-    r.trees['GET'].printTree('', true)
+    r.tree.printTree('', true)
 
     result = r.find('GET', '/magazines/233/articles/377/edit')
     assert.notEqual(null, result[0])
@@ -518,7 +518,7 @@ describe('Router', () => {
   describe('HTTP Methods functions', () => {
     it('#GET()', () => {
       r.get('/folders/files/bolt.gif', () => {})
-      r.trees['GET'].printTree('', true)
+      r.tree.printTree('', true)
 
       result = r.find('GET', '/folders/files/bolt.gif')
       assert.notEqual(null, result[0])

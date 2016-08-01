@@ -24,7 +24,7 @@ describe('GitHub API', () => {
   })
 
   it('GitHub API routes', () => {
-    r.trees['GET'].printTree('', true)
+    r.tree.printTree('', true)
   })
 
   _.shuffle(api).forEach((i) => {

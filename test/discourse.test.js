@@ -24,7 +24,7 @@ describe('Discourse API', () => {
   })
 
   it('Discourse API routes', () => {
-    r.trees['GET'].printTree('', true)
+    r.tree.printTree('', true)
   })
 
   api.forEach((i) => {

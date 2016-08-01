@@ -12,7 +12,7 @@ describe('Issue #9', () => {
   it('routes', () => {
     r.add('GET', '/:prefix/people/:userId/activities/:collection', () => {})
     r.add('GET', '/:prefix/people/*', () => {})
-    r.trees['GET'].printTree('', true)
+    r.tree.printTree('', true)
 
     let [h0, p0] = r.find('GET', '/xxx/people/377/activities/333')
     assert.notEqual(null, h0)
