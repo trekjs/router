@@ -18,9 +18,7 @@ const METHODS = [
   'TRACE'
 ]
 
-const min = Math.min
-
-const STAR = 42 // '*'
+const STAR  = 42 // '*'
 const SLASH = 47 // '/'
 const COLON = 58 // ':'
 
@@ -145,12 +143,19 @@ class Router {
   insert (method, path, handler, pnames) {
     let cn = this.tree // Current node as root
     let search = path
-    let sl, pl, l, n, c
+    let sl, pl, l, max, n, c
 
     while (true) {
       sl = search.length
       pl = cn.prefix.length
-      l = lcp(search, cn.prefix)
+      l = 0
+
+      // LCP
+      max = pl
+      if (sl < max) {
+        max = sl
+      }
+      for (; l < max && (search.charCodeAt(l) === cn.prefix.charCodeAt(l)); l++) {}
 
       if (l === 0) {
         // At root node
@@ -225,7 +230,7 @@ class Router {
     result = result || [undefined, []]
     let search = path
     let params = result[1] // Params
-    let pl, l, leq, c
+    let pl, sl, l, max, c
     let preSearch // Pre search
 
     // Search order static > param > match-any
@@ -245,11 +250,18 @@ class Router {
       return result
     }
 
+    sl = search.length
     pl = cn.prefix.length
-    l = lcp(search, cn.prefix)
-    leq = l === pl
+    l = 0
 
-    if (leq) {
+    // LCP
+    max = pl
+    if (sl < max) {
+      max = sl
+    }
+    for (; l < max && (search.charCodeAt(l) === cn.prefix.charCodeAt(l)); l++) {}
+
+    if (l == pl) {
       search = search.substring(l)
     }
     preSearch = search
@@ -263,7 +275,7 @@ class Router {
     }
 
     // Not found node
-    if (!leq) {
+    if (l !== pl) {
       return result
     }
 
@@ -303,14 +315,6 @@ class Router {
     return result
   }
 
-}
-
-// Length of longest common prefix
-function lcp (a, b) {
-  const max = min(a.length, b.length)
-  let i = 0
-  for (; i < max && (a.charCodeAt(i) === b.charCodeAt(i)); ++i) {}
-  return i
 }
 
 Router.METHODS = METHODS
