@@ -155,19 +155,17 @@ class Router {
       if (sl < max) {
         max = sl
       }
-      for (; l < max && (search.charCodeAt(l) === cn.prefix.charCodeAt(l)); l++) {}
+      for (; l < max && (search.charCodeAt(l) === cn.prefix.charCodeAt(l)); ++l) {}
 
       if (l === 0) {
         // At root node
         cn.label = search.charCodeAt(0)
         cn.prefix = search
         if (handler !== undefined) {
-          // cn.handler = handler
           cn.pnames = pnames
           cn.addHandler(method, handler)
         }
       } else if (l < pl) {
-      // if (l < pl) {
         // Split node
         n = new Node(cn.prefix.substring(l), cn.children, cn.handlers, cn.pnames)
         cn.children = [n] // Add to parent
@@ -181,7 +179,6 @@ class Router {
 
         if (l === sl) {
           // At parent node
-          // cn.handler = handler
           cn.pnames = pnames
           cn.addHandler(method, handler)
         } else {
@@ -205,7 +202,6 @@ class Router {
       } else {
         // Node already exists
         if (handler !== undefined) {
-          // cn.handler = handler
           cn.pnames = pnames
           cn.addHandler(method, handler)
         }
@@ -226,7 +222,7 @@ class Router {
    */
   find (method, path, cn, n, result) {
     cn = cn || this.tree // Current node as root
-    n = n | 0 // Param count
+    n = n | 0 // Param counter
     result = result || [undefined, []]
     let search = path
     let params = result[1] // Params
@@ -236,13 +232,10 @@ class Router {
     // Search order static > param > match-any
     if (search.length === 0 || search === cn.prefix) {
       // Found
-      result[0] = cn.findHandler(method)
-      if (result[0] !== undefined) {
+      if ((result[0] = cn.findHandler(method)) !== undefined) {
         let pnames = cn.pnames
         if (pnames !== undefined) {
-          let i = 0
-          let l = pnames.length
-          for (; i < l; ++i) {
+          for (let i = 0, l = pnames.length; i < l; ++i) {
             params[i].name = pnames[i]
           }
         }
@@ -259,7 +252,7 @@ class Router {
     if (sl < max) {
       max = sl
     }
-    for (; l < max && (search.charCodeAt(l) === cn.prefix.charCodeAt(l)); l++) {}
+    for (; l < max && (search.charCodeAt(l) === cn.prefix.charCodeAt(l)); ++l) {}
 
     if (l == pl) {
       search = search.substring(l)
@@ -301,7 +294,7 @@ class Router {
       search = preSearch
     }
 
-    // Match-any node
+    // Any node
     c = cn.findChild(STAR)
     if (c !== undefined) {
       params[n] = {
