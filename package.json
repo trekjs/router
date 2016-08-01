@@ -1,6 +1,6 @@
 {
   "name": "trek-router",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "A fast HTTP router",
   "repository": "trekjs/router",
   "main": "index.js",
