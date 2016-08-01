@@ -34,7 +34,7 @@ describe('Rest API', () => {
     let [method, path, realpath, paramName] = i
     it(path, () => {
       let [handler, params] = r.find(method, realpath)
-      console.log(method, path, realpath, handler.name, params)
+      // console.log(method, path, realpath, handler.name, params)
       assert.notEqual(null, handler)
       assert.equal(_.camelCase('rest-api' + path + '-' + method), handler.name)
       assert.equal((path.match(/\:/g) || []).length, params.length)
