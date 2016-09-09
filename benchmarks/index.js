@@ -5,6 +5,7 @@ const pathToRegexp = require('path-to-regexp')
 const RouteRecognizer = require('route-recognizer')
 const RouteTrie = require('route-trie')
 const Routington = require('routington')
+const wayfarer = require('wayfarer')
 const Router = require('../')
 const api = _.shuffle(require('../test/fixtures/github-api'))
 const api0 = require('../test/fixtures/discourse-api')
@@ -82,6 +83,20 @@ api0.forEach(function(i) {
   r.define(path)
 })
 
+var routes5 = {}
+api.forEach(function(i) {
+  var method = i[0], path = i[1]
+  var r = routes5[method] || (routes5[method] = wayfarer())
+  r.on(path, () => 1)
+})
+
+var routes50 = {}
+api0.forEach(function(i) {
+  var method = 'GET', path = i[0]
+  var r = routes50[method] || (routes50[method] = wayfarer())
+  r.on(path, () => 1)
+})
+
 console.log('\nGitHub API, %s routes:', api.length)
 // add tests
 suite
@@ -124,6 +139,14 @@ suite
     var method = i[0], path = i[1], realpath = i[2]
     var r = routes4[method]
     var result = r.match(realpath)
+    assert.notEqual(null, result)
+  })
+})
+.add('wayfarer', function() {
+  api.forEach(function(i) {
+    var method = i[0], path = i[1], realpath = i[2]
+    var r = routes5[method]
+    var result = r(realpath)
     assert.notEqual(null, result)
   })
 })
@@ -184,6 +207,14 @@ suite0
     var method = 'GET', path = i[0], realpath = i[1]
     var r = routes40[method]
     var result = r.match(realpath)
+    assert.notEqual(null, result)
+  })
+})
+.add('wayfarer', function() {
+  api0.forEach(function(i) {
+    var method = 'GET', path = i[0], realpath = i[1]
+    var r = routes50[method]
+    var result = r(realpath)
     assert.notEqual(null, result)
   })
 })

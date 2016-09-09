@@ -34,7 +34,8 @@
     "route-recognizer": "0",
     "route-trie": "1",
     "routington": "1",
-    "supertest": "2"
+    "supertest": "2",
+    "wayfarer": "6"
   },
   "engines": {
     "node": ">= 6"
