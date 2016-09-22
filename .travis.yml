@@ -3,7 +3,7 @@ language: node_js
 node_js:
   - "6"
 script:
-  - npm run test-ci
+  - npm run test-cov
 after_script:
   - npm run bench
   - npm install codecov
