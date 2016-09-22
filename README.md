@@ -2,12 +2,6 @@
 
 A fast HTTP router, inspired by [Echo](https://github.com/labstack/echo)'s Router.
 
-  [![NPM version][npm-img]][npm-url]
-  [![Build status][travis-img]][travis-url]
-  [![Test coverage][coveralls-img]][coveralls-url]
-  [![License][license-img]][license-url]
-  [![Dependency status][david-img]][david-url]
-
 
 ## Benchmarks
 
@@ -49,6 +43,7 @@ routington x 1,076 ops/sec ±0.45% (100 runs sampled)
 memoryUsage: { rss: 74973184, heapTotal: 64432128, heapUsed: 25122008 }
 Fastest is trek-router
 ```
+
 
 ## Usage
 
@@ -99,9 +94,20 @@ let server = http.createServer(function(req, res) {
 server.listen(3000)
 ```
 
-## License
 
-  [MIT](LICENSE)
+## Badges
+
+[![NPM version][npm-img]][npm-url]
+[![Build Status](https://travis-ci.org/trekjs/router.svg?branch=master)](https://travis-ci.org/trekjs/router)
+[![codecov](https://codecov.io/gh/trekjs/router/branch/master/graph/badge.svg)](https://codecov.io/gh/trekjs/router)
+[![Dependency status][david-img]][david-url]
+![](https://img.shields.io/badge/license-MIT-blue.svg)
+
+---
+
+> [fundon.me](https://fundon.me) &nbsp;&middot;&nbsp;
+> GitHub [@fundon](https://github.com/fundon) &nbsp;&middot;&nbsp;
+> Twitter [@_fundon](https://twitter.com/_fundon)
 
 [path-to-regexp]: https://github.com/pillarjs/path-to-regexp
 [route-recognizer]: https://github.com/tildeio/route-recognizer
@@ -111,13 +117,7 @@ server.listen(3000)
 [GitHub API Routes]: test/fixtures/github-api.js
 [Discourse API Routes]: test/fixtures/discourse-api.js
 
-[npm-img]: https://img.shields.io/npm/v/trek-router.svg?style=flat-square
+[npm-img]: https://img.shields.io/npm/v/trek-router.svg
 [npm-url]: https://npmjs.org/package/trek-router
-[travis-img]: https://img.shields.io/travis/trekjs/router.svg?style=flat-square
-[travis-url]: https://travis-ci.org/trekjs/router
-[coveralls-img]: https://img.shields.io/coveralls/trekjs/router.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/trekjs/router
-[license-img]: https://img.shields.io/badge/license-MIT-green.svg?style=flat-square
-[license-url]: LICENSE
-[david-img]: https://img.shields.io/david/trekjs/router.svg?style=flat-square
+[david-img]: https://img.shields.io/david/trekjs/router.svg
 [david-url]: https://david-dm.org/trekjs/router
