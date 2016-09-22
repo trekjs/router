@@ -107,22 +107,22 @@ class Router {
       if (ch === COLON) {
         j = i + 1
 
-        this.insert(method, path.substring(0, i))
+        this.insert(method, path.slice(0, i))
         for (; i < l && (path.charCodeAt(i) !== SLASH); ++i) {}
 
-        pnames.push(path.substring(j, i))
-        path = path.substring(0, j) + path.substring(i)
+        pnames.push(path.slice(j, i))
+        path = path.slice(0, j) + path.slice(i)
         i = j
         l = path.length
 
         if (i === l) {
-          this.insert(method, path.substring(0, i), handler, pnames)
+          this.insert(method, path.slice(0, i), handler, pnames)
           return
         }
-        this.insert(method, path.substring(0, i))
+        this.insert(method, path.slice(0, i))
       } else if (ch === STAR) {
-        this.insert(method, path.substring(0, i))
-        this.insert(method, path.substring(0, l), handler, pnames)
+        this.insert(method, path.slice(0, i))
+        this.insert(method, path.slice(0, l), handler, pnames)
         return
       }
     }
@@ -165,12 +165,12 @@ class Router {
         }
       } else if (l < pl) {
         // Split node
-        n = new Node(cn.prefix.substring(l), cn.children, cn.maps)
+        n = new Node(cn.prefix.slice(l), cn.children, cn.maps)
         cn.children = [n] // Add to parent
 
         // Reset parent node
         cn.label = cn.prefix.charCodeAt(0)
-        cn.prefix = cn.prefix.substring(0, l)
+        cn.prefix = cn.prefix.slice(0, l)
         cn.maps = Object.create(null)
 
         if (l === sl) {
@@ -178,12 +178,12 @@ class Router {
           cn.addMap(method, { pnames, handler })
         } else {
           // Create child node
-          n = new Node(search.substring(l), [])
+          n = new Node(search.slice(l), [])
           n.addMap(method, { pnames, handler })
           cn.children.push(n)
         }
       } else if (l < sl) {
-        search = search.substring(l)
+        search = search.slice(l)
         c = cn.findChild(search.charCodeAt(0))
         if (c !== undefined) {
           // Go deeper
@@ -250,7 +250,7 @@ class Router {
     for (; l < max && (search.charCodeAt(l) === cn.prefix.charCodeAt(l)); ++l) {}
 
     if (l == pl) {
-      search = search.substring(l)
+      search = search.slice(l)
     }
     preSearch = search
 
@@ -274,12 +274,12 @@ class Router {
       for (var i = 0; i < l && (search.charCodeAt(i) !== SLASH); ++i) {}
 
       params[n] = {
-        value: search.substring(0, i)
+        value: search.slice(0, i)
       }
 
       n++
       preSearch = search
-      search = search.substring(i)
+      search = search.slice(i)
 
       this.find(method, search, c, n, result)
       if (result[0] !== undefined) return result

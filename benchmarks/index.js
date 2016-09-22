@@ -10,6 +10,32 @@ const Router = require('../')
 const api = _.shuffle(require('../test/fixtures/github-api'))
 const api0 = require('../test/fixtures/discourse-api')
 
+const suiter = new Benchmark.Suite
+
+suiter
+.add('string slice', function() {
+  var path2 = '0123456789abcdefghijklmnopqrstuvwyz'
+  path2.slice(5, 25)
+})
+.add('string substring', function() {
+  var path0 = '0123456789abcdefghijklmnopqrstuvwyz'
+  path0.substring(5, 25)
+})
+.add('string substr', function() {
+  var path1 = '0123456789abcdefghijklmnopqrstuvwyz'
+  path1.substr(5, 20)
+})
+// add listeners
+.on('cycle', function(event) {
+  console.log(String(event.target))
+  console.log('memoryUsage:', process.memoryUsage())
+})
+.on('complete', function() {
+  console.log('Fastest is ' + _.map(this.filter('fastest'), 'name'))
+})
+.run()
+
+
 const suite = new Benchmark.Suite
 
 var routes0 = new Router()
