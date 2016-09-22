@@ -156,6 +156,7 @@ class Router {
       }
       for (; l < max && (search.charCodeAt(l) === cn.prefix.charCodeAt(l)); ++l) {}
 
+      /*
       if (l === 0) {
         // At root node
         cn.label = search.charCodeAt(0)
@@ -164,6 +165,8 @@ class Router {
           cn.addMap(method, { pnames, handler })
         }
       } else if (l < pl) {
+      */
+      if (l < pl) {
         // Split node
         n = new Node(cn.prefix.substring(l), cn.children, cn.maps)
         cn.children = [n] // Add to parent

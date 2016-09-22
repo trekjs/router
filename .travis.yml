@@ -1,9 +1,9 @@
-language: node_js
 sudo: false
+language: node_js
 node_js:
   - "6"
-
-script: "npm run test-ci"
+script:
+  - npm run test-ci
 after_script:
-  - "npm run bench"
-  - "npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"
+  - npm install codecov
+  - ./node_modules/.bin/codecov
