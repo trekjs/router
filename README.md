@@ -14,7 +14,7 @@ See [benchmarks](benchmarks), use [GitHub API Routes][] and [Discourse API Route
 * [route-trie][]
 * [routington][]
 
-```bash
+```console
 $ npm run benchmark
 
 GitHub API, 203 routes:
@@ -102,6 +102,7 @@ server.listen(3000)
 [![codecov](https://codecov.io/gh/trekjs/router/branch/master/graph/badge.svg)](https://codecov.io/gh/trekjs/router)
 [![Dependency status][david-img]][david-url]
 ![](https://img.shields.io/badge/license-MIT-blue.svg)
+
 
 ---
 
