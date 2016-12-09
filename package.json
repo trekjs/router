@@ -32,7 +32,7 @@
     "path-to-regexp": "1",
     "power-assert": "1",
     "route-recognizer": "0",
-    "route-trie": "1",
+    "route-trie": "2.0.0",
     "routington": "1",
     "supertest": "2",
     "wayfarer": "6"
