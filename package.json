@@ -3,8 +3,11 @@
   "version": "1.1.1",
   "description": "A fast HTTP router",
   "repository": "trekjs/router",
-  "main": "index.js",
-  "author": "Fangdun Cai <cfddream@gmail.com>",
+  "author": {
+    "name": "Fangdun Cai",
+    "email": "cfddream@gmail.com",
+    "url": "fundon.me"
+  },
   "license": "MIT",
   "keywords": [
     "route",
@@ -13,6 +16,7 @@
     "trek",
     "trek-router"
   ],
+  "main": "index.js",
   "scripts": {
     "bench": "node benchmarks",
     "test": "mocha --compilers js:babel-core/register --reporter spec --bail --check-leaks test/**/*.test.js",
