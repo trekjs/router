@@ -34,11 +34,11 @@ const COLON = 58 // ':'
  */
 class Node {
 
-  constructor (prefix = '/', children, maps) {
+  constructor (prefix = '/', children  = [], maps = Object.create(null)) {
     this.label = prefix.charCodeAt(0)
     this.prefix = prefix
-    this.children = children || []
-    this.maps = maps || Object.create(null)
+    this.children = children
+    this.maps = maps
   }
 
   /**
@@ -48,13 +48,10 @@ class Node {
    * @return {Node|undefined} node
    */
   findChild (c) {
-    const l = this.children.length
-    let i = 0
-    let e
-    for (; i < l; ++i) {
+    for (let e, i = 0, l = this.children.length; i < l; ++i) {
       e = this.children[i]
       // Compare charCode
-      if (e.label === c) return e
+      if (c === e.label) return e
     }
     return
   }
@@ -79,10 +76,10 @@ class Router {
 
   constructor () {
     this.tree = new Node()
-    METHODS.forEach(M => {
-      Object.defineProperty(this, M.toLowerCase(), {
-        value: function verb (path, handler) {
-          return this.add(M, path, handler)
+    METHODS.forEach(m => {
+      Object.defineProperty(this, m.toLowerCase(), {
+        value (path, handler) {
+          return this.add(m, path, handler)
         }
       })
     })
