@@ -29,7 +29,7 @@
     "babel-plugin-transform-export-extensions": "6",
     "babel-preset-es2016": "6",
     "benchmark": "2",
-    "finalhandler": "0",
+    "finalhandler": "1",
     "isparta": "4",
     "lodash": "4",
     "mocha": "3",
