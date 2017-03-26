@@ -1,26 +1,25 @@
 /*!
  * router
- * Copyright(c) 2015-2016 Fangdun Cai
+ * Copyright(c) 2015-2017 Fangdun Cai
  * MIT Licensed
  */
 
 'use strict'
 
 const METHODS = [
+  'CONNECT',
+  'DELETE',
   'GET',
+  'HEAD',
+  'OPTIONS',
+  'PATCH',
   'POST',
   'PUT',
-  'DELETE',
-  'CONNECT',
-  'HEAD',
-  'PATCH',
-  'OPTIONS',
   'TRACE'
 ]
 
-const STAR  = 42 // '*'
-const SLASH = 47 // '/'
-const COLON = 58 // ':'
+// `*` `/` `:`
+const [STAR, SLASH, COLON] = [42, 47, 58]
 
 /**
  * Route Node
@@ -48,7 +47,7 @@ class Node {
    * @return {Node|undefined} node
    */
   findChild (c) {
-    for (let e, i = 0, l = this.children.length; i < l; ++i) {
+    for (let i = 0, l = this.children.length, e; i < l; ++i) {
       e = this.children[i]
       // Compare charCode
       if (c === e.label) return e
@@ -94,10 +93,8 @@ class Router {
    * @param {Function} handler
    */
   add (method, path, handler) {
-    let i = 0
-    let l = path.length
-    let pnames = [] // Param names
-    let ch, j
+    // pnames: Param names
+    let [i, l, pnames, ch, j] = [0, path.length, []]
 
     for (; i < l; ++i) {
       ch = path.charCodeAt(i)
@@ -137,9 +134,8 @@ class Router {
    * @param {Array} [pnames]
    */
   insert (method, path, handler, pnames) {
-    let cn = this.tree // Current node as root
-    let search = path
-    let sl, pl, l, max, n, c
+    // Current node as root
+    let [cn, search, sl, pl, l, max, n, c] = [this.tree, path]
 
     while (true) {
       sl = search.length
