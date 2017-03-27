@@ -33,7 +33,7 @@ const [STAR, SLASH, COLON] = [42, 47, 58]
  */
 class Node {
 
-  constructor (prefix = '/', children  = [], maps = Object.create(null)) {
+  constructor (prefix = '/', children = [], maps = Object.create(null)) {
     this.label = prefix.charCodeAt(0)
     this.prefix = prefix
     this.children = children
@@ -46,8 +46,8 @@ class Node {
    * @param {Number} char code
    * @return {Node|undefined} node
    */
-  findChild (c) {
-    for (let i = 0, l = this.children.length, e; i < l; ++i) {
+  findChild (c, l, e, i = 0) {
+    for (l = this.children.length; i < l; i++) {
       e = this.children[i]
       // Compare charCode
       if (c === e.label) return e
@@ -143,10 +143,7 @@ class Router {
       l = 0
 
       // LCP
-      max = pl
-      if (sl < max) {
-        max = sl
-      }
+      max = sl < pl ? sl : pl
       for (; l < max && (search.charCodeAt(l) === cn.prefix.charCodeAt(l)); ++l) {}
 
       /*
@@ -239,10 +236,7 @@ class Router {
     l = 0
 
     // LCP
-    max = pl
-    if (sl < max) {
-      max = sl
-    }
+    max = sl < pl ? sl : pl
     for (; l < max && (search.charCodeAt(l) === cn.prefix.charCodeAt(l)); ++l) {}
 
     if (l == pl) {
