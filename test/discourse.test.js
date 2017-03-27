@@ -1,9 +1,9 @@
 import _ from 'lodash'
 import assert from 'power-assert'
+import api from './fixtures/discourse-api'
 import Router from '..'
 import './node'
 
-const api = require('./fixtures/discourse-api')
 const funcPrefx = 'discourse-api'
 
 function createFunc(name) {
@@ -16,7 +16,7 @@ describe('Discourse API', () => {
 
   beforeEach(() => {
     r = new Router()
-    api.forEach((i) => {
+    _.shuffle(api).forEach((i) => {
       let [path] = i
       r.add('GET', path, createFunc(_.camelCase(funcPrefx + path)))
     })
@@ -27,7 +27,7 @@ describe('Discourse API', () => {
     r.tree.printTree('', true)
   })
 
-  api.forEach((i) => {
+  _.shuffle(api).forEach((i) => {
     let [path, realpath] = i
     it(path, () => {
       let [handler, params] = r.find('GET', realpath)

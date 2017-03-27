@@ -1,9 +1,8 @@
 import _ from 'lodash'
 import assert from 'power-assert'
+import api from './fixtures/parse-api'
 import Router from '..'
 import './node'
-
-const api = require('./fixtures/parse-api')
 
 function createFunc(name) {
   var a = `(function ${name||''}(){})`

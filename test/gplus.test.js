@@ -1,9 +1,9 @@
 import _ from 'lodash'
 import assert from 'power-assert'
+import api from './fixtures/gplus-api'
 import Router from '..'
 import './node'
 
-const api = require('./fixtures/gplus-api')
 const funcPrefix = 'gplus-api'
 
 function createFunc(name) {

@@ -136,16 +136,17 @@ class Router {
    */
   insert(method, path, handler, pnames) {
     // Current node as root
-    let [cn, search, sl, pl, l, max, n, c] = [this.tree, path]
+    let [cn, prefix, sl, pl, l, max, n, c] = [this.tree]
 
     while (true) {
-      sl = search.length
-      pl = cn.prefix.length
+      prefix = cn.prefix
+      sl = path.length
+      pl = prefix.length
       l = 0
 
       // LCP
       max = sl < pl ? sl : pl
-      for (; l < max && (search.charCodeAt(l) === cn.prefix.charCodeAt(l)); ++l) {}
+      for (; l < max && (path.charCodeAt(l) === prefix.charCodeAt(l)); ++l) {}
 
       /*
       If (l === 0) {
@@ -159,12 +160,12 @@ class Router {
       */
       if (l < pl) {
         // Split node
-        n = new Node(cn.prefix.substring(l), cn.children, cn.maps)
+        n = new Node(prefix.substring(l), cn.children, cn.maps)
         cn.children = [n] // Add to parent
 
         // Reset parent node
-        cn.label = cn.prefix.charCodeAt(0)
-        cn.prefix = cn.prefix.substring(0, l)
+        cn.label = prefix.charCodeAt(0)
+        cn.prefix = prefix.substring(0, l)
         cn.maps = Object.create(null)
 
         if (l === sl) {
@@ -172,20 +173,20 @@ class Router {
           cn.addMap(method, {pnames, handler})
         } else {
           // Create child node
-          n = new Node(search.substring(l), [])
+          n = new Node(path.substring(l), [])
           n.addMap(method, {pnames, handler})
           cn.children.push(n)
         }
       } else if (l < sl) {
-        search = search.substring(l)
-        c = cn.findChild(search.charCodeAt(0))
+        path = path.substring(l)
+        c = cn.findChild(path.charCodeAt(0))
         if (c !== undefined) {
           // Go deeper
           cn = c
           continue
         }
         // Create child node
-        n = new Node(search, [])
+        n = new Node(path, [])
         n.addMap(method, {pnames, handler})
         cn.children.push(n)
       } else if (handler !== undefined) {
