@@ -6,18 +6,6 @@
 
 'use strict'
 
-const METHODS = [
-  'CONNECT',
-  'DELETE',
-  'GET',
-  'HEAD',
-  'OPTIONS',
-  'PATCH',
-  'POST',
-  'PUT',
-  'TRACE'
-]
-
 // `*` `/` `:`
 const [STAR, SLASH, COLON] = [42, 47, 58]
 
@@ -76,13 +64,6 @@ class Router {
 
   constructor() {
     this.tree = new Node()
-    METHODS.forEach(m => {
-      Object.defineProperty(this, m.toLowerCase(), {
-        value(path, handler) {
-          return this.add(m, path, handler)
-        }
-      })
-    })
   }
 
   /**
@@ -299,8 +280,6 @@ class Router {
   }
 
 }
-
-Router.METHODS = METHODS
 
 Router.Node = Node
 

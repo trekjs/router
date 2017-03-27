@@ -509,15 +509,9 @@ describe('Router', () => {
     })
   })
 
-  describe('METHODS', () => {
-    it('Router.METHODS', () => {
-      assert.notEqual(null, METHODS)
-    })
-  })
-
   describe('HTTP Methods functions', () => {
     it('#GET()', () => {
-      r.get('/folders/files/bolt.gif', () => {})
+      r.add('GET', '/folders/files/bolt.gif', () => {})
       r.tree.printTree('', true)
 
       result = r.find('GET', '/folders/files/bolt.gif')
@@ -533,7 +527,7 @@ describe('Router', () => {
 
   describe('HTTP Server', () => {
     it('should be used for http server', (done) => {
-      r.get('/', helloWorld)
+      r.add('GET', '/', helloWorld)
 
       let server = createServer(r)
 
@@ -543,7 +537,7 @@ describe('Router', () => {
     })
 
     it('should return params', (done) => {
-      r.get('/:anyway', sawParams)
+      r.add('GET', '/:anyway', sawParams)
 
       let server = createServer(r)
 

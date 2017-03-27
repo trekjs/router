@@ -76,12 +76,6 @@ let result = router.find('GET', '/photos/233')
 // => [handler, params]
 // => [undefined, []]
 
-// Or use HTTP Verb function to add path
-router.get('/', (req, res) => {
-  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.end('Hello World!');
-});
-
 let server = http.createServer(function(req, res) {
   let result = router.find(req.method, req.url);
   if (result) {
