@@ -33,7 +33,7 @@ const [STAR, SLASH, COLON] = [42, 47, 58]
  */
 class Node {
 
-  constructor (prefix = '/', children = [], maps = Object.create(null)) {
+  constructor(prefix = '/', children = [], maps = Object.create(null)) {
     this.label = prefix.charCodeAt(0)
     this.prefix = prefix
     this.children = children
@@ -46,20 +46,21 @@ class Node {
    * @param {Number} char code
    * @return {Node|undefined} node
    */
-  findChild (c, l, e, i = 0) {
+  findChild(c, l, e, i = 0) {
     for (l = this.children.length; i < l; i++) {
       e = this.children[i]
       // Compare charCode
-      if (c === e.label) return e
+      if (c === e.label) {
+        return e
+      }
     }
-    return
   }
 
-  addMap (method, map) {
+  addMap(method, map) {
     this.maps[method] = map
   }
 
-  findMap (method) {
+  findMap(method) {
     return this.maps[method]
   }
 
@@ -73,11 +74,11 @@ class Node {
  */
 class Router {
 
-  constructor () {
+  constructor() {
     this.tree = new Node()
     METHODS.forEach(m => {
       Object.defineProperty(this, m.toLowerCase(), {
-        value (path, handler) {
+        value(path, handler) {
           return this.add(m, path, handler)
         }
       })
@@ -92,8 +93,8 @@ class Router {
    * @param {String} path
    * @param {Function} handler
    */
-  add (method, path, handler) {
-    // pnames: Param names
+  add(method, path, handler) {
+    // Pnames: Param names
     let [i, l, pnames, ch, j] = [0, path.length, []]
 
     for (; i < l; ++i) {
@@ -133,7 +134,7 @@ class Router {
    * @param {Function} [handler]
    * @param {Array} [pnames]
    */
-  insert (method, path, handler, pnames) {
+  insert(method, path, handler, pnames) {
     // Current node as root
     let [cn, search, sl, pl, l, max, n, c] = [this.tree, path]
 
@@ -147,7 +148,7 @@ class Router {
       for (; l < max && (search.charCodeAt(l) === cn.prefix.charCodeAt(l)); ++l) {}
 
       /*
-      if (l === 0) {
+      If (l === 0) {
         // At root node
         cn.label = search.charCodeAt(0)
         cn.prefix = search
@@ -168,11 +169,11 @@ class Router {
 
         if (l === sl) {
           // At parent node
-          cn.addMap(method, { pnames, handler })
+          cn.addMap(method, {pnames, handler})
         } else {
           // Create child node
           n = new Node(search.substring(l), [])
-          n.addMap(method, { pnames, handler })
+          n.addMap(method, {pnames, handler})
           cn.children.push(n)
         }
       } else if (l < sl) {
@@ -185,13 +186,11 @@ class Router {
         }
         // Create child node
         n = new Node(search, [])
-        n.addMap(method, { pnames, handler })
+        n.addMap(method, {pnames, handler})
         cn.children.push(n)
-      } else {
+      } else if (handler !== undefined) {
         // Node already exists
-        if (handler !== undefined) {
-          cn.addMap(method, { pnames, handler })
-        }
+        cn.addMap(method, {pnames, handler})
       }
       return
     }
@@ -207,23 +206,24 @@ class Router {
    * @property {Undefined|Function} result[0]
    * @property {Array} result[1]
    */
-  find (method, path, cn, n, result) {
+  find(method, path, cn, n, result) {
     cn = cn || this.tree // Current node as root
-    n = n | 0 // Param counter
+    n |= 0 // Param counter
     result = result || [undefined, []]
     let search = path
-    let params = result[1] // Params
-    let pl, sl, l, max, c
+    let prefix = cn.prefix
+    const params = result[1] // Params
+    let i, pl, sl, l, max, c
     let preSearch // Pre search
 
     // Search order static > param > match-any
-    if (search.length === 0 || search === cn.prefix) {
+    if (search.length === 0 || search === prefix) {
       // Found
-      let map = cn.findMap(method)
+      const map = cn.findMap(method)
       if ((result[0] = map && map.handler) !== undefined) {
-        let pnames = map.pnames
+        const pnames = map.pnames
         if (pnames !== undefined) {
-          for (let i = 0, l = pnames.length; i < l; ++i) {
+          for (i = 0, l = pnames.length; i < l; ++i) {
             params[i].name = pnames[i]
           }
         }
@@ -232,14 +232,14 @@ class Router {
     }
 
     sl = search.length
-    pl = cn.prefix.length
+    pl = prefix.length
     l = 0
 
     // LCP
     max = sl < pl ? sl : pl
-    for (; l < max && (search.charCodeAt(l) === cn.prefix.charCodeAt(l)); ++l) {}
+    for (; l < max && (search.charCodeAt(l) === prefix.charCodeAt(l)); ++l) {}
 
-    if (l == pl) {
+    if (l === pl) {
       search = search.substring(l)
     }
     preSearch = search
@@ -248,7 +248,9 @@ class Router {
     c = cn.findChild(search.charCodeAt(0))
     if (c !== undefined) {
       this.find(method, search, c, n, result)
-      if (result[0] !== undefined) return result
+      if (result[0] !== undefined) {
+        return result
+      }
       search = preSearch
     }
 
@@ -261,7 +263,7 @@ class Router {
     c = cn.findChild(COLON)
     if (c !== undefined) {
       l = search.length
-      for (var i = 0; i < l && (search.charCodeAt(i) !== SLASH); ++i) {}
+      for (i = 0; i < l && (search.charCodeAt(i) !== SLASH); ++i) {}
 
       params[n] = {
         value: search.substring(0, i)
@@ -272,7 +274,9 @@ class Router {
       search = search.substring(i)
 
       this.find(method, search, c, n, result)
-      if (result[0] !== undefined) return result
+      if (result[0] !== undefined) {
+        return result
+      }
 
       n--
       params.pop()
