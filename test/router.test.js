@@ -41,7 +41,7 @@ describe('Router', () => {
     result = r.find('GET', '/static/js')
     assert.notEqual(null, result[0])
     assert.deepEqual([{
-      name: '_*',
+      name: '*',
       value: 'js'
     }], result[1])
     assert.equal(1, result[1].length)
@@ -49,7 +49,7 @@ describe('Router', () => {
     result = r.find('GET', '/static/css')
     assert.notEqual(null, result[0])
     assert.deepEqual([{
-      name: '_*',
+      name: '*',
       value: 'css'
     }], result[1])
     assert.equal(1, result[1].length)
@@ -78,7 +78,6 @@ describe('Router', () => {
 
     result = r.find('GET', '')
     assert.notEqual(null, result[0])
-    assert.equal('root', result[0].name)
     assert.equal(0, result[1].length)
 
     result = r.find('GET', '/')
@@ -96,14 +95,14 @@ describe('Router', () => {
     result = r.find('GET', '/geocoder/delete/')
     assert.equal('anyGeocoder', result[0].name)
     assert.equal(1, result[1].length)
-    assert.equal('_*', result[1][0].name)
+    assert.equal('*', result[1][0].name)
     assert.equal('delete/', result[1][0].value)
 
     result = r.find('GET', '/geocoder/any/action')
     assert.notEqual(null, result[0])
     assert.equal('anyGeocoder', result[0].name)
     assert.equal(1, result[1].length)
-    assert.equal('_*', result[1][0].name)
+    assert.equal('*', result[1][0].name)
     assert.equal('any/action', result[1][0].value)
 
     result = r.find('GET', '/geocoder/exchange/trekjs')
@@ -191,7 +190,7 @@ describe('Router', () => {
     assert.notEqual(null, result[0])
     assert.equal('anyUser', result[0].name)
     assert.equal(1, result[1].length)
-    assert.equal('_*', result[1][0].name)
+    assert.equal('*', result[1][0].name)
     assert.equal('610/books/987/edit', result[1][0].value)
 
     result = r.find('GET', '/users/610/books/987')
@@ -543,7 +542,7 @@ describe('Router', () => {
 
       request(server)
         .get('/233')
-        .expect(200, '[{"value":"233","name":"anyway"}]', done)
+        .expect(200, [{value: 233, name: "anyway"}], done)
     })
 
   })

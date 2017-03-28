@@ -20,7 +20,7 @@ describe('Issue #9', () => {
 
     let [h1, p1] = r.find('GET', '/xxx/people/377/activities')
     assert.notEqual(null, h1)
-    assert.deepEqual(p1[p1.length - 1], { name: '_*', value: '377/activities' })
+    assert.deepEqual(p1[p1.length - 1], { name: '*', value: '377/activities' })
   })
 
 })

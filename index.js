@@ -9,31 +9,19 @@
 // `*` `/` `:`
 const [STAR, SLASH, COLON] = [42, 47, 58]
 
-/**
- * Route Node
- *
- * @class Node
- * @constructor
- * @param {String} path
- * @param {Array} [children]
- * @param {Function} handler
- * @param {Array} [pnames]
- */
 class Node {
 
-  constructor(prefix = '/', children = [], maps = Object.create(null)) {
+  constructor(prefix = '/', children = [], map = Object.create(null)) {
     this.label = prefix.charCodeAt(0)
     this.prefix = prefix
     this.children = children
-    this.maps = maps
+    this.map = map
   }
 
-  /**
-   * Find child node by charCode
-   *
-   * @param {Number} char code
-   * @return {Node|undefined} node
-   */
+  addChild(n) {
+    this.children.push(n)
+  }
+
   findChild(c, l, e, i = 0) {
     for (l = this.children.length; i < l; i++) {
       e = this.children[i]
@@ -44,36 +32,22 @@ class Node {
     }
   }
 
-  addMap(method, map) {
-    this.maps[method] = map
+  addHandler(method, handler, pnames) {
+    this.map[method] = {handler, pnames}
   }
 
-  findMap(method) {
-    return this.maps[method]
+  findHandler(method) {
+    return this.map[method]
   }
 
 }
 
-/**
- * Router
- *
- * @class Router
- * @constructor
- */
 class Router {
 
   constructor() {
     this.tree = new Node()
   }
 
-  /**
-   * Add new route
-   *
-   * @method add
-   * @param {String} method
-   * @param {String} path
-   * @param {Function} handler
-   */
   add(method, path, handler) {
     // Pnames: Param names
     let [i, l, pnames, ch, j] = [0, path.length, []]
@@ -92,30 +66,21 @@ class Router {
         l = path.length
 
         if (i === l) {
-          this.insert(method, path.substring(0, i), handler, pnames)
+          this.insert(method, path.substring(0, i), pnames, handler)
           return
         }
-        this.insert(method, path.substring(0, i))
+        this.insert(method, path.substring(0, i), pnames)
       } else if (ch === STAR) {
         this.insert(method, path.substring(0, i))
-        this.insert(method, path.substring(0, l), handler, pnames)
+        pnames.push('*')
+        this.insert(method, path.substring(0, l), pnames, handler)
         return
       }
     }
-    this.insert(method, path, handler, pnames)
+    this.insert(method, path, pnames, handler)
   }
 
-  /**
-   * Insert new route
-   *
-   * @method insert
-   * @private
-   * @param {String} method
-   * @param {String} path
-   * @param {Function} [handler]
-   * @param {Array} [pnames]
-   */
-  insert(method, path, handler, pnames) {
+  insert(method, path, pnames, handler) {
     // Current node as root
     let [cn, prefix, sl, pl, l, max, n, c] = [this.tree]
 
@@ -135,28 +100,28 @@ class Router {
         cn.label = search.charCodeAt(0)
         cn.prefix = search
         if (handler !== undefined) {
-          cn.addMap(method, { pnames, handler })
+          cn.addHandler(method, { pnames, handler })
         }
       } else if (l < pl) {
       */
       if (l < pl) {
         // Split node
-        n = new Node(prefix.substring(l), cn.children, cn.maps)
+        n = new Node(prefix.substring(l), cn.children, cn.map)
         cn.children = [n] // Add to parent
 
         // Reset parent node
         cn.label = prefix.charCodeAt(0)
         cn.prefix = prefix.substring(0, l)
-        cn.maps = Object.create(null)
+        cn.map = Object.create(null)
 
         if (l === sl) {
           // At parent node
-          cn.addMap(method, {pnames, handler})
+          cn.addHandler(method, handler, pnames)
         } else {
           // Create child node
           n = new Node(path.substring(l), [])
-          n.addMap(method, {pnames, handler})
-          cn.children.push(n)
+          n.addHandler(method, handler, pnames)
+          cn.addChild(n)
         }
       } else if (l < sl) {
         path = path.substring(l)
@@ -168,45 +133,38 @@ class Router {
         }
         // Create child node
         n = new Node(path, [])
-        n.addMap(method, {pnames, handler})
-        cn.children.push(n)
+        n.addHandler(method, handler, pnames)
+        cn.addChild(n)
       } else if (handler !== undefined) {
         // Node already exists
-        cn.addMap(method, {pnames, handler})
+        cn.addHandler(method, handler, pnames)
       }
       return
     }
   }
 
-  /**
-   * Find route by method and path
-   *
-   * @method find
-   * @param {String} method
-   * @param {String} path
-   * @return {Array} result
-   * @property {Undefined|Function} result[0]
-   * @property {Array} result[1]
-   */
   find(method, path, cn, n, result) {
     cn = cn || this.tree // Current node as root
     n |= 0 // Param counter
     result = result || [undefined, []]
     let search = path
     let prefix = cn.prefix
-    const params = result[1] // Params
+    const pvalues = result[1] // Params
     let i, pl, sl, l, max, c
     let preSearch // Pre search
 
     // Search order static > param > match-any
     if (search.length === 0 || search === prefix) {
       // Found
-      const map = cn.findMap(method)
-      if ((result[0] = map && map.handler) !== undefined) {
-        const pnames = map.pnames
+      const r = cn.findHandler(method)
+      if ((result[0] = r && r.handler) !== undefined) {
+        const pnames = r.pnames
         if (pnames !== undefined) {
           for (i = 0, l = pnames.length; i < l; ++i) {
-            params[i].name = pnames[i]
+            pvalues[i] = {
+              name: pnames[i],
+              value: pvalues[i]
+            }
           }
         }
       }
@@ -247,9 +205,7 @@ class Router {
       l = search.length
       for (i = 0; i < l && (search.charCodeAt(i) !== SLASH); ++i) {}
 
-      params[n] = {
-        value: search.substring(0, i)
-      }
+      pvalues[n] = search.substring(0, i)
 
       n++
       preSearch = search
@@ -261,17 +217,14 @@ class Router {
       }
 
       n--
-      params.pop()
+      pvalues.pop()
       search = preSearch
     }
 
     // Any node
     c = cn.findChild(STAR)
     if (c !== undefined) {
-      params[n] = {
-        name: '_*',
-        value: search
-      }
+      pvalues[n] = search
       search = '' // End search
       this.find(method, search, c, n, result)
     }

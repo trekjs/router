@@ -6,13 +6,14 @@ function prefix(tail, p, on, off) {
 }
 
 Node.prototype.printTree = function printTree(pfx, tail, method = 'GET') {
-  let map = this.maps[method]
+  let result = this.map[method]
+  let handler = result && result.handler
   let p = prefix(tail, pfx, '└── ', '├── ')
   console.log(
     '%s%s h=%s children=%s',
     p,
     this.prefix,
-    map && map.handler ? map.handler.name : '',
+    handler ? handler.name : '',
     this.children.length
   )
 
