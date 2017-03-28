@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import assert from 'power-assert'
-import Router, { Node, METHODS } from '..'
+import Router, { Node } from '..'
 import './node'
 
 describe('Issue #9', () => {

@@ -3,7 +3,7 @@ import http from 'http'
 import assert from 'power-assert'
 import finalhandler from 'finalhandler'
 import request from 'supertest'
-import Router, { Node, METHODS } from '..'
+import Router, { Node } from '..'
 import './node'
 
 function createFunc(name) {
