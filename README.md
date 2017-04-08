@@ -14,7 +14,14 @@ See [benchmarks](benchmarks), use [GitHub API Routes][] and [Discourse API Route
 * [route-trie][]
 * [routington][]
 
-```console
+```sh
+$ sysctl machdep.cpu.brand_string
+machdep.cpu.brand_string: Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz
+$ sysctl hw.memsize
+hw.memsize: 34359738368
+```
+
+```sh
 $ yarn run bench
 yarn run v0.22.0
 $ node benchmarks
