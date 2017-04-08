@@ -15,33 +15,76 @@ See [benchmarks](benchmarks), use [GitHub API Routes][] and [Discourse API Route
 * [routington][]
 
 ```console
-$ npm run benchmark
+$ yarn run bench
+yarn run v0.22.0
+$ node benchmarks
 
 GitHub API, 203 routes:
-trek-router x 5,095 ops/sec ±2.26% (98 runs sampled)
-memoryUsage: { rss: 42135552, heapTotal: 32478208, heapUsed: 18689464 }
-path-to-regexp x 408 ops/sec ±1.58% (93 runs sampled)
-memoryUsage: { rss: 60882944, heapTotal: 51053056, heapUsed: 16037648 }
-route-recognizer x 323 ops/sec ±1.27% (90 runs sampled)
-memoryUsage: { rss: 63623168, heapTotal: 54136832, heapUsed: 28968984 }
-route-trie x 1,229 ops/sec ±1.12% (95 runs sampled)
-memoryUsage: { rss: 65597440, heapTotal: 55168768, heapUsed: 27494288 }
-routington x 1,201 ops/sec ±0.30% (98 runs sampled)
-memoryUsage: { rss: 68001792, heapTotal: 59284480, heapUsed: 28473048 }
+trek-router x 12,652 ops/sec ±0.86% (91 runs sampled)
+memoryUsage: { rss: 69746688,
+  heapTotal: 46108672,
+  heapUsed: 31815272,
+  external: 9284 }
+path-to-regexp x 973 ops/sec ±0.21% (95 runs sampled)
+memoryUsage: { rss: 87674880,
+  heapTotal: 63422464,
+  heapUsed: 52531280,
+  external: 9284 }
+route-recognizer x 795 ops/sec ±1.18% (95 runs sampled)
+memoryUsage: { rss: 102465536,
+  heapTotal: 77578240,
+  heapUsed: 44904632,
+  external: 9284 }
+route-trie x 2,515 ops/sec ±1.64% (94 runs sampled)
+memoryUsage: { rss: 100438016,
+  heapTotal: 75481088,
+  heapUsed: 31334832,
+  external: 9284 }
+routington x 1,896 ops/sec ±0.84% (95 runs sampled)
+memoryUsage: { rss: 100835328,
+  heapTotal: 75993088,
+  heapUsed: 24018936,
+  external: 9284 }
+wayfarer x 2,327 ops/sec ±0.80% (97 runs sampled)
+memoryUsage: { rss: 101703680,
+  heapTotal: 77041664,
+  heapUsed: 20170432,
+  external: 9284 }
 Fastest is trek-router
 
 Discourse API, 359 routes:
-trek-router x 3,801 ops/sec ±0.09% (101 runs sampled)
-memoryUsage: { rss: 70402048, heapTotal: 61348352, heapUsed: 30221032 }
-path-to-regexp x 59.41 ops/sec ±0.23% (78 runs sampled)
-memoryUsage: { rss: 72286208, heapTotal: 63400192, heapUsed: 28175392 }
-route-recognizer x 211 ops/sec ±1.14% (92 runs sampled)
-memoryUsage: { rss: 75005952, heapTotal: 64432128, heapUsed: 21000584 }
-route-trie x 1,131 ops/sec ±0.85% (97 runs sampled)
-memoryUsage: { rss: 74936320, heapTotal: 64432128, heapUsed: 18404472 }
-routington x 1,076 ops/sec ±0.45% (100 runs sampled)
-memoryUsage: { rss: 74973184, heapTotal: 64432128, heapUsed: 25122008 }
+trek-router x 8,665 ops/sec ±0.33% (97 runs sampled)
+memoryUsage: { rss: 101941248,
+  heapTotal: 77041664,
+  heapUsed: 37168328,
+  external: 9284 }
+path-to-regexp x 115 ops/sec ±0.43% (83 runs sampled)
+memoryUsage: { rss: 106766336,
+  heapTotal: 81772544,
+  heapUsed: 33245496,
+  external: 9284 }
+route-recognizer x 534 ops/sec ±0.12% (95 runs sampled)
+memoryUsage: { rss: 107204608,
+  heapTotal: 81772544,
+  heapUsed: 43184720,
+  external: 9284 }
+route-trie x 2,183 ops/sec ±0.49% (96 runs sampled)
+memoryUsage: { rss: 106786816,
+  heapTotal: 81248256,
+  heapUsed: 34731560,
+  external: 9284 }
+routington x 1,487 ops/sec ±0.53% (95 runs sampled)
+memoryUsage: { rss: 107184128,
+  heapTotal: 81772544,
+  heapUsed: 22843088,
+  external: 9284 }
+wayfarer x 1,966 ops/sec ±0.37% (96 runs sampled)
+memoryUsage: { rss: 107184128,
+  heapTotal: 81772544,
+  heapUsed: 54756160,
+  external: 9284 }
 Fastest is trek-router
+✨  Done in 65.04s.
 ```
 
 
