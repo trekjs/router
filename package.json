@@ -24,7 +24,7 @@
     "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
   },
   "devDependencies": {
-    "babel-cli": "6",
+    "babel-cli": "6.22.1",
     "babel-plugin-transform-es2015-modules-commonjs": "6",
     "babel-plugin-transform-export-extensions": "6",
     "babel-preset-es2016": "6",
