@@ -10,8 +10,12 @@
 const [SKIND, PKIND, AKIND, STAR, SLASH, COLON] = [0, 1, 2, 42, 47, 58]
 
 class Node {
-
-  constructor(prefix = '/', children = [], kind = SKIND, map = Object.create(null)) {
+  constructor(
+    prefix = '/',
+    children = [],
+    kind = SKIND,
+    map = Object.create(null)
+  ) {
     this.label = prefix.charCodeAt(0)
     this.prefix = prefix
     this.children = children
@@ -51,17 +55,15 @@ class Node {
   }
 
   addHandler(method, handler, pnames) {
-    this.map[method] = {handler, pnames}
+    this.map[method] = { handler, pnames }
   }
 
   findHandler(method) {
     return this.map[method]
   }
-
 }
 
 class Router {
-
   constructor() {
     this.tree = new Node()
   }
@@ -257,7 +259,6 @@ class Router {
 
     return result
   }
-
 }
 
 Router.Node = Node

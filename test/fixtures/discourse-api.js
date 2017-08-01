@@ -21,13 +21,19 @@ module.exports = [
   ['/admin/site_settings/new', '/admin/site_settings/new'],
   ['/admin/site_settings/:id', '/admin/site_settings/377'],
   ['/admin/site_settings/:id/edit', '/admin/site_settings/377/edit'],
-  ['/admin/site_settings/:id/category/:cid', '/admin/site_settings/377/category/233'],
+  [
+    '/admin/site_settings/:id/category/:cid',
+    '/admin/site_settings/377/category/233'
+  ],
   ['/admin/reports/:type', '/admin/reports/2333'],
   ['/admin/groups', '/admin/groups'],
   ['/admin/groups/new', '/admin/groups/new'],
   ['/admin/groups/:id', '/admin/groups/610'],
   ['/admin/groups/:id/edit', '/admin/groups/987/edit'],
-  ['/admin/groups/refresh_automatic_groups', '/admin/groups/refresh_automatic_groups'],
+  [
+    '/admin/groups/refresh_automatic_groups',
+    '/admin/groups/refresh_automatic_groups'
+  ],
   ['/admin/groups/:id/members', '/admin/groups/1024/members'],
   // ['/admin/groups/:type', '/admin/groups/javascript'],
   // ['/admin/groups/:type/:id', '/admin/groups/language/233'],
@@ -38,8 +44,14 @@ module.exports = [
   ['/admin/users/:id/edit', '/admin/users/2312/edit'],
   ['/admin/users/list/:query', '/admin/users/list/keywords'],
   ['/admin/users/ip-info', '/admin/users/ip-info'],
-  ['/admin/users/delete-others-with-same-ip', '/admin/users/delete-others-with-same-ip'],
-  ['/admin/users/total-others-with-same-ip', '/admin/users/total-others-with-same-ip'],
+  [
+    '/admin/users/delete-others-with-same-ip',
+    '/admin/users/delete-others-with-same-ip'
+  ],
+  [
+    '/admin/users/total-others-with-same-ip',
+    '/admin/users/total-others-with-same-ip'
+  ],
   ['/admin/users/approve-bulk', '/admin/users/approve-bulk'],
   ['/admin/users/reject-bulk', '/admin/users/reject-bulk'],
   ['/admin/users/suspend', '/admin/users/suspend'],
@@ -86,10 +98,22 @@ module.exports = [
   ['/admin/logs/staff_action_logs', '/admin/logs/staff_action_logs'],
   ['/admin/logs/screened_emails', '/admin/logs/screened_emails'],
   ['/admin/logs/screened_ip_addresses', '/admin/logs/screened_ip_addresses'],
-  ['/admin/logs/screened_ip_addresses/new', '/admin/logs/screened_ip_addresses/new'],
-  ['/admin/logs/screened_ip_addresses/:id', '/admin/logs/screened_ip_addresses/5555'],
-  ['/admin/logs/screened_ip_addresses/:id/edit', '/admin/logs/screened_ip_addresses/4444/edit'],
-  ['/admin/logs/screened_ip_addresses/roll_up', '/admin/logs/screened_ip_addresses/roll_up'],
+  [
+    '/admin/logs/screened_ip_addresses/new',
+    '/admin/logs/screened_ip_addresses/new'
+  ],
+  [
+    '/admin/logs/screened_ip_addresses/:id',
+    '/admin/logs/screened_ip_addresses/5555'
+  ],
+  [
+    '/admin/logs/screened_ip_addresses/:id/edit',
+    '/admin/logs/screened_ip_addresses/4444/edit'
+  ],
+  [
+    '/admin/logs/screened_ip_addresses/roll_up',
+    '/admin/logs/screened_ip_addresses/roll_up'
+  ],
   ['/admin/logs/screened_urls', '/admin/logs/screened_urls'],
   ['/admin/customize', '/admin/customize'],
   ['/admin/customize/css_html', '/admin/customize/css_html'],
@@ -102,19 +126,37 @@ module.exports = [
   ['/admin/site_customizations', '/admin/site_customizations'],
   ['/admin/site_customizations/new', '/admin/site_customizations/new'],
   ['/admin/site_customizations/:id', '/admin/site_customizations/223'],
-  ['/admin/site_customizations/:id/edit', '/admin/site_customizations/233/edit'],
+  [
+    '/admin/site_customizations/:id/edit',
+    '/admin/site_customizations/233/edit'
+  ],
   ['/admin/customize/site_text', '/admin/customize/site_text'],
   ['/admin/customize/site_text/new', '/admin/customize/site_text/new'],
   ['/admin/customize/site_text/:id', '/admin/customize/site_text/233'],
-  ['/admin/customize/site_text/:id/edit', '/admin/customize/site_text/233/edit'],
+  [
+    '/admin/customize/site_text/:id/edit',
+    '/admin/customize/site_text/233/edit'
+  ],
   ['/admin/customize/site_text_types', '/admin/customize/site_text_types'],
-  ['/admin/customize/site_text_types/new', '/admin/customize/site_text_types/new'],
-  ['/admin/customize/site_text_types/:id', '/admin/customize/site_text_types/233'],
-  ['/admin/customize/site_text_types/:id/edit', '/admin/customize/site_text_types/233/edit'],
+  [
+    '/admin/customize/site_text_types/new',
+    '/admin/customize/site_text_types/new'
+  ],
+  [
+    '/admin/customize/site_text_types/:id',
+    '/admin/customize/site_text_types/233'
+  ],
+  [
+    '/admin/customize/site_text_types/:id/edit',
+    '/admin/customize/site_text_types/233/edit'
+  ],
   ['/admin/customize/user_fields', '/admin/customize/user_fields'],
   ['/admin/customize/user_fields/new', '/admin/customize/user_fields/new'],
   ['/admin/customize/user_fields/:id', '/admin/customize/user_fields/233'],
-  ['/admin/customize/user_fields/:id/edit', '/admin/customize/user_fields/233/edit'],
+  [
+    '/admin/customize/user_fields/:id/edit',
+    '/admin/customize/user_fields/233/edit'
+  ],
   ['/admin/customize/emojis', '/admin/customize/emojis'],
   ['/admin/customize/emojis/new', '/admin/customize/emojis/new'],
   ['/admin/customize/emojis/:id', '/admin/customize/emojis/233'],
@@ -191,20 +233,44 @@ module.exports = [
   // ['/my/*path', '/my/catch-all-path'],
   ['/user_preferences', '/user_preferences'],
   ['/users/:username/private-messages', '/users/fundon/private-messages'],
-  ['/users/:username/private-messages/:filter', '/users/fundon/private-messages/system'],
+  [
+    '/users/:username/private-messages/:filter',
+    '/users/fundon/private-messages/system'
+  ],
   ['/users/:username', '/users/fundon'],
   ['/users/:username/emails', '/users/fundon/emails'],
   ['/users/:username/preferences', '/users/fundon/preferences'],
   ['/users/:username/preferences/email', '/users/fundon/preferences/email'],
-  ['/users/:username/preferences/about-me', '/users/fundon/preferences/about-me'],
-  ['/users/:username/preferences/badge_title', '/users/fundon/preferences/badge_title'],
-  ['/users/:username/preferences/username', '/users/fundon/preferences/username'],
-  ['/users/:username/preferences/user_image', '/users/fundon/preferences/user_image'],
-  ['/users/:username/preferences/avatar/pick', '/users/fundon/preferences/avatar/pick'],
-  ['/users/:username/preferences/card-badge', '/users/fundon/preferences/card-badge'],
+  [
+    '/users/:username/preferences/about-me',
+    '/users/fundon/preferences/about-me'
+  ],
+  [
+    '/users/:username/preferences/badge_title',
+    '/users/fundon/preferences/badge_title'
+  ],
+  [
+    '/users/:username/preferences/username',
+    '/users/fundon/preferences/username'
+  ],
+  [
+    '/users/:username/preferences/user_image',
+    '/users/fundon/preferences/user_image'
+  ],
+  [
+    '/users/:username/preferences/avatar/pick',
+    '/users/fundon/preferences/avatar/pick'
+  ],
+  [
+    '/users/:username/preferences/card-badge',
+    '/users/fundon/preferences/card-badge'
+  ],
   ['/users/:username/staff-info', '/users/fundon/staff-info'],
   ['/users/:username/invited', '/users/fundon/invited'],
-  ['/users/action/send_activation_email', '/users/action/send_activation_email'],
+  [
+    '/users/action/send_activation_email',
+    '/users/action/send_activation_email'
+  ],
   ['/users/:username/activity', '/users/fundon/activity'],
   ['/users/:username/activity/:filter', '/users/fundon/activity/keywords'],
   ['/users/:username/badges', '/users/fundon/badges'],
@@ -214,7 +280,10 @@ module.exports = [
   ['/users/:username/flagged-posts', '/users/fundon/flagged-posts'],
   ['/users/:username/deleted-posts', '/users/fundon/deleted-posts'],
   ['/user-badges/:username', '/user-badges/fundon'],
-  ['/user_avatar/:username/refresh_gravatar', '/user_avatar/fundon/refresh_gravatar'],
+  [
+    '/user_avatar/:username/refresh_gravatar',
+    '/user_avatar/fundon/refresh_gravatar'
+  ],
   // ['/letter_avatar/:username/:size/:version.png', '/letter_avatar/fundo/40/1.0.1.png'],
   // ['/user_avatar/:hostname/:username/:size/:version.png', '/user_avatar/github/fundon/40/v1.png'],
   // ['/highlight-js/:hostname/:version.js', '/highlight-js/github/v0.1.x.js'],
@@ -329,8 +398,14 @@ module.exports = [
   ['/topics/feature_stats', '/topics/feature_stats'],
   ['/topics/created-by/:username', '/topics/created-by/function'],
   ['/topics/private-messages/:username', '/topics/private-messages/fundon'],
-  ['/topics/private-messages-sent/:username', '/topics/private-messages-sent/fundon'],
-  ['/topics/private-messages-unread/:username', '/topics/private-messages-unread/fundon'],
+  [
+    '/topics/private-messages-sent/:username',
+    '/topics/private-messages-sent/fundon'
+  ],
+  [
+    '/topics/private-messages-unread/:username',
+    '/topics/private-messages-unread/fundon'
+  ],
 
   ['/embed/comments', '/embed/comments'],
   ['/embed/count', '/embed/count'],
@@ -433,7 +508,7 @@ module.exports = [
 
   // ['/cdn_asset/:site/*path', '/cdn_asset/2321/321312'],
 
-  ['/robots.txt', '/robots.txt'],
+  ['/robots.txt', '/robots.txt']
 
   // ['/*url', '/fdsfjsdakjfjdslkfjlskdjflskdjflsfj']
-];
+]

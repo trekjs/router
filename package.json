@@ -24,22 +24,22 @@
     "test-cov": "babel-node node_modules/.bin/isparta cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/**/*.test.js"
   },
   "devDependencies": {
-    "babel-cli": "6",
-    "babel-plugin-transform-es2015-modules-commonjs": "6",
+    "babel-cli": "6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "6.24.1",
     "babel-plugin-transform-export-extensions": "6",
-    "babel-preset-es2016": "6",
-    "benchmark": "2",
-    "finalhandler": "1",
+    "babel-preset-es2016": "6.24.1",
+    "benchmark": "2.1.4",
+    "finalhandler": "1.0.3",
     "isparta": "4",
     "lodash": "4",
-    "mocha": "3",
+    "mocha": "3.5.0",
     "path-to-regexp": "1",
-    "power-assert": "1",
-    "route-recognizer": "0",
-    "route-trie": "2",
+    "power-assert": "1.4.4",
+    "route-recognizer": "0.3.3",
+    "route-trie": "2.2.1",
     "routington": "1",
     "supertest": "3",
-    "wayfarer": "6"
+    "wayfarer": "6.6.2"
   },
   "engines": {
     "node": ">= 6"

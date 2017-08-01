@@ -41,5 +41,5 @@ module.exports = [
   ['DELETE', '/1/installations/:objectId', '/1/installations/233'],
 
   // Cloud Functions
-  ['POST', '/1/functions', '/1/functions'],
-];
+  ['POST', '/1/functions', '/1/functions']
+]
