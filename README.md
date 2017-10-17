@@ -102,7 +102,7 @@ import http from 'http';
 import finalhandler from 'finalhandler';
 import Router from 'trek-router';
 
-let router = Router()
+let router = new Router()
 
 // static route
 router.add('GET', '/folders/files/bolt.gif', () => {});
